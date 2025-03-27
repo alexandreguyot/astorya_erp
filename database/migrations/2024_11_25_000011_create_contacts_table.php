@@ -4,19 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateContactsTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
         Schema::create('contacts', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('lastname')->nullable();
-            $table->string('firstname')->nullable();
-            $table->string('title')->nullable();
-            $table->string('email')->nullable();
-            $table->boolean('is_director')->default(0)->nullable();
+            $table->id();
+            $table->string('lastname', 40)->nullable();
+            $table->string('firstname', 40)->nullable();
+            $table->string('civi', 4)->nullable();
+            $table->string('email', 200)->nullable();
+            $table->boolean('director')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
     }
-}
+
+    public function down()
+    {
+        Schema::dropIfExists('contacts');
+    }
+};

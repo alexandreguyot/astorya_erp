@@ -194,7 +194,7 @@ return [
         ],
     ],
     'city' => [
-        'title'          => 'Ville',
+        'title'          => 'Villes',
         'title_singular' => 'Ville',
         'fields'         => [
             'id'                => 'ID',
@@ -212,7 +212,7 @@ return [
         ],
     ],
     'contact' => [
-        'title'          => 'Contact',
+        'title'          => 'Contacts',
         'title_singular' => 'Contact',
         'fields'         => [
             'id'                 => 'ID',

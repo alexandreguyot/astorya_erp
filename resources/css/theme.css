@@ -72,7 +72,7 @@
 
 
 .sidebar-nav-active {
-    @apply text-xs uppercase py-3 font-bold block text-pink-500
+    @apply text-xs uppercase py-3 font-bold block text-red-600
 }
 
 .sidebar-nav-active > i {
@@ -80,7 +80,7 @@
 }
 
 .sidebar-nav-active:hover {
-    @apply text-pink-600
+    @apply text-red-800
 }
 
 .sidebar-nav {
@@ -92,7 +92,7 @@
 }
 
 .sidebar-nav:hover {
-    @apply text-blueGray-600
+    @apply text-blueGray-800
 }
 
 .form-group {

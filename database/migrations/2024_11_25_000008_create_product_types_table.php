@@ -4,18 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductTypesTable extends Migration
-{
+return new class extends Migration {
     public function up()
     {
-        Schema::create('product_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('code');
-            $table->longText('short_description')->nullable();
-            $table->longText('description_longue')->nullable();
-            $table->string('accounting')->nullable();
+        Schema::create('types_product', function (Blueprint $table) {
+            $table->id();
+            $table->string('code_article', 20)->nullable();
+            $table->string('designation_short', 50)->nullable();
+            $table->string('designation_long', 1000)->nullable();
+            $table->string('accounting', 20)->nullable();
+
             $table->timestamps();
             $table->softDeletes();
         });
     }
-}
+
+    public function down()
+    {
+        Schema::dropIfExists('types_product');
+    }
+};

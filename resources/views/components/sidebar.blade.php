@@ -70,7 +70,7 @@
                 @endcan
                 @can('parametre_access')
                     <li class="items-center">
-                        <a class="has-sub {{ request()->is("admin/owners*")||request()->is("admin/contract-types*")||request()->is("admin/period-types*")||request()->is("admin/vat-types*")||request()->is("admin/product-types*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
+                        <a class="has-sub {{ request()->is("admin/owners*")||request()->is("admin/contract-types*")||request()->is("admin/period-types*")||request()->is("admin/vat-types*")||request()->is("admin/product-types*")||request()->is("admin/cities*")||request()->is("admin/contacts*")||request()->is("admin/bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
                             <i class="fa-fw fas c-sidebar-nav-icon fa-cogs">
                             </i>
                             {{ trans('cruds.parametre.title') }}
@@ -121,6 +121,33 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('city_access')
+                                <li class="items-center">
+                                    <a class="{{ request()->is("admin/cities*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.cities.index") }}">
+                                        <i class="fa-fw c-sidebar-nav-icon far fa-building">
+                                        </i>
+                                        {{ trans('cruds.city.title') }}
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('contact_access')
+                                <li class="items-center">
+                                    <a class="{{ request()->is("admin/contacts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contacts.index") }}">
+                                        <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
+                                        </i>
+                                        {{ trans('cruds.contact.title') }}
+                                    </a>
+                                </li>
+                            @endcan
+                            @can('bank_account_access')
+                                <li class="items-center">
+                                    <a class="{{ request()->is("admin/bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bank-accounts.index") }}">
+                                        <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
+                                        </i>
+                                        {{ trans('cruds.bankAccount.title') }}
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan
@@ -160,33 +187,6 @@
                                 </li>
                             @endcan
                         </ul>
-                    </li>
-                @endcan
-                @can('city_access')
-                    <li class="items-center">
-                        <a class="{{ request()->is("admin/cities*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.cities.index") }}">
-                            <i class="fa-fw c-sidebar-nav-icon far fa-building">
-                            </i>
-                            {{ trans('cruds.city.title') }}
-                        </a>
-                    </li>
-                @endcan
-                @can('contact_access')
-                    <li class="items-center">
-                        <a class="{{ request()->is("admin/contacts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contacts.index") }}">
-                            <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
-                            </i>
-                            {{ trans('cruds.contact.title') }}
-                        </a>
-                    </li>
-                @endcan
-                @can('bank_account_access')
-                    <li class="items-center">
-                        <a class="{{ request()->is("admin/bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bank-accounts.index") }}">
-                            <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
-                            </i>
-                            {{ trans('cruds.bankAccount.title') }}
-                        </a>
                     </li>
                 @endcan
 
