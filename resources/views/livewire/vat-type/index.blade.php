@@ -16,12 +16,6 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.vatType.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
-                        </th>
                         <th>
                             {{ trans('cruds.vatType.fields.code') }}
                             @include('components.table.sort', ['field' => 'code'])
@@ -31,6 +25,10 @@
                             @include('components.table.sort', ['field' => 'percent'])
                         </th>
                         <th>
+                            {{ trans('cruds.vatType.fields.account_tva') }}
+                            @include('components.table.sort', ['field' => 'account_tva'])
+                        </th>
+                        <th>
                         </th>
                     </tr>
                 </thead>
@@ -38,16 +36,13 @@
                     @forelse($vatTypes as $vatType)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $vatType->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $vatType->id }}
-                            </td>
-                            <td>
-                                {{ $vatType->code }}
+                                {{ $vatType->code_vat }}
                             </td>
                             <td>
                                 {{ $vatType->percent }}
+                            </td>
+                            <td>
+                                {{ $vatType->account_vat }}
                             </td>
                             <td>
                                 <div class="flex justify-end">

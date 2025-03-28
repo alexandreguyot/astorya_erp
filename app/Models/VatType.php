@@ -13,7 +13,7 @@ class VatType extends Model
 {
     use HasFactory, HasAdvancedFilter, SoftDeletes;
 
-    public $table = 'vat_types';
+    public $table = 'types_vat';
 
     protected $fillable = [
         'code',
@@ -24,12 +24,14 @@ class VatType extends Model
         'id',
         'code',
         'percent',
+        'account_vat'
     ];
 
     public $filterable = [
         'id',
         'code',
         'percent',
+        'account_vat'
     ];
 
     protected $dates = [

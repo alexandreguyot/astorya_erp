@@ -16,12 +16,6 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.bankAccount.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
-                        </th>
                         <th>
                             {{ trans('cruds.bankAccount.fields.no_rum') }}
                             @include('components.table.sort', ['field' => 'no_rum'])
@@ -46,12 +40,6 @@
                     @forelse($bankAccounts as $bankAccount)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $bankAccount->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $bankAccount->id }}
-                            </td>
-                            <td>
                                 {{ $bankAccount->no_rum }}
                             </td>
                             <td>
@@ -65,11 +53,6 @@
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('bank_account_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.bank-accounts.show', $bankAccount) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
                                     @can('bank_account_edit')
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.bank-accounts.edit', $bankAccount) }}">
                                             {{ trans('global.edit') }}

@@ -2121,6 +2121,16 @@ select {
 .gap-4 {
 	gap: 1rem;
 }
+.space-x-4 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(1rem * var(--tw-space-x-reverse));
+	margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+}
+.space-x-2 > :not([hidden]) ~ :not([hidden]) {
+	--tw-space-x-reverse: 0;
+	margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+	margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
 .self-center {
 	align-self: center;
 }
@@ -2277,6 +2287,9 @@ select {
 .bg-red-700 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(185, 28, 28, var(--tw-bg-opacity));
+}
+.bg-red-700\/75 {
+	background-color: rgba(185, 28, 28, 0.75);
 }
 .from-gray-700\/50 {
 	--tw-gradient-from: rgba(55, 65, 81, 0.5);

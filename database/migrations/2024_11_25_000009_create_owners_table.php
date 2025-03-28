@@ -11,25 +11,22 @@ return new class extends Migration {
             $table->id();
             $table->string('name', 50);
             $table->string('address', 50);
-            $table->string('zip_code', 10);
+            $table->string('zip_code', 5);
             $table->string('city', 50);
-            $table->string('tel_web_part', 40);
-            $table->string('account_part', 30);
             $table->string('email', 50);
-            $table->string('tel', 15);
-            $table->string('website', 50);
-            $table->string('number_siret', 20);
+            $table->string('phone', 15);
+            $table->string('web_site_address', 50);
+            $table->string('siret', 20);
             $table->string('capital', 10);
             $table->string('bic', 30);
             $table->string('iban', 30);
-            $table->string('service_web', 30);
-            $table->string('service_hotline', 50);
-            $table->string('tel_hotline', 15);
-            $table->string('email_hotline', 50);
-            $table->string('service_account', 50);
-            $table->string('tel_account', 15);
-            $table->string('email_account', 50);
-            $table->timestamps(0); // Timestamps for created_at and updated_at
+            $table->string('hotline_name', 50);
+            $table->string('hotline_phone', 15);
+            $table->string('hotline_email', 50);
+            $table->string('accounting_manager', 50);
+            $table->string('accounting_phone', 15);
+            $table->string('accounting_email', 50);
+            $table->timestamps(0);
             $table->softDeletes();
         });
     }

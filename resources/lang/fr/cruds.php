@@ -73,7 +73,7 @@ return [
         'fields'         => [
             'id'                => 'ID',
             'id_helper'         => ' ',
-            'title'             => 'Title',
+            'title'             => 'Titre',
             'title_helper'      => ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
@@ -115,6 +115,8 @@ return [
             'code_helper'       => ' ',
             'percent'           => 'Pourcentage',
             'percent_helper'    => ' ',
+            'account_tva'           => 'Compte TVA',
+            'account_tva_helper'    => ' ',
             'created_at'        => 'Created at',
             'created_at_helper' => ' ',
             'updated_at'        => 'Updated at',

@@ -1,10 +1,18 @@
 <div>
-    <div class="card-controls sm:flex">
-        <div class="w-full sm:w-1/2 ">
-            Recherche:
-            <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full sm:w-1/2 form-control" />
-        </div>
-        <div class="w-full sm:w-1/2 sm:text-right">
+    <div class="card-controls sm:flex bg-red-700/75">
+        <div class="flex space-x-4 font-semibold">
+            <div>
+                Recherche:
+                <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control" />
+            </div>
+            <div>
+                Date de début :
+                <x-date-picker wire:model="dateStart" class="border rounded px-2 py-1" placeholder="Date de début" picker="date"/>
+            </div>
+            <div>
+                Date de fin :
+                <x-date-picker wire:model="dateEnd" class="border rounded px-2 py-1" placeholder="Date de fin" picker="date"/>
+            </div>
         </div>
     </div>
     <div wire:loading.delay>
@@ -16,11 +24,9 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.bill.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
+                        <th>
+                            {{ trans('cruds.bill.fields.company') }}
+                            @include('components.table.sort', ['field' => 'company.name'])
                         </th>
                         <th>
                             {{ trans('cruds.bill.fields.no_bill') }}
@@ -31,63 +37,12 @@
                             @include('components.table.sort', ['field' => 'amount'])
                         </th>
                         <th>
-                            {{ trans('cruds.bill.fields.amount_vat_included') }}
-                            @include('components.table.sort', ['field' => 'amount_vat_included'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.one_bill_per_period') }}
-                            @include('components.table.sort', ['field' => 'one_bill_per_period'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.started_at') }}
-                            @include('components.table.sort', ['field' => 'started_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.billed_at') }}
-                            @include('components.table.sort', ['field' => 'billed_at'])
-                        </th>
-                        <th>
                             {{ trans('cruds.bill.fields.generated_at') }}
                             @include('components.table.sort', ['field' => 'generated_at'])
                         </th>
                         <th>
-                            {{ trans('cruds.bill.fields.validated_at') }}
-                            @include('components.table.sort', ['field' => 'validated_at'])
-                        </th>
-                        <th>
                             {{ trans('cruds.bill.fields.sent_at') }}
                             @include('components.table.sort', ['field' => 'sent_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.to_be_collected') }}
-                            @include('components.table.sort', ['field' => 'to_be_collected'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.collected_at') }}
-                            @include('components.table.sort', ['field' => 'collected_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.recorded_at') }}
-                            @include('components.table.sort', ['field' => 'recorded_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.file_path') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.company') }}
-                            @include('components.table.sort', ['field' => 'company.name'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.address') }}
-                            @include('components.table.sort', ['field' => 'company.address'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.bill.fields.type_period') }}
-                            @include('components.table.sort', ['field' => 'type_period.title'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.periodType.fields.nb_month') }}
-                            @include('components.table.sort', ['field' => 'type_period.nb_month'])
                         </th>
                         <th>
                         </th>
@@ -97,83 +52,24 @@
                     @forelse($bills as $bill)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $bill->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $bill->id }}
-                            </td>
-                            <td>
-                                {{ $bill->no_bill }}
-                            </td>
-                            <td>
-                                {{ $bill->amount }}
-                            </td>
-                            <td>
-                                {{ $bill->amount_vat_included }}
-                            </td>
-                            <td>
-                                <input class="disabled:opacity-50 disabled:cursor-not-allowed" type="checkbox" disabled {{ $bill->one_bill_per_period ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                {{ $bill->started_at }}
-                            </td>
-                            <td>
-                                {{ $bill->billed_at }}
-                            </td>
-                            <td>
-                                {{ $bill->generated_at }}
-                            </td>
-                            <td>
-                                {{ $bill->validated_at }}
-                            </td>
-                            <td>
-                                {{ $bill->sent_at }}
-                            </td>
-                            <td>
-                                <input class="disabled:opacity-50 disabled:cursor-not-allowed" type="checkbox" disabled {{ $bill->to_be_collected ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                {{ $bill->collected_at }}
-                            </td>
-                            <td>
-                                {{ $bill->recorded_at }}
-                            </td>
-                            <td>
-                                @foreach($bill->file_path as $key => $entry)
-                                    <a class="link-light-blue" href="{{ $entry['url'] }}">
-                                        <i class="far fa-file">
-                                        </i>
-                                        {{ $entry['file_name'] }}
-                                    </a>
-                                @endforeach
-                            </td>
-                            <td>
                                 @if($bill->company)
                                     <span class="badge badge-relationship">{{ $bill->company->name ?? '' }}</span>
                                 @endif
                             </td>
                             <td>
-                                @if($bill->company)
-                                    {{ $bill->company->address ?? '' }}
-                                @endif
+                                {{ $bill->no_bill }}
                             </td>
                             <td>
-                                @if($bill->typePeriod)
-                                    <span class="badge badge-relationship">{{ $bill->typePeriod->title ?? '' }}</span>
-                                @endif
+                                {{ $bill->amount }} €
                             </td>
                             <td>
-                                @if($bill->typePeriod)
-                                    {{ $bill->typePeriod->nb_month ?? '' }}
-                                @endif
+                                {{ $bill->generated_at }}
+                            </td>
+                            <td>
+                                {{ $bill->sent_at }}
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('bill_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.bills.show', $bill) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
                                     @can('bill_edit')
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.bills.edit', $bill) }}">
                                             {{ trans('global.edit') }}

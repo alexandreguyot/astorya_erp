@@ -24,9 +24,18 @@ class Index extends Component
 
     public array $paginationOptions;
 
+    public ?string $dateStart = null; // Date de début
+    public ?string $dateEnd = null;   // Date de fin
+
     protected $queryString = [
         'search' => [
             'except' => '',
+        ],
+        'dateStart' => [
+            'except' => null,
+        ],
+        'dateEnd' => [
+            'except' => null,
         ],
         'sortBy' => [
             'except' => 'id',
@@ -34,6 +43,7 @@ class Index extends Component
         'sortDirection' => [
             'except' => 'desc',
         ],
+
     ];
 
     public function getSelectedCountProperty()
@@ -67,7 +77,10 @@ class Index extends Component
 
     public function render()
     {
-        $query = Bill::with(['company', 'typePeriod'])->advancedFilter([
+        $query = Bill::with(['company', 'typePeriod'])
+        ->when($this->dateStart && $this->dateEnd, function ($query) {
+            $query->whereBetween('generated_at', [$this->dateStart, $this->dateEnd]);
+        })->advancedFilter([
             's'               => $this->search ?: null,
             'order_column'    => $this->sortBy,
             'order_direction' => $this->sortDirection,

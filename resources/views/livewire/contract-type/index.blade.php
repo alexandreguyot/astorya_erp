@@ -16,12 +16,6 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.contractType.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
-                        </th>
                         <th>
                             {{ trans('cruds.contractType.fields.title') }}
                             @include('components.table.sort', ['field' => 'title'])
@@ -34,21 +28,10 @@
                     @forelse($contractTypes as $contractType)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $contractType->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $contractType->id }}
-                            </td>
-                            <td>
                                 {{ $contractType->title }}
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('contract_type_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contract-types.show', $contractType) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
                                     @can('contract_type_edit')
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contract-types.edit', $contractType) }}">
                                             {{ trans('global.edit') }}

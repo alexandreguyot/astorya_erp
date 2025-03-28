@@ -13,7 +13,7 @@ class ProductType extends Model
 {
     use HasFactory, HasAdvancedFilter, SoftDeletes;
 
-    public $table = 'product_types';
+    public $table = 'types_products';
 
     protected $dates = [
         'created_at',
@@ -23,24 +23,24 @@ class ProductType extends Model
 
     protected $fillable = [
         'code',
-        'short_description',
-        'description_longue',
+        'designation_short',
+        'designation_long',
         'accounting',
     ];
 
     public $orderable = [
         'id',
         'code',
-        'short_description',
-        'description_longue',
+        'designation_short',
+        'designation_long',
         'accounting',
     ];
 
     public $filterable = [
         'id',
         'code',
-        'short_description',
-        'description_longue',
+        'designation_short',
+        'designation_long',
         'accounting',
     ];
 

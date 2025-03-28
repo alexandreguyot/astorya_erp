@@ -16,12 +16,6 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.periodType.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
-                        </th>
                         <th>
                             {{ trans('cruds.periodType.fields.title') }}
                             @include('components.table.sort', ['field' => 'title'])
@@ -38,12 +32,6 @@
                     @forelse($periodTypes as $periodType)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $periodType->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $periodType->id }}
-                            </td>
-                            <td>
                                 {{ $periodType->title }}
                             </td>
                             <td>
@@ -51,11 +39,11 @@
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('period_type_show')
+                                    {{-- @can('period_type_show')
                                         <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.period-types.show', $periodType) }}">
                                             {{ trans('global.view') }}
                                         </a>
-                                    @endcan
+                                    @endcan --}}
                                     @can('period_type_edit')
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.period-types.edit', $periodType) }}">
                                             {{ trans('global.edit') }}

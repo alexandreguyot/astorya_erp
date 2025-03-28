@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
             $table->string('no_rum', 40)->nullable();
-            $table->date('effect_mandat_at')->nullable();
+            $table->date('effective_starting_date')->nullable();
             $table->string('bic', 20)->nullable();
             $table->string('iban', 30)->nullable();
             $table->timestamps();

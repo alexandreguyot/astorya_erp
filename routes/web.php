@@ -75,3 +75,5 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
         Route::get('/', [UserProfileController::class, 'show'])->name('show');
     }
 });
+
+Route::get('/install', [HomeController::class, 'install'])->name('install');

@@ -16,12 +16,6 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
-                        <th class="w-9">
-                        </th>
-                        <th class="w-28">
-                            {{ trans('cruds.contact.fields.id') }}
-                            @include('components.table.sort', ['field' => 'id'])
-                        </th>
                         <th>
                             {{ trans('cruds.contact.fields.lastname') }}
                             @include('components.table.sort', ['field' => 'lastname'])
@@ -50,12 +44,6 @@
                     @forelse($contacts as $contact)
                         <tr>
                             <td>
-                                <input type="checkbox" value="{{ $contact->id }}" wire:model="selected">
-                            </td>
-                            <td>
-                                {{ $contact->id }}
-                            </td>
-                            <td>
                                 {{ $contact->lastname }}
                             </td>
                             <td>
@@ -76,11 +64,6 @@
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('contact_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contacts.show', $contact) }}">
-                                            {{ trans('global.view') }}
-                                        </a>
-                                    @endcan
                                     @can('contact_edit')
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contacts.edit', $contact) }}">
                                             {{ trans('global.edit') }}

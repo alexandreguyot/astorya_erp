@@ -101,12 +101,12 @@ class Bill extends Model implements HasMedia
 
     public function getStartedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
     public function setStartedAtAttribute($value)
     {
-        $this->attributes['started_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['started_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getBilledAtAttribute($value)
@@ -121,52 +121,52 @@ class Bill extends Model implements HasMedia
 
     public function getGeneratedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
     public function setGeneratedAtAttribute($value)
     {
-        $this->attributes['generated_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['generated_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getValidatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
     public function setValidatedAtAttribute($value)
     {
-        $this->attributes['validated_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['validated_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getSentAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
     public function setSentAtAttribute($value)
     {
-        $this->attributes['sent_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['sent_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getCollectedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.datetime_format')) : null;
     }
 
     public function setCollectedAtAttribute($value)
     {
-        $this->attributes['collected_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['collected_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getRecordedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.datetime_format')) : null;
     }
 
     public function setRecordedAtAttribute($value)
     {
-        $this->attributes['recorded_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['recorded_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getFilePathAttribute()
