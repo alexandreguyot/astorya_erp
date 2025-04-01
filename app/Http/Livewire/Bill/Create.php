@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Bill;
 
 use App\Models\Bill;
 use App\Models\Company;
-use App\Models\PeriodType;
+use App\Models\TypePeriod;
 use Livewire\Component;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -128,7 +128,7 @@ class Create extends Component
             ],
             'bill.type_period_id' => [
                 'integer',
-                'exists:period_types,id',
+                'exists:type_periods,id',
                 'nullable',
             ],
         ];
@@ -137,6 +137,6 @@ class Create extends Component
     protected function initListsForFields(): void
     {
         $this->listsForFields['company']     = Company::pluck('name', 'id')->toArray();
-        $this->listsForFields['type_period'] = PeriodType::pluck('title', 'id')->toArray();
+        $this->listsForFields['type_period'] = TypePeriod::pluck('title', 'id')->toArray();
     }
 }

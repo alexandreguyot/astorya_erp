@@ -69,73 +69,62 @@ class Index extends Component
 
     public function mount()
     {
-        $this->sortBy            = 'id';
-        $this->sortDirection     = 'desc';
-        $this->perPage           = 100;
+        $this->sortBy            = 'company.name';
+        $this->sortDirection     = 'asc';
+        $this->perPage           = 10;
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Contract())->orderable;
         $this->filterable         = (new Contract())->filterable;
-        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y'); // 1er jour du mois
-        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y'); // Dernier jour du mois
+        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
     }
 
     public function render()
     {
-        $query = Contract::with(['company'])
-        ->when($this->dateStart && !$this->dateEnd, function ($query) {
-            $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-            $query->where('started_at', '>=', $dateStart);
-        })
-        ->when(!$this->dateStart && $this->dateEnd, function ($query) {
-            $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-            $query->where('started_at', '<=', $dateEnd);
-        })
-        ->when($this->dateStart && $this->dateEnd, function ($query) {
-            $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-            $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-            $query->whereBetween('started_at', [$dateStart, $dateEnd]);
+        $query = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
+        ->whereNotNull('setup_at')
+        ->where(function ($query) {
+            $query->whereNull('terminated_at')
+                  ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
         })
         ->when($this->search, function ($query) {
-            $query->whereHas('company', function($q) {
+            $query->whereHas('company', function ($q) {
                 $q->where('companies.name', 'like', '%'.$this->search.'%');
             });
         })
-        ->advancedFilter([
-            's'               => $this->search ?: null,
-            'order_column'    => $this->sortBy,
-            'order_direction' => $this->sortDirection,
-        ]);
+        ->whereHas('type_period', function ($query) {
+            $query->whereRaw('(TIMESTAMPDIFF(MONTH, terminated_at, ?) % nb_month) = 0', [Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth()]);
+        });
 
         $contracts = $query->paginate($this->perPage);
+
+        $contracts->getCollection()->transform(function ($contract) {
+            $contract->billing_period = $this->getBillingPeriodAttribute($contract, $this->dateStart);
+            $contract->total_price = $contract->total_price;
+            return $contract;
+        });
+
 
         return view('livewire.contract.index', compact('contracts', 'query'));
     }
 
-    private function convertDateFormat($date, $type)
+    public function getBillingPeriodAttribute($contrat, $dateStart = null)
     {
-       // Vérifier le format fourni
-        if (preg_match('/^\d{4}$/', $date)) {
-            // Format YYYY -> Année complète
-            return $type === 'start' ? "$date-01-01" : "$date-12-31";
+        if (!$contrat->type_period || !$contrat->type_period->nb_month) {
+            return null;
         }
 
-        if (preg_match('/^\d{2}\/\d{4}$/', $date)) {
-            // Format MM/YYYY -> Mois complet
-            [$month, $year] = explode('/', $date);
+        $nbMonth = $contrat->type_period->nb_month;
+        $day = Carbon::createFromFormat('d/m/Y', $contrat->setup_at)->format('d');
+        $startBilling = Carbon::createFromFormat('d/m/Y', $dateStart)->day($day);
+        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay(1);
 
-            // Trouver le dernier jour du mois
-            $lastDay = date('t', strtotime("$year-$month-01"));
+        return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
+    }
 
-            return $type === 'start' ? "$year-$month-01" : "$year-$month-$lastDay";
-        }
-
-        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date)) {
-            // Format DD/MM/YYYY -> Un seul jour
-            [$day, $month, $year] = explode('/', $date);
-            return $type === 'start' ? "$year-$month-$day" : "$year-$month-$day";
-        }
-
-        return null;
+    public function pdf()
+    {
+        //TODO
     }
 
     public function deleteSelected()
@@ -145,12 +134,5 @@ class Index extends Component
         Contract::whereIn('id', $this->selected)->delete();
 
         $this->resetSelected();
-    }
-
-    public function delete(Contract $contract)
-    {
-        abort_if(Gate::denies('contract_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $contract->delete();
     }
 }

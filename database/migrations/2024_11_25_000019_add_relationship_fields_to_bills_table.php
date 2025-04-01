@@ -12,7 +12,7 @@ class AddRelationshipFieldsToBillsTable extends Migration
             $table->unsignedBigInteger('company_id')->nullable();
             $table->foreign('company_id', 'company_fk_10285799')->references('id')->on('companies');
             $table->unsignedBigInteger('type_period_id')->nullable();
-            $table->foreign('type_period_id', 'type_period_fk_10285800')->references('id')->on('period_types');
+            $table->foreign('type_period_id', 'type_period_fk_10285800')->references('id')->on('type_periods');
             $table->unsignedBigInteger('contract_id')->nullable();
             $table->foreign('contract_id', 'contract_id_fk_10285800')->references('id')->on('contracts');
         });

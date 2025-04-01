@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-Use App\Models\ProductType;
 
 class ContractProductDetail extends Model
 {
@@ -41,8 +40,8 @@ class ContractProductDetail extends Model
     /**
      * Relation avec Product
      */
-    public function product()
+    public function type_product()
     {
-        return $this->belongsTo(ProductType::class, 'type_product_id');
+        return $this->belongsTo(TypeProduct::class);
     }
 }

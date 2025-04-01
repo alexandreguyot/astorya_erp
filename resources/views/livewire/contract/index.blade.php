@@ -24,6 +24,9 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
+                        <th class="w-9">
+                            <input type="checkbox" wire:click="selectAll"">
+                        </th>
                         <th>
                             {{ trans('cruds.contract.fields.company') }}
                             @include('components.table.sort', ['field' => 'company.name'])
@@ -32,12 +35,10 @@
                             Type de contract
                         </th>
                         <th>
-                            {{ trans('cruds.contract.fields.started_at') }}
-                            @include('components.table.sort', ['field' => 'started_at'])
+                            Montant HT
                         </th>
                         <th>
-                            {{ trans('cruds.contract.fields.terminated_at') }}
-                            @include('components.table.sort', ['field' => 'terminated_at'])
+                            Période de facturation
                         </th>
                         <th>
                         </th>
@@ -47,37 +48,39 @@
                     @forelse($contracts as $contract)
                         <tr>
                             <td>
+                                <input type="checkbox" value="{{ $contract->id }}" wire:model="selected">
+                            </td>
+                            <td>
                                 @if($contract->company)
                                     <span class="badge badge-relationship">{{ $contract->company->name ?? '' }}</span>
                                 @endif
                             </td>
                             <td>
-                                @foreach($contract->contractProductDetails as $detail)
-                                    @if($detail->product)
-                                        <span class="badge badge-relationship">
-                                            {{ $detail->product->designation_short ?? '' }}
+                                @foreach($contract->contract_product_detail as $key => $detail)
+                                    @if($detail->type_product && $key == 0)
+                                        <span class="badge badge-contract">
+                                            {{ $detail->type_product->type_contract->title ?? '' }}
                                         </span>
                                     @endif
                                 @endforeach
                             </td>
                             <td>
-                                {{ $contract->started_at }}
+                                {{ $contract->total_price }} €
                             </td>
                             <td>
-                                {{ $contract->terminated_at }}
+                                {{ $contract->billing_period }}
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('contract_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
-                                            {{ trans('global.edit') }}
-                                        </a>
-                                    @endcan
-                                    @can('contract_delete')
-                                        <button class="btn btn-sm btn-rose mr-2" type="button" wire:click="confirm('delete', {{ $contract->id }})" wire:loading.attr="disabled">
-                                            {{ trans('global.delete') }}
-                                        </button>
-                                    @endcan
+                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                        Générer
+                                    </a>
+                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                        Valider
+                                    </a>
+                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                        Télécharger
+                                    </a>
                                 </div>
                             </td>
                         </tr>

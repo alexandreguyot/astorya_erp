@@ -5,10 +5,10 @@
         <div class="card-header border-b border-blueGray-200">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('cruds.contractType.title') }}
+                    {{ trans('cruds.typeContract.title') }}
                 </h6>
 
-                @can('contract_type_create')
+                @can('type_contract_create')
                     <a class="btn btn-indigo" href="{{ route('admin.contract-types.create') }}">
                         Créer un type de contrat
                     </a>

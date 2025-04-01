@@ -8,7 +8,7 @@ class CreateContractTypesTable extends Migration
 {
     public function up()
     {
-        Schema::create('contract_types', function (Blueprint $table) {
+        Schema::create('type_contracts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
             $table->timestamps();

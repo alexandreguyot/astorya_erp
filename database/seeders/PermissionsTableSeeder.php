@@ -80,23 +80,23 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 18,
-                'title' => 'contract_type_create',
+                'title' => 'type_contract_create',
             ],
             [
                 'id'    => 19,
-                'title' => 'contract_type_edit',
+                'title' => 'type_contract_edit',
             ],
             [
                 'id'    => 20,
-                'title' => 'contract_type_show',
+                'title' => 'type_contract_show',
             ],
             [
                 'id'    => 21,
-                'title' => 'contract_type_delete',
+                'title' => 'type_contract_delete',
             ],
             [
                 'id'    => 22,
-                'title' => 'contract_type_access',
+                'title' => 'type_contract_access',
             ],
             [
                 'id'    => 23,
@@ -104,63 +104,63 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 24,
-                'title' => 'period_type_create',
+                'title' => 'type_period_create',
             ],
             [
                 'id'    => 25,
-                'title' => 'period_type_edit',
+                'title' => 'type_period_edit',
             ],
             [
                 'id'    => 26,
-                'title' => 'period_type_show',
+                'title' => 'type_period_show',
             ],
             [
                 'id'    => 27,
-                'title' => 'period_type_delete',
+                'title' => 'type_period_delete',
             ],
             [
                 'id'    => 28,
-                'title' => 'period_type_access',
+                'title' => 'type_period_access',
             ],
             [
                 'id'    => 29,
-                'title' => 'vat_type_create',
+                'title' => 'type_vat_create',
             ],
             [
                 'id'    => 30,
-                'title' => 'vat_type_edit',
+                'title' => 'type_vat_edit',
             ],
             [
                 'id'    => 31,
-                'title' => 'vat_type_show',
+                'title' => 'type_vat_show',
             ],
             [
                 'id'    => 32,
-                'title' => 'vat_type_delete',
+                'title' => 'type_vat_delete',
             ],
             [
                 'id'    => 33,
-                'title' => 'vat_type_access',
+                'title' => 'type_vat_access',
             ],
             [
                 'id'    => 34,
-                'title' => 'product_type_create',
+                'title' => 'type_product_create',
             ],
             [
                 'id'    => 35,
-                'title' => 'product_type_edit',
+                'title' => 'type_product_edit',
             ],
             [
                 'id'    => 36,
-                'title' => 'product_type_show',
+                'title' => 'type_product_show',
             ],
             [
                 'id'    => 37,
-                'title' => 'product_type_delete',
+                'title' => 'type_product_delete',
             ],
             [
                 'id'    => 38,
-                'title' => 'product_type_access',
+                'title' => 'type_product_access',
             ],
             [
                 'id'    => 39,

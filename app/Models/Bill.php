@@ -186,7 +186,7 @@ class Bill extends Model implements HasMedia
 
     public function typePeriod()
     {
-        return $this->belongsTo(PeriodType::class);
+        return $this->belongsTo(TypePeriod::class);
     }
 
     public function getCreatedAtAttribute($value)

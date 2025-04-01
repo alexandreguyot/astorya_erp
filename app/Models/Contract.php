@@ -61,9 +61,23 @@ class Contract extends Model
         'validated_at',
     ];
 
+    protected $appends = ['billing_period', 'total_price'];
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    public function getTotalPriceAttribute()
+    {
+        return number_format(
+            $this->contract_product_detail->sum(function ($detail) {
+                return ($detail->monthly_unit_price_without_taxe * $detail->quantity);
+            }),
+            2,
+            ',',
+            ''
+        );
     }
 
     public function company()
@@ -71,7 +85,12 @@ class Contract extends Model
         return $this->belongsTo(Company::class);
     }
 
-    public function contractProductDetails()
+    public function type_period()
+    {
+        return $this->belongsTo(TypePeriod::class);
+    }
+
+    public function contract_product_detail()
     {
         return $this->hasMany(ContractProductDetail::class);
     }

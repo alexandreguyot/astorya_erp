@@ -6,9 +6,9 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.view') }}
-                    {{ trans('cruds.productType.title_singular') }}:
-                    {{ trans('cruds.productType.fields.id') }}
-                    {{ $productType->id }}
+                    {{ trans('cruds.typeProduct.title_singular') }}:
+                    {{ trans('cruds.typeProduct.fields.id') }}
+                    {{ $typeProduct->id }}
                 </h6>
             </div>
         </div>
@@ -19,10 +19,10 @@
                     <tbody class="bg-white">
                         <tr>
                             <th>
-                                {{ trans('cruds.productType.fields.id') }}
+                                {{ trans('cruds.typeProduct.fields.id') }}
                             </th>
                             <td>
-                                {{ $productType->id }}
+                                {{ $typeProduct->id }}
                             </td>
                         </tr>
                     </tbody>
@@ -30,7 +30,7 @@
             </div>
             <div class="form-group">
                 @can('product_type_edit')
-                    <a href="{{ route('admin.product-types.edit', $productType) }}" class="btn btn-indigo mr-2">
+                    <a href="{{ route('admin.product-types.edit', $typeProduct) }}" class="btn btn-indigo mr-2">
                         {{ trans('global.edit') }}
                     </a>
                 @endcan

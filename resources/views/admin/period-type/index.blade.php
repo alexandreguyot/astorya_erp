@@ -5,12 +5,12 @@
         <div class="card-header border-b border-blueGray-200">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('cruds.periodType.title') }}
+                    {{ trans('cruds.typePeriod.title') }}
                 </h6>
 
                 @can('period_type_create')
                     <a class="btn btn-indigo" href="{{ route('admin.period-types.create') }}">
-                        {{ trans('global.add') }} {{ trans('cruds.periodType.title_singular') }}
+                        {{ trans('global.add') }} {{ trans('cruds.typePeriod.title_singular') }}
                     </a>
                 @endcan
             </div>

@@ -6,9 +6,9 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.view') }}
-                    {{ trans('cruds.vatType.title_singular') }}:
-                    {{ trans('cruds.vatType.fields.id') }}
-                    {{ $vatType->id }}
+                    {{ trans('cruds.typeVat.title_singular') }}:
+                    {{ trans('cruds.typeVat.fields.id') }}
+                    {{ $typeVat->id }}
                 </h6>
             </div>
         </div>
@@ -19,18 +19,18 @@
                     <tbody class="bg-white">
                         <tr>
                             <th>
-                                {{ trans('cruds.vatType.fields.id') }}
+                                {{ trans('cruds.typeVat.fields.id') }}
                             </th>
                             <td>
-                                {{ $vatType->id }}
+                                {{ $typeVat->id }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="form-group">
-                @can('vat_type_edit')
-                    <a href="{{ route('admin.vat-types.edit', $vatType) }}" class="btn btn-indigo mr-2">
+                @can('type_vat_edit')
+                    <a href="{{ route('admin.vat-types.edit', $typeVat) }}" class="btn btn-indigo mr-2">
                         {{ trans('global.edit') }}
                     </a>
                 @endcan

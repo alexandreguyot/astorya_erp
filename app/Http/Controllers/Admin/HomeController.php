@@ -20,21 +20,27 @@ class HomeController
         );
 
         $this->migrateTable(
-            'TypePeriods', 'period_types',
+            'TypePeriods', 'type_periods',
             ['Id', 'Title', 'NbMonth', 'CreationDate', 'LastModifiedDate'],
             ['id', 'title', 'nb_month', 'created_at', 'updated_at']
         );
 
         $this->migrateTable(
-            'TypeProducts', 'types_products',
-            ['Id', 'Code', 'ShortDesignation', 'LongDesignation', 'Accounting', 'CreationDate', 'LastModifiedDate'],
-            ['id', 'code', 'designation_short', 'designation_long', 'accounting', 'created_at', 'updated_at']
+            'TypeContracts', 'type_contracts',
+            ['Id', 'Title', 'CreationDate', 'LastModifiedDate'],
+            ['id', 'title', 'created_at', 'updated_at']
         );
 
         $this->migrateTable(
-            'TypeVats', 'types_vat',
+            'TypeVats', 'type_vats',
             ['Id', 'Code', 'Percent', 'AccountVat', 'CreationDate', 'LastModifiedDate'],
             ['id', 'code_vat', 'percent', 'account_vat', 'created_at', 'updated_at']
+        );
+
+        $this->migrateTable(
+            'TypeProducts', 'type_products',
+            ['Id', 'TypeContractId', 'TypeVatId', 'Code', 'ShortDesignation', 'LongDesignation', 'Accounting', 'CreationDate', 'LastModifiedDate'],
+            ['id', 'type_contract_id', 'type_vat_id', 'code', 'designation_short', 'designation_long', 'accounting', 'created_at', 'updated_at']
         );
 
         $this->migrateTable(
@@ -61,20 +67,14 @@ class HomeController
             ['id', 'name', 'address', 'address_compl', 'phone', 'city_id', 'email', 'accounting', 'ciel_reference', 'send_bill_type', 'one_bill_per_period', 'bill_payment_method', 'created_at', 'updated_at', 'observations', 'bank_account_id', 'contact_id']
         );
 
-        $this->migrateTable(
-            'TypeContracts', 'contract_types',
-            ['Id', 'Title', 'CreationDate', 'LastModifiedDate'],
-            ['id', 'title', 'created_at', 'updated_at']
-        );
-
         $this->migrateTable('Contracts', 'contracts',
             ['Id', 'CompanyId', 'TypePeriodId', 'SetupAt', 'EstablishedAt', 'StartedAt', 'TerminatedAt', 'BilledAt', 'ValidatedAt', 'CreationDate', 'LastModifiedDate'],
             ['id', 'company_id', 'type_period_id', 'setup_at', 'established_at', 'started_at', 'terminated_at', 'billed_at', 'validated_at', 'created_at', 'updated_at']
         );
 
         $this->migrateTable('ContractProductDetails', 'contract_product_details',
-            ['Id', 'ContractId', 'TypeProductId', 'Designation', 'Quantity', 'Capacity', 'BillingStartedAt', 'BillingTerminatedAt', 'LastBilledAt', 'CreationDate', 'LastModifiedDate'],
-            ['id', 'contract_id', 'type_product_id', 'designation', 'quantity', 'capacity', 'billing_started_at', 'billing_terminated_at', 'last_billed_at', 'created_at', 'updated_at']
+            ['Id', 'ContractId', 'TypeProductId', 'Designation', 'Quantity', 'Capacity', 'MonthlyUnitPriceWithoutTaxe', 'BillingStartedAt', 'BillingTerminatedAt', 'LastBilledAt', 'CreationDate', 'LastModifiedDate'],
+            ['id', 'contract_id', 'type_product_id', 'designation', 'quantity', 'capacity', 'monthly_unit_price_without_taxe', 'billing_started_at', 'billing_terminated_at', 'last_billed_at', 'created_at', 'updated_at']
         );
 
         $this->migrateTable(

@@ -515,6 +515,12 @@ input[type=text].form-control:focus, input[type=email].form-control:focus, input
 .badge:last-child {
     margin-right: 0px}
 
+.badge-contract {
+    --tw-bg-opacity: 1;
+    background-color: rgba(167, 243, 208, var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgba(5, 150, 105, var(--tw-text-opacity))}
+
 .badge-relationship {
     --tw-bg-opacity: 1;
     background-color: rgba(199, 210, 254, var(--tw-bg-opacity));

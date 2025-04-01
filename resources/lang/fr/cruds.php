@@ -67,7 +67,7 @@ return [
             'deleted_at_helper'        => ' ',
         ],
     ],
-    'contractType' => [
+    'typeContract' => [
         'title'          => 'Type de contrat',
         'title_singular' => 'Type de contrat',
         'fields'         => [
@@ -87,7 +87,7 @@ return [
         'title'          => 'Paramétrage',
         'title_singular' => 'Paramétrage',
     ],
-    'periodType' => [
+    'typePeriod' => [
         'title'          => 'Type de période',
         'title_singular' => 'Type de période',
         'fields'         => [
@@ -105,7 +105,7 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
-    'vatType' => [
+    'typeVat' => [
         'title'          => 'Type de TVA',
         'title_singular' => 'Type de TVA',
         'fields'         => [
@@ -125,7 +125,7 @@ return [
             'deleted_at_helper' => ' ',
         ],
     ],
-    'productType' => [
+    'typeProduct' => [
         'title'          => 'Type de produit',
         'title_singular' => 'Type de produit',
         'fields'         => [

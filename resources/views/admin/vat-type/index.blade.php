@@ -5,12 +5,12 @@
         <div class="card-header border-b border-blueGray-200">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('cruds.vatType.title') }}
+                    {{ trans('cruds.typeVat.title') }}
                 </h6>
 
-                @can('vat_type_create')
+                @can('type_vat_create')
                     <a class="btn btn-indigo" href="{{ route('admin.vat-types.create') }}">
-                        {{ trans('global.add') }} {{ trans('cruds.vatType.title_singular') }}
+                        {{ trans('global.add') }} {{ trans('cruds.typeVat.title_singular') }}
                     </a>
                 @endcan
             </div>

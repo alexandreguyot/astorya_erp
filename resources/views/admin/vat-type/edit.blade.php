@@ -6,15 +6,15 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.edit') }}
-                    {{ trans('cruds.vatType.title_singular') }}:
-                    {{ trans('cruds.vatType.fields.id') }}
-                    {{ $vatType->id }}
+                    {{ trans('cruds.typeVat.title_singular') }}:
+                    {{ trans('cruds.typeVat.fields.id') }}
+                    {{ $typeVat->id }}
                 </h6>
             </div>
         </div>
 
         <div class="card-body">
-            @livewire('vat-type.edit', [$vatType])
+            @livewire('vat-type.edit', [$typeVat])
         </div>
     </div>
 </div>
