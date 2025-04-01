@@ -1,10 +1,18 @@
 <div>
     <div class="card-controls sm:flex">
-        <div class="w-full sm:w-1/2 ">
-            Recherche:
-            <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full sm:w-1/2 form-control" />
-        </div>
-        <div class="w-full sm:w-1/2 sm:text-right">
+        <div class="flex space-x-4 font-semibold">
+            <div>
+                Recherche:
+                <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
+            </div>
+            <div>
+                Date de début :
+                <x-date-picker wire:model="dateStart" id="dateStart" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de début" picker="date"/>
+            </div>
+            <div>
+                Date de fin :
+                <x-date-picker wire:model="dateEnd" id="dateEnd" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de fin" picker="date"/>
+            </div>
         </div>
     </div>
     <div wire:loading.delay>
@@ -21,16 +29,7 @@
                             @include('components.table.sort', ['field' => 'company.name'])
                         </th>
                         <th>
-                            {{ trans('cruds.company.fields.address') }}
-                            @include('components.table.sort', ['field' => 'company.address'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.contract.fields.setup_at') }}
-                            @include('components.table.sort', ['field' => 'setup_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.contract.fields.established_at') }}
-                            @include('components.table.sort', ['field' => 'established_at'])
+                            Type de contract
                         </th>
                         <th>
                             {{ trans('cruds.contract.fields.started_at') }}
@@ -39,14 +38,6 @@
                         <th>
                             {{ trans('cruds.contract.fields.terminated_at') }}
                             @include('components.table.sort', ['field' => 'terminated_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.contract.fields.billed_at') }}
-                            @include('components.table.sort', ['field' => 'billed_at'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.contract.fields.validated_at') }}
-                            @include('components.table.sort', ['field' => 'validated_at'])
                         </th>
                         <th>
                         </th>
@@ -61,27 +52,19 @@
                                 @endif
                             </td>
                             <td>
-                                @if($contract->company)
-                                    {{ $contract->company->address ?? '' }}
-                                @endif
-                            </td>
-                            <td>
-                                {{ $contract->setup_at }}
-                            </td>
-                            <td>
-                                {{ $contract->established_at }}
+                                @foreach($contract->contractProductDetails as $detail)
+                                    @if($detail->product)
+                                        <span class="badge badge-relationship">
+                                            {{ $detail->product->designation_short ?? '' }}
+                                        </span>
+                                    @endif
+                                @endforeach
                             </td>
                             <td>
                                 {{ $contract->started_at }}
                             </td>
                             <td>
                                 {{ $contract->terminated_at }}
-                            </td>
-                            <td>
-                                {{ $contract->billed_at }}
-                            </td>
-                            <td>
-                                {{ $contract->validated_at }}
                             </td>
                             <td>
                                 <div class="flex justify-end">

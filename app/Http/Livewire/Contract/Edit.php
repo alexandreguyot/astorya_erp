@@ -42,27 +42,27 @@ class Edit extends Component
             ],
             'contract.setup_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.established_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.started_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.terminated_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.billed_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.validated_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
         ];
     }

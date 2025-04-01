@@ -10,12 +10,12 @@ class CreateContractsTable extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('setup_at');
-            $table->dateTime('established_at');
-            $table->dateTime('started_at');
-            $table->dateTime('terminated_at');
-            $table->dateTime('billed_at');
-            $table->dateTime('validated_at');
+            $table->date('setup_at');
+            $table->date('established_at');
+            $table->date('started_at');
+            $table->date('terminated_at');
+            $table->date('billed_at');
+            $table->date('validated_at');
             $table->timestamps();
             $table->softDeletes();
         });

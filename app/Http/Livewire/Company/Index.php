@@ -58,8 +58,8 @@ class Index extends Component
 
     public function mount()
     {
-        $this->sortBy            = 'id';
-        $this->sortDirection     = 'desc';
+        $this->sortBy            = 'name';
+        $this->sortDirection     = 'asc';
         $this->perPage           = 100;
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Company())->orderable;

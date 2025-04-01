@@ -1,17 +1,17 @@
 <div>
-    <div class="card-controls sm:flex bg-red-700/75">
+    <div class="card-controls sm:flex ">
         <div class="flex space-x-4 font-semibold">
             <div>
                 Recherche:
-                <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control" />
+                <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
             </div>
             <div>
                 Date de début :
-                <x-date-picker wire:model="dateStart" class="border rounded px-2 py-1" placeholder="Date de début" picker="date"/>
+                <x-date-picker wire:model="dateStart" id="dateStart" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de début" picker="date"/>
             </div>
             <div>
                 Date de fin :
-                <x-date-picker wire:model="dateEnd" class="border rounded px-2 py-1" placeholder="Date de fin" picker="date"/>
+                <x-date-picker wire:model="dateEnd" id="dateEnd" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de fin" picker="date"/>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
                                 {{ $bill->no_bill }}
                             </td>
                             <td>
-                                {{ $bill->amount }} €
+                                {{ number_format((float)$bill->amount, 2, ',', ''); }} €
                             </td>
                             <td>
                                 {{ $bill->generated_at }}

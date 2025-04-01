@@ -17,9 +17,9 @@ return new class extends Migration
             $table->integer('quantity');
             $table->string('capacity', 250)->nullable();
             $table->decimal('monthly_unit_price_without_taxe', 10, 2)->default(0);
-            $table->dateTime('billing_started_at');
-            $table->dateTime('billing_terminated_at');
-            $table->dateTime('last_billed_at');
+            $table->date('billing_started_at');
+            $table->date('billing_terminated_at');
+            $table->date('last_billed_at');
             $table->timestamps();
         });
     }

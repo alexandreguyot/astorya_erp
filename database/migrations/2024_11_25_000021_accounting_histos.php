@@ -10,13 +10,13 @@ return new class extends Migration {
         Schema::create('accounting_histos', function (Blueprint $table) {
             $table->id();
             $table->longText('journal');
-            $table->dateTime('date');
+            $table->date('date');
             $table->longText('no_bill');
             $table->longText('account_number');
             $table->longText('label');
             $table->decimal('debit_amount', 10, 2);
             $table->decimal('credit_amount', 10, 2);
-            $table->dateTime('deadline');
+            $table->date('deadline');
             $table->longText('product_code')->nullable();
             $table->longText('product_short_description')->nullable();
             $table->longText('company_name')->nullable();

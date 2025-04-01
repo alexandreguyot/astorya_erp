@@ -21,48 +21,12 @@
                             @include('components.table.sort', ['field' => 'name'])
                         </th>
                         <th>
-                            {{ trans('cruds.company.fields.address') }}
-                            @include('components.table.sort', ['field' => 'address'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.address_compl') }}
-                            @include('components.table.sort', ['field' => 'address_compl'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.city') }}
-                            @include('components.table.sort', ['field' => 'city.name'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.city.fields.zipcode') }}
-                            @include('components.table.sort', ['field' => 'city.zipcode'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.email') }}
-                            @include('components.table.sort', ['field' => 'email'])
-                        </th>
-                        <th>
                             {{ trans('cruds.company.fields.accounting') }}
                             @include('components.table.sort', ['field' => 'accounting'])
                         </th>
                         <th>
                             {{ trans('cruds.company.fields.ciel_reference') }}
                             @include('components.table.sort', ['field' => 'ciel_reference'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.send_bill_type') }}
-                            @include('components.table.sort', ['field' => 'send_bill_type'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.one_bill_per_period') }}
-                            @include('components.table.sort', ['field' => 'one_bill_per_period'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.bill_payment_methood') }}
-                            @include('components.table.sort', ['field' => 'bill_payment_methood'])
-                        </th>
-                        <th>
-                            {{ trans('cruds.company.fields.observations') }}
-                            @include('components.table.sort', ['field' => 'observations'])
                         </th>
                         <th>
                         </th>
@@ -75,45 +39,10 @@
                                 {{ $company->name }}
                             </td>
                             <td>
-                                {{ $company->address }}
-                            </td>
-                            <td>
-                                {{ $company->address_compl }}
-                            </td>
-                            <td>
-                                @if($company->city)
-                                    <span class="badge badge-relationship">{{ $company->city->name ?? '' }}</span>
-                                @endif
-                            </td>
-                            <td>
-                                @if($company->city)
-                                    {{ $company->city->zipcode ?? '' }}
-                                @endif
-                            </td>
-                            <td>
-                                <a class="link-light-blue" href="mailto:{{ $company->email }}">
-                                    <i class="far fa-envelope fa-fw">
-                                    </i>
-                                    {{ $company->email }}
-                                </a>
-                            </td>
-                            <td>
                                 {{ $company->accounting }}
                             </td>
                             <td>
                                 {{ $company->ciel_reference }}
-                            </td>
-                            <td>
-                                <input class="disabled:opacity-50 disabled:cursor-not-allowed" type="checkbox" disabled {{ $company->send_bill_type ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                <input class="disabled:opacity-50 disabled:cursor-not-allowed" type="checkbox" disabled {{ $company->one_bill_per_period ? 'checked' : '' }}>
-                            </td>
-                            <td>
-                                {{ $company->bill_payment_methood }}
-                            </td>
-                            <td>
-                                {{ $company->observations }}
                             </td>
                             <td>
                                 <div class="flex justify-end">
