@@ -75,12 +75,12 @@ class Index extends Component
 
         $typePeriods = $query->paginate($this->perPage);
 
-        return view('livewire.period-type.index', compact('typePeriods', 'query'));
+        return view('livewire.type-period.index', compact('typePeriods', 'query'));
     }
 
     public function deleteSelected()
     {
-        abort_if(Gate::denies('period_type_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         TypePeriod::whereIn('id', $this->selected)->delete();
 
@@ -89,7 +89,7 @@ class Index extends Component
 
     public function delete(TypePeriod $typePeriod)
     {
-        abort_if(Gate::denies('period_type_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $typePeriod->delete();
     }

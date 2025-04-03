@@ -75,7 +75,7 @@ class Index extends Component
 
         $typeContracts = $query->paginate($this->perPage);
 
-        return view('livewire.contract-type.index', compact('typeContracts', 'query'));
+        return view('livewire.type-contract.index', compact('typeContracts', 'query'));
     }
 
     public function deleteSelected()

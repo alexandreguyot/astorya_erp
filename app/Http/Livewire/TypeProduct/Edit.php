@@ -16,7 +16,7 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.product-type.edit');
+        return view('livewire.type-product.edit');
     }
 
     public function submit()
@@ -25,7 +25,7 @@ class Edit extends Component
 
         $this->typeProduct->save();
 
-        return redirect()->route('admin.product-types.index');
+        return redirect()->route('admin.type-product.index');
     }
 
     protected function rules(): array

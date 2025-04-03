@@ -9,13 +9,13 @@
                 </h6>
 
                 @can('type_contract_create')
-                    <a class="btn btn-indigo" href="{{ route('admin.contract-types.create') }}">
+                    <a class="btn btn-indigo" href="{{ route('admin.type-contract.create') }}">
                         Créer un type de contrat
                     </a>
                 @endcan
             </div>
         </div>
-        @livewire('contract-type.index')
+        @livewire('type-contract.index')
 
     </div>
 </div>

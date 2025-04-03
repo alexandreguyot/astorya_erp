@@ -14,27 +14,27 @@ class TypeVatController extends Controller
     {
         abort_if(Gate::denies('type_vat_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.vat-type.index');
+        return view('admin.type-vat.index');
     }
 
     public function create()
     {
         abort_if(Gate::denies('type_vat_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.vat-type.create');
+        return view('admin.type-vat.create');
     }
 
     public function edit(TypeVat $typeVat)
     {
         abort_if(Gate::denies('type_vat_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.vat-type.edit', compact('typeVat'));
+        return view('admin.type-vat.edit', compact('typeVat'));
     }
 
     public function show(TypeVat $typeVat)
     {
         abort_if(Gate::denies('type_vat_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.vat-type.show', compact('typeVat'));
+        return view('admin.type-vat.show', compact('typeVat'));
     }
 }

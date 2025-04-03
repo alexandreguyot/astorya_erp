@@ -33,7 +33,7 @@
                             <td>
                                 <div class="flex justify-end">
                                     @can('type_contract_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contract-types.edit', $typeContract) }}">
+                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.type-contract.edit', $typeContract) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan

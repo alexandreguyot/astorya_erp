@@ -75,12 +75,12 @@ class Index extends Component
 
         $typeProducts = $query->paginate($this->perPage);
 
-        return view('livewire.product-type.index', compact('typeProducts', 'query'));
+        return view('livewire.type-product.index', compact('typeProducts', 'query'));
     }
 
     public function deleteSelected()
     {
-        abort_if(Gate::denies('product_type_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         TypeProduct::whereIn('id', $this->selected)->delete();
 
@@ -89,7 +89,7 @@ class Index extends Component
 
     public function delete(TypeProduct $typeProduct)
     {
-        abort_if(Gate::denies('product_type_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         $typeProduct->delete();
     }

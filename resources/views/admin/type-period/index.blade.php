@@ -5,17 +5,17 @@
         <div class="card-header border-b border-blueGray-200">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('cruds.typeVat.title') }}
+                    {{ trans('cruds.typePeriod.title') }}
                 </h6>
 
-                @can('type_vat_create')
-                    <a class="btn btn-indigo" href="{{ route('admin.vat-types.create') }}">
-                        {{ trans('global.add') }} {{ trans('cruds.typeVat.title_singular') }}
+                @can('type_period_create')
+                    <a class="btn btn-indigo" href="{{ route('admin.type-period.create') }}">
+                        {{ trans('global.add') }} {{ trans('cruds.typePeriod.title_singular') }}
                     </a>
                 @endcan
             </div>
         </div>
-        @livewire('vat-type.index')
+        @livewire('type-period.index')
 
     </div>
 </div>

@@ -13,7 +13,7 @@ class TypeVat extends Model
 {
     use HasFactory, HasAdvancedFilter, SoftDeletes;
 
-    public $table = 'types_vat';
+    public $table = 'type_vats';
 
     protected $fillable = [
         'code',

@@ -409,7 +409,14 @@
                     Facture N° {{ $bill->no_bill }}
                 </div>
                 <div class="auto-fill">
-                    Mode de paiement : {{ $bill->company->payment_method == 0 ? 'Prélèvement' : $bill->company->payment_method == 1 ? 'Virement' : '' }}
+                    Mode de paiement :
+                    @if ($bill->company->payment_method == 0)
+                        Prélèvement
+                    @elseif ($bill->company->payment_method == 1)
+                        Virement
+                    @else
+
+                    @endif
                 </div>
                 <div class="auto-fill">
                     Echéance : {{ Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') }}
@@ -432,17 +439,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in billingPage)
-                    {
-                    <tr class="spaceUnder">
-                        <td class="width-10 center-align">@item.Reference</td>
-                        <td style="font-size: 14px">@Html.Raw(item.Description)<br /><b>Du @item.StartBillingDate au @item.EndBillingDate</b><br />@item.Observation</td>
-                        <td class="width-10 center-align">@item.Quantity</td>
-                        <td class="width-10 center-align">@item.MonthlyUnitPriceVatNotIncluded.ToString("0.00")</td>
-                        <td class="width-10 center-align">@item.AmountVatNotIncluded.ToString("0.00")</td>
-                        <td class="width-10 center-align">@item.CodeVat</td>
-                    </tr>
-                    }
+                    {{-- @foreach (var item in billingPage)
+                    { --}}
+                        <tr class="spaceUnder">
+                            <td class="width-10 center-align">@item.Reference</td>
+                            <td style="font-size: 14px">@Html.Raw(item.Description)<br /><b>Du @item.StartBillingDate au @item.EndBillingDate</b><br />@item.Observation</td>
+                            <td class="width-10 center-align">@item.Quantity</td>
+                            <td class="width-10 center-align">@item.MonthlyUnitPriceVatNotIncluded.ToString("0.00")</td>
+                            <td class="width-10 center-align">@item.AmountVatNotIncluded.ToString("0.00")</td>
+                            <td class="width-10 center-align">@item.CodeVat</td>
+                        </tr>
+                    {{-- } --}}
                     <tr class="last-row">
                         <td></td>
                         <td></td>
@@ -470,15 +477,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach(var vat in Model.VatResumes)
-                                    {
+                                    {{-- @foreach(var vat in Model.VatResumes)
+                                    { --}}
                                     <tr>
                                         <td class="min-width-70 center-align">@vat.Code</td>
                                         <td class="right-align">@vat.AmountVatNotIncluded.ToString("0.00")</td>
                                         <td class="right-align">@vat.Percent.ToString("0.00")</td>
                                         <td class="right-align">@vat.AmountVat.ToString("0.00")</td>
                                     </tr>
-                                    }
+                                    {{-- } --}}
                                 </tbody>
                             </table>
                         </div>

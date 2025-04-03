@@ -78,7 +78,7 @@
                                     <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
                                         Valider
                                     </a>
-                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.pdf', $contract) }}" target="_blank">
                                         Télécharger
                                     </a>
                                 </div>

@@ -47,12 +47,12 @@
                             <td>
                                 <div class="flex justify-end">
                                     @can('type_vat_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.vat-types.show', $typeVat) }}">
+                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.type-vat.show', $typeVat) }}">
                                             {{ trans('global.view') }}
                                         </a>
                                     @endcan
                                     @can('type_vat_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.vat-types.edit', $typeVat) }}">
+                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.type-vat.edit', $typeVat) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan

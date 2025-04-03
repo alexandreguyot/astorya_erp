@@ -6,13 +6,13 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.create') }}
-                    {{ trans('cruds.typeVat.title_singular') }}
+                    {{ trans('cruds.typeContract.title_singular') }}
                 </h6>
             </div>
         </div>
 
         <div class="card-body">
-            @livewire('vat-type.create')
+            @livewire('type-contract.create')
         </div>
     </div>
 </div>

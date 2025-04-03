@@ -16,7 +16,7 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.contract-type.edit');
+        return view('livewire.type-contract.edit');
     }
 
     public function submit()
@@ -25,7 +25,7 @@ class Edit extends Component
 
         $this->typeContract->save();
 
-        return redirect()->route('admin.contract-types.index');
+        return redirect()->route('admin.type-contract.index');
     }
 
     protected function rules(): array

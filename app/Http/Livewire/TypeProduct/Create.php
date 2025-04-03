@@ -16,7 +16,7 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.product-type.create');
+        return view('livewire.type-product.create');
     }
 
     public function submit()
@@ -25,7 +25,7 @@ class Create extends Component
 
         $this->typeProduct->save();
 
-        return redirect()->route('admin.product-types.index');
+        return redirect()->route('admin.type-product.index');
     }
 
     protected function rules(): array

@@ -12,29 +12,29 @@ class TypeProductController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('product_type_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.product-type.index');
+        return view('admin.type-product.index');
     }
 
     public function create()
     {
-        abort_if(Gate::denies('product_type_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.product-type.create');
+        return view('admin.type-product.create');
     }
 
     public function edit(TypeProduct $typeProduct)
     {
-        abort_if(Gate::denies('product_type_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.product-type.edit', compact('typeProduct'));
+        return view('admin.type-product.edit', compact('typeProduct'));
     }
 
     public function show(TypeProduct $typeProduct)
     {
-        abort_if(Gate::denies('product_type_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_product_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.product-type.show', compact('typeProduct'));
+        return view('admin.type-product.show', compact('typeProduct'));
     }
 }

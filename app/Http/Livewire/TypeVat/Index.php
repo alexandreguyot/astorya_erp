@@ -75,7 +75,7 @@ class Index extends Component
 
         $typeVats = $query->paginate($this->perPage);
 
-        return view('livewire.vat-type.index', compact('query', 'typeVats'));
+        return view('livewire.type-vat.index', compact('query', 'typeVats'));
     }
 
     public function deleteSelected()

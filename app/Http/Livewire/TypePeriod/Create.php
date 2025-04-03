@@ -16,7 +16,7 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.period-type.create');
+        return view('livewire.type-period.create');
     }
 
     public function submit()
@@ -25,7 +25,7 @@ class Create extends Component
 
         $this->typePeriod->save();
 
-        return redirect()->route('admin.period-types.index');
+        return redirect()->route('admin.type-period.index');
     }
 
     protected function rules(): array

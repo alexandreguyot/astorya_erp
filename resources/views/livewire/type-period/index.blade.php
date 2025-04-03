@@ -39,17 +39,17 @@
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    {{-- @can('period_type_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.period-types.show', $typePeriod) }}">
+                                    {{-- @can('type_period_show')
+                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.type-period.show', $typePeriod) }}">
                                             {{ trans('global.view') }}
                                         </a>
                                     @endcan --}}
-                                    @can('period_type_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.period-types.edit', $typePeriod) }}">
+                                    @can('type_period_edit')
+                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.type-period.edit', $typePeriod) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan
-                                    @can('period_type_delete')
+                                    @can('type_period_delete')
                                         <button class="btn btn-sm btn-rose mr-2" type="button" wire:click="confirm('delete', {{ $typePeriod->id }})" wire:loading.attr="disabled">
                                             {{ trans('global.delete') }}
                                         </button>

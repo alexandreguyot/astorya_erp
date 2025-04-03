@@ -43,7 +43,7 @@
 
                 @can('contract_access')
                     <li class="items-center">
-                        <a class="{{ request()->is("admin/contrats*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contracts.index") }}">
+                        <a class="{{ request()->is("contrats*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contracts.index") }}">
                             <i class="fa-fw c-sidebar-nav-icon fas fa-folder-open">
                             </i>
                             {{ trans('cruds.contract.title') }}
@@ -52,7 +52,7 @@
                 @endcan
                 @can('bill_access')
                     <li class="items-center">
-                        <a class="{{ request()->is("admin/factures*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bills.index") }}">
+                        <a class="{{ request()->is("factures*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bills.index") }}">
                             <i class="fa-fw c-sidebar-nav-icon fas fa-list-ul">
                             </i>
                             {{ trans('cruds.bill.title') }}
@@ -61,7 +61,7 @@
                 @endcan
                 @can('company_access')
                     <li class="items-center">
-                        <a class="{{ request()->is("admin/clients*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.companies.index") }}">
+                        <a class="{{ request()->is("clients*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.companies.index") }}">
                             <i class="fa-fw c-sidebar-nav-icon fas fa-user-friends">
                             </i>
                             {{ trans('cruds.company.title') }}
@@ -70,7 +70,7 @@
                 @endcan
                 @can('parametre_access')
                     <li class="items-center">
-                        <a class="has-sub {{ request()->is("admin/nos-coordonnees*")||request()->is("admin/type-de-contract*")||request()->is("admin/type-de-periode*")||request()->is("admin/type-de-tva*")||request()->is("admin/type-de-produit*")||request()->is("admin/cities*")||request()->is("admin/contacts*")||request()->is("admin/bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
+                        <a class="has-sub {{ request()->is("nos-coordonnees*")||request()->is("type-de-contract*")||request()->is("type-de-periode*")||request()->is("type-de-tva*")||request()->is("type-de-produit*")  ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
                             <i class="fa-fw fas c-sidebar-nav-icon fa-cogs">
                             </i>
                             {{ trans('cruds.parametre.title') }}
@@ -78,7 +78,7 @@
                         <ul class="ml-4 subnav hidden">
                             @can('owner_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/nos-coordonnees*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.owners.index") }}">
+                                    <a class="{{ request()->is("nos-coordonnees*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.owners.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-home">
                                         </i>
                                         {{ trans('cruds.owner.title') }}
@@ -87,7 +87,7 @@
                             @endcan
                             @can('type_contract_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/type-de-contract*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-contracts.index") }}">
+                                    <a class="{{ request()->is("type-de-contract*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-contract.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.typeContract.title') }}
@@ -96,7 +96,7 @@
                             @endcan
                             @can('type_period_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/type-de-periode*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-de-periode.index") }}">
+                                    <a class="{{ request()->is("type-de-periode*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-period.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.typePeriod.title') }}
@@ -105,7 +105,7 @@
                             @endcan
                             @can('type_vat_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/type-de-tva*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-vat.index") }}">
+                                    <a class="{{ request()->is("type-de-tva*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-vat.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.typeVat.title') }}
@@ -114,7 +114,7 @@
                             @endcan
                             @can('type_product_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/type-de-produit*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-product.index") }}">
+                                    <a class="{{ request()->is("type-de-produit*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.type-product.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.typeProduct.title') }}
@@ -123,7 +123,7 @@
                             @endcan
                             {{-- @can('city_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/villes*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.cities.index") }}">
+                                    <a class="{{ request()->is("villes*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.cities.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon far fa-building">
                                         </i>
                                         {{ trans('cruds.city.title') }}
@@ -132,7 +132,7 @@
                             @endcan
                             @can('contact_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/contacts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contacts.index") }}">
+                                    <a class="{{ request()->is("contacts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contacts.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.contact.title') }}
@@ -141,7 +141,7 @@
                             @endcan
                             @can('bank_account_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bank-accounts.index") }}">
+                                    <a class="{{ request()->is("bank-accounts*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.bank-accounts.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-cogs">
                                         </i>
                                         {{ trans('cruds.bankAccount.title') }}
@@ -153,7 +153,7 @@
                 @endcan
                 @can('user_management_access')
                     <li class="items-center">
-                        <a class="has-sub {{ request()->is("admin/permissions*")||request()->is("admin/roles*")||request()->is("admin/utilisateurs*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
+                        <a class="has-sub {{ request()->is("permissions*")||request()->is("roles*")||request()->is("utilisateurs*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="#" onclick="window.openSubNav(this)">
                             <i class="fa-fw fas c-sidebar-nav-icon fa-users">
                             </i>
                             {{ trans('cruds.userManagement.title') }}
@@ -161,7 +161,7 @@
                         <ul class="ml-4 subnav hidden">
                             @can('permission_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/permissions*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.permissions.index") }}">
+                                    <a class="{{ request()->is("permissions*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.permissions.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-unlock-alt">
                                         </i>
                                         {{ trans('cruds.permission.title') }}
@@ -170,7 +170,7 @@
                             @endcan
                             @can('role_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/roles*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.roles.index") }}">
+                                    <a class="{{ request()->is("roles*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.roles.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-briefcase">
                                         </i>
                                         {{ trans('cruds.role.title') }}
@@ -179,7 +179,7 @@
                             @endcan
                             @can('user_access')
                                 <li class="items-center">
-                                    <a class="{{ request()->is("admin/utilisateurs*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.users.index") }}">
+                                    <a class="{{ request()->is("utilisateurs*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.users.index") }}">
                                         <i class="fa-fw c-sidebar-nav-icon fas fa-user">
                                         </i>
                                         {{ trans('cruds.user.title') }}

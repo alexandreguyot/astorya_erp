@@ -21,12 +21,12 @@
                             @include('components.table.sort', ['field' => 'code'])
                         </th>
                         <th>
-                            {{ trans('cruds.typeProduct.fields.short_description') }}
-                            @include('components.table.sort', ['field' => 'short_description'])
+                            {{ trans('cruds.typeProduct.fields.designation_short') }}
+                            @include('components.table.sort', ['field' => 'designation_short'])
                         </th>
                         <th>
-                            {{ trans('cruds.typeProduct.fields.description_longue') }}
-                            @include('components.table.sort', ['field' => 'description_longue'])
+                            {{ trans('cruds.typeProduct.fields.designation_long') }}
+                            @include('components.table.sort', ['field' => 'designation_long'])
                         </th>
                         <th>
                             {{ trans('cruds.typeProduct.fields.accounting') }}
@@ -43,27 +43,27 @@
                                 {{ $typeProduct->code }}
                             </td>
                             <td>
-                                {{ $typeProduct->short_description }}
+                                {{ $typeProduct->designation_short }}
                             </td>
                             <td>
-                                {{ $typeProduct->description_longue }}
+                                {{ $typeProduct->designation_long }}
                             </td>
                             <td>
                                 {{ $typeProduct->accounting }}
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    {{-- @can('product_type_show')
-                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.product-types.show', $typeProduct) }}">
+                                    {{-- @can('type_product_show')
+                                        <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.type-product.show', $typeProduct) }}">
                                             {{ trans('global.view') }}
                                         </a>
                                     @endcan --}}
-                                    @can('product_type_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.product-types.edit', $typeProduct) }}">
+                                    @can('type_product_edit')
+                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.type-product.edit', $typeProduct) }}">
                                             {{ trans('global.edit') }}
                                         </a>
                                     @endcan
-                                    @can('product_type_delete')
+                                    @can('type_product_delete')
                                         <button class="btn btn-sm btn-rose mr-2" type="button" wire:click="confirm('delete', {{ $typeProduct->id }})" wire:loading.attr="disabled">
                                             {{ trans('global.delete') }}
                                         </button>

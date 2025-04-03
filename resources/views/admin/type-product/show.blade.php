@@ -6,9 +6,9 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.view') }}
-                    {{ trans('cruds.typePeriod.title_singular') }}:
-                    {{ trans('cruds.typePeriod.fields.id') }}
-                    {{ $typePeriod->id }}
+                    {{ trans('cruds.typeProduct.title_singular') }}:
+                    {{ trans('cruds.typeProduct.fields.id') }}
+                    {{ $typeProduct->id }}
                 </h6>
             </div>
         </div>
@@ -19,22 +19,22 @@
                     <tbody class="bg-white">
                         <tr>
                             <th>
-                                {{ trans('cruds.typePeriod.fields.id') }}
+                                {{ trans('cruds.typeProduct.fields.id') }}
                             </th>
                             <td>
-                                {{ $typePeriod->id }}
+                                {{ $typeProduct->id }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="form-group">
-                @can('period_type_edit')
-                    <a href="{{ route('admin.period-types.edit', $typePeriod) }}" class="btn btn-indigo mr-2">
+                @can('type_product_edit')
+                    <a href="{{ route('admin.type-product.edit', $typeProduct) }}" class="btn btn-indigo mr-2">
                         {{ trans('global.edit') }}
                     </a>
                 @endcan
-                <a href="{{ route('admin.period-types.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.type-product.index') }}" class="btn btn-secondary">
                     {{ trans('global.back') }}
                 </a>
             </div>

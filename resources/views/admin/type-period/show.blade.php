@@ -6,9 +6,9 @@
             <div class="card-header-container">
                 <h6 class="card-title">
                     {{ trans('global.view') }}
-                    {{ trans('cruds.typeContract.title_singular') }}:
-                    {{ trans('cruds.typeContract.fields.id') }}
-                    {{ $typeContract->id }}
+                    {{ trans('cruds.typePeriod.title_singular') }}:
+                    {{ trans('cruds.typePeriod.fields.id') }}
+                    {{ $typePeriod->id }}
                 </h6>
             </div>
         </div>
@@ -19,22 +19,22 @@
                     <tbody class="bg-white">
                         <tr>
                             <th>
-                                {{ trans('cruds.typeContract.fields.id') }}
+                                {{ trans('cruds.typePeriod.fields.id') }}
                             </th>
                             <td>
-                                {{ $typeContract->id }}
+                                {{ $typePeriod->id }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="form-group">
-                @can('type_contract_edit')
-                    <a href="{{ route('admin.contract-types.edit', $typeContract) }}" class="btn btn-indigo mr-2">
+                @can('type_period_edit')
+                    <a href="{{ route('admin.type-period.edit', $typePeriod) }}" class="btn btn-indigo mr-2">
                         {{ trans('global.edit') }}
                     </a>
                 @endcan
-                <a href="{{ route('admin.contract-types.index') }}" class="btn btn-secondary">
+                <a href="{{ route('admin.type-period.index') }}" class="btn btn-secondary">
                     {{ trans('global.back') }}
                 </a>
             </div>

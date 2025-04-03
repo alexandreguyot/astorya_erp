@@ -14,7 +14,7 @@
         </div>
 
         <div class="card-body">
-            @livewire('period-type.edit', [$typePeriod])
+            @livewire('type-period.edit', [$typePeriod])
         </div>
     </div>
 </div>

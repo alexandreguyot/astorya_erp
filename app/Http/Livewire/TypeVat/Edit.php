@@ -16,7 +16,7 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.vat-type.edit');
+        return view('livewire.type-vat.edit');
     }
 
     public function submit()
@@ -25,7 +25,7 @@ class Edit extends Component
 
         $this->typeVat->save();
 
-        return redirect()->route('admin.vat-types.index');
+        return redirect()->route('admin.type-vat.index');
     }
 
     protected function rules(): array

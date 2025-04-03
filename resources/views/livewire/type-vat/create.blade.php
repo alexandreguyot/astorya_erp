@@ -25,7 +25,7 @@
         <button class="btn btn-indigo mr-2" type="submit">
             {{ trans('global.save') }}
         </button>
-        <a href="{{ route('admin.vat-types.index') }}" class="btn btn-secondary">
+        <a href="{{ route('admin.type-vat.index') }}" class="btn btn-secondary">
             {{ trans('global.cancel') }}
         </a>
     </div>

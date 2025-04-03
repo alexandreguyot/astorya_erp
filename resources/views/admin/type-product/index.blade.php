@@ -8,14 +8,14 @@
                     {{ trans('cruds.typeProduct.title') }}
                 </h6>
 
-                @can('product_type_create')
-                    <a class="btn btn-indigo" href="{{ route('admin.product-types.create') }}">
+                @can('type_product_create')
+                    <a class="btn btn-indigo" href="{{ route('admin.type-product.create') }}">
                         {{ trans('global.add') }} {{ trans('cruds.typeProduct.title_singular') }}
                     </a>
                 @endcan
             </div>
         </div>
-        @livewire('product-type.index')
+        @livewire('type-product.index')
 
     </div>
 </div>

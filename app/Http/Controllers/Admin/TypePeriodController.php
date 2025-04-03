@@ -12,29 +12,29 @@ class TypePeriodController extends Controller
 {
     public function index()
     {
-        abort_if(Gate::denies('period_type_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.period-type.index');
+        return view('admin.type-period.index');
     }
 
     public function create()
     {
-        abort_if(Gate::denies('period_type_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.period-type.create');
+        return view('admin.type-period.create');
     }
 
     public function edit(TypePeriod $typePeriod)
     {
-        abort_if(Gate::denies('period_type_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.period-type.edit', compact('typePeriod'));
+        return view('admin.type-period.edit', compact('typePeriod'));
     }
 
     public function show(TypePeriod $typePeriod)
     {
-        abort_if(Gate::denies('period_type_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('type_period_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.period-type.show', compact('typePeriod'));
+        return view('admin.type-period.show', compact('typePeriod'));
     }
 }
