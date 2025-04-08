@@ -168,9 +168,9 @@ textarea.form-control {
     @apply px-4 py-2 border-t border-dashed
 }
 
-.table.table-index > tbody > tr:hover {
+/* .table.table-index > tbody > tr:hover {
     @apply bg-blueGray-50
-}
+} */
 
 .table.table-messages th {
     @apply px-6 py-3 border-l-0 border-r-0 border-blueGray-100
@@ -204,7 +204,7 @@ textarea.form-control {
 }
 
 .badge-contract {
-    @apply text-green-600 bg-green-200
+    @apply text-red-600 bg-red-200
 }
 
 .badge-relationship {

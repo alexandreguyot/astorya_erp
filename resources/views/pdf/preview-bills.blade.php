@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="{{ asset('css/pdf.css') }}" />
+    <title></title>
+    <link rel="stylesheet" href="{{ public_path('css/pdf.css') }}" />
+
 </head>
-<body>
+<body class="page">
     <div class="container">
         <div class="header">
             <div class="row">
-                <div class="auto-fill logo"></div>
+                <div class="logo-container">
+                    <img src="{{ public_path('images/logo.jpg') }}" alt="Logo" style="width: 280px;">
+                </div>
                 <div class="col auto-fill">
                     <div class="auto-fill">
                         <div class="auto-fill centered">
@@ -42,10 +45,10 @@
                             <hr />
                         </div>
                         <div class="margin-top-bot-10">
-                            {{ $bill->company->name }} <br />
-                            {{ $bill->company->address }} <br />
-                            {{ $bill->company->address_compl }} <br />
-                            {{ $bill->company->city->zip_code ?? '' }} {{ $bill->company->city->name ?? '' }} <br />
+                            {{ $contract->company->name }} <br />
+                            {{ $contract->company->address }} <br />
+                            {{ $contract->company->address_compl }} <br />
+                            {{ $contract->company->city->zip_code ?? '' }} {{ $contract->company->city->name ?? '' }} <br />
                         </div>
                     </div>
                 </div>
@@ -55,26 +58,26 @@
             </div>
             <div class="row bill-info">
                 <div class="auto-fill">
-                    Date : {{ $bill->billed_at->format('d/m/Y') }}
+                    Date : A DEFINIR
                 </div>
                 <div class="auto-fill">
-                    Facture N° {{ $bill->no_bill }}
+                    Facture N° A DEFINIR
                 </div>
                 <div class="auto-fill">
                     Mode de paiement :
-                    @if ($bill->company->payment_method == 0)
+                    @if ($contract->company->payment_method == 0)
                         Prélèvement
-                    @elseif ($bill->company->payment_method == 1)
+                    @elseif ($contract->company->payment_method == 1)
                         Virement
                     @else
 
                     @endif
                 </div>
                 <div class="auto-fill">
-                    Echéance : {{ Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') }}
+                    Echéance : PAS ENCORE GENERER
                 </div>
                 <div class="auto-fill">
-                    Type de Facturation : {{ $bill->type_period->title }}
+                    Type de Facturation : {{ $contract->type_period->title }}
                 </div>
             </div>
         </div>
@@ -131,12 +134,12 @@
                                 <tbody>
                                     {{-- @foreach(var vat in Model.VatResumes)
                                     { --}}
-                                    <tr>
+                                    {{-- <tr>
                                         <td class="min-width-70 center-align">@vat.Code</td>
                                         <td class="right-align">@vat.AmountVatNotIncluded.ToString("0.00")</td>
                                         <td class="right-align">@vat.Percent.ToString("0.00")</td>
                                         <td class="right-align">@vat.AmountVat.ToString("0.00")</td>
-                                    </tr>
+                                    </tr> --}}
                                     {{-- } --}}
                                 </tbody>
                             </table>
@@ -185,23 +188,23 @@
                                 <tbody>
                                     <tr>
                                         <td class="min-width-150 gray-background title">Total HT</td>
-                                        <td class="right-align width-70">@Model.TotalVatNotIncluded</td>
+                                        <td class="right-align width-70">Model.TotalVatNotIncluded</td>
                                     </tr>
                                     <tr>
                                         <td class="min-width-150 gray-background title"><strong>Net HT</strong></td>
-                                        <td class="border-bottom right-align width-70"><strong>@Model.TotalVatNotIncluded</strong></td>
+                                        <td class="border-bottom right-align width-70"><strong>Model.TotalVatNotIncluded</strong></td>
                                     </tr>
                                     <tr>
                                         <td class="min-width-150 gray-background title">Total TVA</td>
-                                        <td class="right-align width-70">@Model.TotalVat</td>
+                                        <td class="right-align width-70">Model.TotalVat</td>
                                     </tr>
                                     <tr>
                                         <td class="min-width-150 border-bottom gray-background title">Total TTC</td>
-                                        <td class="border-bottom right-align width-70">@Model.TotalVatIncluded</td>
+                                        <td class="border-bottom right-align width-70">Model.TotalVatIncluded</td>
                                     </tr>
                                     <tr>
                                         <td class="min-width-150 gray-background title"><strong>NET A PAYER</strong></td>
-                                        <td class="gray-background right-align width-70"><strong>@Model.TotalVatIncluded</strong></td>
+                                        <td class="gray-background right-align width-70"><strong>Model.TotalVatIncluded</strong></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -221,11 +224,11 @@
                                         <div>Mode de paiement </div>
                                     </div>
                                     <div class="col margin8">
-                                        <div>:   @Model.ClientCode</div>
-                                        <div>:   @Model.NoBill</div>
-                                        <div>:   @Model.TotalVatIncluded</div>
-                                        <div>:   @Model.Deadline</div>
-                                        <div>:   @Model.PayementMethod</div>
+                                        <div>:   Model.ClientCode</div>
+                                        <div>:   Model.NoBill</div>
+                                        <div>:   Model.TotalVatIncluded</div>
+                                        <div>:   Model.Deadline</div>
+                                        <div>:   Model.PayementMethod</div>
                                     </div>
                                 </div>
                             </div>

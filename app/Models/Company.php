@@ -32,11 +32,11 @@ class Company extends Model
         'address',
         'address_compl',
         'city.name',
-        'city.zipcode',
+        'city.zip_code',
         'email',
         'accounting',
         'ciel_reference',
-        'bill_payment_methood',
+        'bill_payment_method',
         'observations',
     ];
 
@@ -50,7 +50,7 @@ class Company extends Model
         'ciel_reference',
         'send_bill_type',
         'one_bill_per_period',
-        'bill_payment_methood',
+        'bill_payment_method',
         'observations',
     ];
 
@@ -60,13 +60,13 @@ class Company extends Model
         'address',
         'address_compl',
         'city.name',
-        'city.zipcode',
+        'city.zip_code',
         'email',
         'accounting',
         'ciel_reference',
         'send_bill_type',
         'one_bill_per_period',
-        'bill_payment_methood',
+        'bill_payment_method',
         'observations',
     ];
 

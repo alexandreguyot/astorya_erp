@@ -8,11 +8,11 @@
                     {{ trans('cruds.typeContract.title') }}
                 </h6>
 
-                @can('type_contract_create')
+                {{-- @can('type_contract_create')
                     <a class="btn btn-indigo" href="{{ route('admin.type-contract.create') }}">
                         Créer un type de contrat
                     </a>
-                @endcan
+                @endcan --}}
             </div>
         </div>
         @livewire('type-contract.index')

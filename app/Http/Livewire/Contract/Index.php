@@ -5,11 +5,13 @@ namespace App\Http\Livewire\Contract;
 use App\Http\Livewire\WithConfirmation;
 use App\Http\Livewire\WithSorting;
 use App\Models\Contract;
+use App\Models\Owner;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Index extends Component
 {
@@ -71,7 +73,7 @@ class Index extends Component
     {
         $this->sortBy            = 'company.name';
         $this->sortDirection     = 'asc';
-        $this->perPage           = 10;
+        $this->perPage           = 100;
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Contract())->orderable;
         $this->filterable         = (new Contract())->filterable;
@@ -81,50 +83,38 @@ class Index extends Component
 
     public function render()
     {
-        $query = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
-        ->whereNotNull('setup_at')
-        ->where(function ($query) {
-            $query->whereNull('terminated_at')
-                  ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
-        })
-        ->when($this->search, function ($query) {
-            $query->whereHas('company', function ($q) {
-                $q->where('companies.name', 'like', '%'.$this->search.'%');
-            });
-        })
-        ->whereHas('type_period', function ($query) {
-            $query->whereRaw('(TIMESTAMPDIFF(MONTH, terminated_at, ?) % nb_month) = 0', [Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth()]);
-        });
+        // Récupération des contrats sans pagination
+        $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
+            ->whereNotNull('setup_at')
+            ->where(function ($query) {
+                $query->whereNull('terminated_at')
+                        ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
+            })
+            ->when($this->search, function ($query) {
+                $query->whereHas('company', function ($q) {
+                    $q->where('companies.name', 'like', '%'.$this->search.'%');
+                });
+            })
+            ->whereHas('type_period', function ($query) {
+                $query->whereRaw('(TIMESTAMPDIFF(MONTH, terminated_at, ?) % nb_month) = 0', [
+                    Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth()
+                ]);
+            })
+            ->get(); // Récupère tous les contrats
 
-        $contracts = $query->paginate($this->perPage);
-
-        $contracts->getCollection()->transform(function ($contract) {
-            $contract->billing_period = $this->getBillingPeriodAttribute($contract, $this->dateStart);
-            $contract->total_price = $contract->total_price;
-            return $contract;
-        });
-
-
-        return view('livewire.contract.index', compact('contracts', 'query'));
-    }
-
-    public function getBillingPeriodAttribute($contrat, $dateStart = null)
-    {
-        if (!$contrat->type_period || !$contrat->type_period->nb_month) {
-            return null;
-        }
-
-        $nbMonth = $contrat->type_period->nb_month;
-        $day = Carbon::createFromFormat('d/m/Y', $contrat->setup_at)->format('d');
-        $startBilling = Carbon::createFromFormat('d/m/Y', $dateStart)->day($day);
-        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay(1);
-
-        return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
-    }
-
-    public function pdf()
-    {
-        //TODO
+        // Groupement des contrats par entreprise et période de facturation
+        $groupedContracts = $contracts->groupBy([
+            function ($contract) {
+                $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart); // Calcul de la période de facturation
+                return $contract->company->name; // Groupe par entreprise
+            },
+            function ($contract) {
+                return $contract->billing_period; // Groupe par période de facturation
+            }
+        ])->sortKeys();
+        return view('livewire.contract.index', [
+            'groupedContracts' => $groupedContracts // Passer les groupes à la vue
+        ]);
     }
 
     public function deleteSelected()

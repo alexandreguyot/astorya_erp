@@ -46,18 +46,23 @@
     </form>
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-    @livewireScripts
-        @yield('scripts')
-        @stack('scripts')
-        <script>
-            function closeAlert(event){
-        let element = event.target;
-        while(element.nodeName !== "BUTTON"){
-          element = element.parentNode;
+        @livewireScripts
+            @yield('scripts')
+            @stack('scripts')
+    <script>
+        function closeAlert(event){
+            let element = event.target;
+            while(element.nodeName !== "BUTTON"){
+            element = element.parentNode;
+            }
+            element.parentNode.parentNode.removeChild(element.parentNode);
         }
-        element.parentNode.parentNode.removeChild(element.parentNode);
-      }
-        </script>
+    </script>
+    <script>
+        window.addEventListener('openPdf', event => {
+            window.open(event.detail.url, '_blank');
+        });
+    </script>
 </body>
 
 </html>

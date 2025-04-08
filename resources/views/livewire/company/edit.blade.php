@@ -90,14 +90,14 @@
             {{ trans('cruds.company.fields.one_bill_per_period_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('company.bill_payment_methood') ? 'invalid' : '' }}">
-        <label class="form-label" for="bill_payment_methood">{{ trans('cruds.company.fields.bill_payment_methood') }}</label>
-        <input class="form-control" type="text" name="bill_payment_methood" id="bill_payment_methood" wire:model.defer="company.bill_payment_methood">
+    <div class="form-group {{ $errors->has('company.bill_payment_method') ? 'invalid' : '' }}">
+        <label class="form-label" for="bill_payment_method">{{ trans('cruds.company.fields.bill_payment_method') }}</label>
+        <input class="form-control" type="text" name="bill_payment_method" id="bill_payment_method" wire:model.defer="company.bill_payment_method">
         <div class="validation-message">
-            {{ $errors->first('company.bill_payment_methood') }}
+            {{ $errors->first('company.bill_payment_method') }}
         </div>
         <div class="help-block">
-            {{ trans('cruds.company.fields.bill_payment_methood_helper') }}
+            {{ trans('cruds.company.fields.bill_payment_method_helper') }}
         </div>
     </div>
     <div class="form-group {{ $errors->has('company.observations') ? 'invalid' : '' }}">

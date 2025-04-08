@@ -61,8 +61,6 @@ class Contract extends Model
         'validated_at',
     ];
 
-    protected $appends = ['billing_period', 'total_price'];
-
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
@@ -90,6 +88,19 @@ class Contract extends Model
         return $this->belongsTo(TypePeriod::class);
     }
 
+    public function calculateBillingPeriod($dateStart)
+    {
+        if (!$this->type_period || !$this->type_period->nb_month) {
+            return null;
+        }
+
+        $nbMonth = $this->type_period->nb_month;
+        $day = Carbon::createFromFormat('d/m/Y', $this->setup_at)->format('d');
+        $startBilling = Carbon::createFromFormat('d/m/Y', $dateStart)->day($day);
+        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay(1);
+
+        return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
+    }
     public function contract_product_detail()
     {
         return $this->hasMany(ContractProductDetail::class);

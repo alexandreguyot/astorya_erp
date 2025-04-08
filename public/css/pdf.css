@@ -1,0 +1,346 @@
+body {
+    font-family: Arial;
+}
+
+hr {
+    border-top: 1px solid black;
+}
+
+.container .header {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.container .row {
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+}
+
+.container .col {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+}
+
+.container .row .auto-fill,
+.container .col .auto-fill {
+    display: -webkit-box;
+    -webkit-box-flex: 1;
+}
+
+.container .row .auto-fill.centered {
+    -webkit-box-pack: center;
+}
+
+.container .header .bill-title {
+    -webkit-box-orient: vertical;
+    text-align: center;
+}
+
+.container .header .bill-title h1 {
+    font-size: 20px;
+}
+
+.container .header .logo {
+    background-image: public_path('images/logo.jpg');
+    background-repeat: no-repeat;
+    min-width: 280px;
+}
+
+.container .header .row .left-info {
+    width: 30mm;
+    text-align: left;
+}
+
+.container .client-resume .left-info {
+    width: 50mm;
+    text-align: left;
+}
+
+.container .bank-account .left-info {
+    width: 30mm;
+    text-align: left;
+}
+
+.container .margin2 > div {
+    margin: 2px 0;
+}
+
+.container .margin8 > div {
+    margin: 8px 0;
+}
+
+.container .margin5 > div {
+    margin: 5px 0;
+}
+
+.container .bill-info {
+    font-size: 12px;
+    padding: 0px 0px;
+    margin: 10px 0px;
+}
+
+.container .resume-table .small {
+    width: 5%;
+}
+
+.container .resume-table table,
+.container .amount-resume table,
+.container .resume-table th,
+.container .resume-table td {
+    /*border: 1px solid black;*/
+}
+
+.container .resume-table.main-col-min {
+    height: 150mm;
+}
+
+.container .resume-table.main-col {
+    height: 250mm;
+}
+
+.container .resume-table table.main-table-min {
+    height: 150mm;
+}
+
+.container .resume-table table.main-table {
+    height: 250mm;
+}
+
+.container .resume-table table.main-table-min tr th,
+.container .resume-table table.main-table tr th {
+    font-size: 13px;
+    height: 9mm;
+}
+
+.container .resume-table table.main-table-min tr td,
+.container .resume-table table.main-table tr td {
+    border-bottom: none;
+    vertical-align: top;
+}
+
+.container .resume-table table.main-table-min tr:last-child,
+.container .resume-table table.main-table tr:last-child {
+    height: 99%;
+}
+
+.container .resume-table table,
+.container .amount-resume table {
+    /*border-collapse: collapse;*/
+    width: 100%;
+    word-break: break-word;
+}
+
+    .container .amount-resume table .border-bottom {
+        border-bottom: 1px solid black;
+    }
+
+.container .footer {
+    -webkit-box-pack: justify;
+}
+
+.container .footer .contacts {
+    border: 1px solid black;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.container .footer .resume {
+/*        padding: 5px;*/
+    max-width: 490px;
+}
+
+.container .footer .vat-resume {
+    height: 80px;
+}
+
+.container .footer .payment-coupon .content {
+    border-left: 1px dashed black;
+    border-top: 1px dashed black;
+    padding: 0px 0px 0px 20px;
+}
+
+.container .footer .payment-coupon .content .client-resume {
+    border: 1px solid black;
+    padding: 2px 10px 2px 10px;
+    display: -webkit-box;
+}
+
+.container .footer .payment-coupon .scissors {
+    height: 24px;
+    margin: auto auto;
+    background-image: public_path('/images/scissors.png');
+    background-repeat: no-repeat;
+    background-position: right;
+    position: relative;
+    overflow: hidden;
+    background-size: 20px 20px;
+    top: 12px;
+    right: 10px;
+}
+
+.small-text {
+    font-size: 9px;
+}
+
+.gray-background {
+    background-color: #eee;
+}
+
+.right-align {
+    text-align: right;
+    padding-right: 5px;
+}
+
+.center-align {
+    text-align: center;
+}
+
+
+.left-align {
+    text-align: left;
+}
+
+
+.width-70 {
+    width: 70%;
+}
+
+.margin-top-10 {
+    margin: 10px 0px 0px 0px;
+}
+
+.margin-bot-10 {
+    margin: 0px 0px 10px 0px;
+}
+
+.margin-bot-20 {
+    margin: 0px 0px 20px 0px;
+}
+
+.margin-top-bot-5 {
+    margin: 5px 0px;
+}
+
+.margin-top-bot-10 {
+    margin: 10px 0px;
+}
+
+.margin-top-bot-15 {
+    margin: 15px 0px;
+}
+
+.width-45 {
+    width: 45%;
+}
+
+.width-10 {
+    width: 10%;
+}
+
+table.rounded {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 350px;
+    border-left: solid black 1.5px;
+    border-right: solid black 1.5px;
+    border-bottom: solid black 1.5px;
+    border-top: none;
+    border-radius: 10px;
+}
+
+    table.rounded td, th {
+        border-left: solid black 1px;
+        border-bottom: solid black 1px;
+    }
+
+    table.rounded tr:first-child th:first-child {
+        border-top-left-radius: 10px;
+    }
+
+    /*top-right border-radius*/
+    table.rounded tr:first-child th:last-child {
+        border-top-right-radius: 10px;
+    }
+
+    table.rounded tr:first-child th {
+        border-top: solid black 1.5px;
+        letter-spacing: 1px;
+    }
+
+    table.rounded th {
+        background-color: #eee;
+    }
+
+    table.rounded td:first-child, th:first-child {
+        border-left: none;
+    }
+
+    table.rounded.no-interline tr td {
+        border-top: none;
+    }
+
+    table.rounded tr:last-child td {
+        border-bottom: none;
+    }
+
+table.rounded-amount-resume {
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 350px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+    table.rounded-amount-resume .title {
+        letter-spacing: 1px;
+        padding: 3px 0px 3px 6px;
+    }
+
+    table.rounded-amount-resume tr:first-child td:first-child {
+        border-radius: 10px 0px 0px 0px;
+        border: none;
+    }
+
+    table.rounded-amount-resume tr:last-child td:first-child {
+        border-radius: 0px 0px 0px 10px;
+        border: none;
+    }
+
+    table.rounded-amount-resume tr:last-child td:last-child {
+        border-radius: 0px 0px 10px 0px;
+        border: none;
+    }
+
+.min-width-70 {
+    min-width: 70px;
+}
+
+.min-width-150 {
+    min-width: 150px;
+}
+
+.page-break-avoid {
+    page-break-inside: avoid;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-flex: 1;
+    -webkit-box-pack: end;
+}
+
+.bank-account h2 {
+    font-size: 12px;
+}
+
+.new-page {
+    page-break-before: always;
+}
+
+.cgv{
+    margin: 2px 0px 0px 0px;
+}
+
+tr.spaceUnder > td {
+    padding-bottom: 10px;
+}
+

@@ -16,19 +16,19 @@ class City extends Model
     public $table = 'cities';
 
     protected $fillable = [
-        'zipcode',
+        'zip_code',
         'name',
     ];
 
     public $orderable = [
         'id',
-        'zipcode',
+        'zip_code',
         'name',
     ];
 
     public $filterable = [
         'id',
-        'zipcode',
+        'zip_code',
         'name',
     ];
 

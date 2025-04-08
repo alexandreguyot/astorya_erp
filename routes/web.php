@@ -104,9 +104,7 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('contrats/creation', [ContractController::class, 'create'])->name('contracts.create');
     Route::get('contrats/{contract}', [ContractController::class, 'show'])->name('contracts.show');
     Route::get('contrats/{contract}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
-    Route::get('contrats/{contract}/pdf', [ContractController::class, 'pdf'])->name('contracts.pdf');
-
-
+    Route::get('contrats/previsualisation-pdf/{company}/{period}/{contracts}', [ContractController::class, 'preview'])->name('contracts.pdf.preview');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth']], function () {

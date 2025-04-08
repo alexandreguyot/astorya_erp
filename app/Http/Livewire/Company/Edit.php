@@ -70,7 +70,7 @@ class Edit extends Component
             'company.one_bill_per_period' => [
                 'boolean',
             ],
-            'company.bill_payment_methood' => [
+            'company.bill_payment_method' => [
                 'string',
                 'nullable',
             ],

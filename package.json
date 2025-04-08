@@ -26,5 +26,8 @@
         "resolve-url-loader": "^3.1.2",
         "select2": "^4.0.13",
         "tailwindcss": "^2.1.2"
+    },
+    "dependencies": {
+        "puppeteer": "^24.6.0"
     }
 }

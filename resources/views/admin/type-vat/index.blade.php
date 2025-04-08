@@ -8,11 +8,11 @@
                     {{ trans('cruds.typeVat.title') }}
                 </h6>
 
-                @can('type_vat_create')
+                {{-- @can('type_vat_create')
                     <a class="btn btn-indigo" href="{{ route('admin.type-vat.create') }}">
                         {{ trans('global.add') }} {{ trans('cruds.typeVat.title_singular') }}
                     </a>
-                @endcan
+                @endcan --}}
             </div>
         </div>
         @livewire('type-vat.index')

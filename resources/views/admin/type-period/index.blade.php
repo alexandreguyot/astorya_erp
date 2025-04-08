@@ -8,11 +8,11 @@
                     {{ trans('cruds.typePeriod.title') }}
                 </h6>
 
-                @can('type_period_create')
+                {{-- @can('type_period_create')
                     <a class="btn btn-indigo" href="{{ route('admin.type-period.create') }}">
                         {{ trans('global.add') }} {{ trans('cruds.typePeriod.title_singular') }}
                     </a>
-                @endcan
+                @endcan --}}
             </div>
         </div>
         @livewire('type-period.index')

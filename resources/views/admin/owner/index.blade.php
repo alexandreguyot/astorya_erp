@@ -8,11 +8,11 @@
                     {{ trans('cruds.owner.title') }}
                 </h6>
 
-                @can('owner_create')
+                {{-- @can('owner_create')
                     <a class="btn btn-indigo" href="{{ route('admin.owners.create') }}">
                         {{ trans('global.add') }} {{ trans('cruds.owner.title_singular') }}
                     </a>
-                @endcan
+                @endcan --}}
             </div>
         </div>
         @livewire('owner.index')
