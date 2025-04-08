@@ -20,26 +20,6 @@
             {{ trans('cruds.contract.fields.setup_at_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('contract.established_at') ? 'invalid' : '' }}">
-        <label class="form-label" for="established_at">{{ trans('cruds.contract.fields.established_at') }}</label>
-        <x-date-picker class="form-control" wire:model="contract.established_at" id="established_at" name="established_at" />
-        <div class="validation-message">
-            {{ $errors->first('contract.established_at') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.contract.fields.established_at_helper') }}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('contract.started_at') ? 'invalid' : '' }}">
-        <label class="form-label" for="started_at">{{ trans('cruds.contract.fields.started_at') }}</label>
-        <x-date-picker class="form-control" wire:model="contract.started_at" id="started_at" name="started_at" />
-        <div class="validation-message">
-            {{ $errors->first('contract.started_at') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.contract.fields.started_at_helper') }}
-        </div>
-    </div>
     <div class="form-group {{ $errors->has('contract.terminated_at') ? 'invalid' : '' }}">
         <label class="form-label" for="terminated_at">{{ trans('cruds.contract.fields.terminated_at') }}</label>
         <x-date-picker class="form-control" wire:model="contract.terminated_at" id="terminated_at" name="terminated_at" />

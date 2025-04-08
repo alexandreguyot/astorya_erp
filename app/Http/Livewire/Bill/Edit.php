@@ -110,17 +110,6 @@ class Edit extends Component
                 'nullable',
                 'date_format:' . config('project.datetime_format'),
             ],
-            'bill.to_be_collected' => [
-                'boolean',
-            ],
-            'bill.collected_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
-            'bill.recorded_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
             'mediaCollections.bill_file_path' => [
                 'array',
                 'nullable',

@@ -8,11 +8,11 @@
                     {{ trans('cruds.bill.title') }}
                 </h6>
 
-                @can('bill_create')
+                {{-- @can('bill_create')
                     <a class="btn btn-indigo" href="{{ route('admin.bills.create') }}">
                         Créer une facture
                     </a>
-                @endcan
+                @endcan --}}
             </div>
         </div>
         @livewire('bill.index')

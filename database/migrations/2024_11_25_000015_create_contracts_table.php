@@ -11,8 +11,6 @@ class CreateContractsTable extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
             $table->date('setup_at');
-            $table->date('established_at');
-            $table->date('started_at');
             $table->date('terminated_at');
             $table->date('billed_at');
             $table->date('validated_at');

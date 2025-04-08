@@ -90,36 +90,6 @@
             {{ trans('cruds.bill.fields.sent_at_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('bill.to_be_collected') ? 'invalid' : '' }}">
-        <input class="form-control" type="checkbox" name="to_be_collected" id="to_be_collected" wire:model.defer="bill.to_be_collected">
-        <label class="form-label inline ml-1" for="to_be_collected">{{ trans('cruds.bill.fields.to_be_collected') }}</label>
-        <div class="validation-message">
-            {{ $errors->first('bill.to_be_collected') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.bill.fields.to_be_collected_helper') }}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('bill.collected_at') ? 'invalid' : '' }}">
-        <label class="form-label" for="collected_at">{{ trans('cruds.bill.fields.collected_at') }}</label>
-        <x-date-picker class="form-control" wire:model="bill.collected_at" id="collected_at" name="collected_at" />
-        <div class="validation-message">
-            {{ $errors->first('bill.collected_at') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.bill.fields.collected_at_helper') }}
-        </div>
-    </div>
-    <div class="form-group {{ $errors->has('bill.recorded_at') ? 'invalid' : '' }}">
-        <label class="form-label" for="recorded_at">{{ trans('cruds.bill.fields.recorded_at') }}</label>
-        <x-date-picker class="form-control" wire:model="bill.recorded_at" id="recorded_at" name="recorded_at" />
-        <div class="validation-message">
-            {{ $errors->first('bill.recorded_at') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.bill.fields.recorded_at_helper') }}
-        </div>
-    </div>
     <div class="form-group {{ $errors->has('mediaCollections.bill_file_path') ? 'invalid' : '' }}">
         <label class="form-label" for="file_path">{{ trans('cruds.bill.fields.file_path') }}</label>
         <x-dropzone id="file_path" name="file_path" action="{{ route('admin.bills.storeMedia') }}" collection-name="bill_file_path" max-file-size="10" />

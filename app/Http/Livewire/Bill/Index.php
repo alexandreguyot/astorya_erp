@@ -84,7 +84,7 @@ class Index extends Component
     {
         $query = Bill::with(['company', 'typePeriod'])
         ->whereNotNull('no_bill')
-        // ->where('no_bill', 'like', 'FACT-%')
+        ->where('no_bill', 'like', 'FACT-%')
         ->when($this->dateStart && !$this->dateEnd, function ($query) {
             $dateStart = $this->convertDateFormat($this->dateStart, 'start');
             $query->where('generated_at', '>=', $dateStart);
@@ -101,7 +101,9 @@ class Index extends Component
         ->when($this->search, function ($query) {
             $query->whereHas('company', function($q) {
                 $q->where('companies.name', 'like', '%'.$this->search.'%');
-            });
+            })
+            ->orWhere('no_bill', 'like', '%'.$this->search.'%');
+
         })->orderBy($this->sortBy, $this->sortDirection);
 
         $bills = $query->paginate($this->perPage);

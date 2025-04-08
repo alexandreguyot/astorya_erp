@@ -44,14 +44,6 @@ class Edit extends Component
                 'nullable',
                 'date_format:' . config('project.date_format'),
             ],
-            'contract.established_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
-            'contract.started_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
             'contract.terminated_at' => [
                 'nullable',
                 'date_format:' . config('project.date_format'),

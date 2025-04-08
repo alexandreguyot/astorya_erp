@@ -18,9 +18,6 @@ return new class extends Migration {
             $table->date('generated_at')->nullable();
             $table->date('validated_at')->nullable();
             $table->date('sent_at')->nullable();
-            $table->boolean('to_be_collected')->default(0);
-            $table->date('collected_at')->nullable();
-            $table->date('recorded_at')->nullable();
             $table->string('file_path', 250)->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -515,11 +515,29 @@ input[type=text].form-control:focus, input[type=email].form-control:focus, input
 .badge:last-child {
     margin-right: 0px}
 
-.badge-contract {
+.badge-red {
     --tw-bg-opacity: 1;
     background-color: rgba(254, 202, 202, var(--tw-bg-opacity));
     --tw-text-opacity: 1;
     color: rgba(220, 38, 38, var(--tw-text-opacity))}
+
+.badge-green {
+    --tw-bg-opacity: 1;
+    background-color: rgba(167, 243, 208, var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgba(5, 150, 105, var(--tw-text-opacity))}
+
+.badge-purple {
+    --tw-bg-opacity: 1;
+    background-color: rgba(221, 214, 254, var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgba(124, 58, 237, var(--tw-text-opacity))}
+
+.badge-rose {
+    --tw-bg-opacity: 1;
+    background-color: rgba(254, 205, 211, var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgba(225, 29, 72, var(--tw-text-opacity))}
 
 .badge-relationship {
     --tw-bg-opacity: 1;
@@ -1938,12 +1956,6 @@ select {
 .mr-8 {
 	margin-right: 2rem;
 }
-.mr-5 {
-	margin-right: 1.25rem;
-}
-.mr-6 {
-	margin-right: 1.5rem;
-}
 .mt-3 {
 	margin-top: 0.75rem;
 }
@@ -2270,6 +2282,10 @@ select {
 	--tw-bg-opacity: 1;
 	background-color: rgba(185, 28, 28, var(--tw-bg-opacity));
 }
+.bg-red-600 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(220, 38, 38, var(--tw-bg-opacity));
+}
 .bg-blueGray-300 {
 	--tw-bg-opacity: 1;
 	background-color: rgba(203, 213, 225, var(--tw-bg-opacity));
@@ -2414,10 +2430,6 @@ select {
 	font-size: 0.75rem;
 	line-height: 1rem;
 }
-.text-2xl {
-	font-size: 1.5rem;
-	line-height: 2rem;
-}
 .font-bold {
 	font-weight: 700;
 }
@@ -2512,6 +2524,10 @@ select {
 .text-green-500 {
 	--tw-text-opacity: 1;
 	color: rgba(16, 185, 129, var(--tw-text-opacity));
+}
+.text-red-600 {
+	--tw-text-opacity: 1;
+	color: rgba(220, 38, 38, var(--tw-text-opacity));
 }
 .text-gray-700 {
 	--tw-text-opacity: 1;

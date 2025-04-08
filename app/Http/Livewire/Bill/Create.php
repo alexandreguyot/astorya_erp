@@ -45,7 +45,6 @@ class Create extends Component
     {
         $this->bill                      = $bill;
         $this->bill->one_bill_per_period = false;
-        $this->bill->to_be_collected     = false;
         $this->initListsForFields();
     }
 
@@ -99,17 +98,6 @@ class Create extends Component
                 'date_format:' . config('project.datetime_format'),
             ],
             'bill.sent_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
-            'bill.to_be_collected' => [
-                'boolean',
-            ],
-            'bill.collected_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
-            'bill.recorded_at' => [
                 'nullable',
                 'date_format:' . config('project.datetime_format'),
             ],

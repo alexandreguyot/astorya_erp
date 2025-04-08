@@ -68,8 +68,8 @@ class HomeController
         );
 
         $this->migrateTable('Contracts', 'contracts',
-            ['Id', 'CompanyId', 'TypePeriodId', 'SetupAt', 'EstablishedAt', 'StartedAt', 'TerminatedAt', 'BilledAt', 'ValidatedAt', 'CreationDate', 'LastModifiedDate'],
-            ['id', 'company_id', 'type_period_id', 'setup_at', 'established_at', 'started_at', 'terminated_at', 'billed_at', 'validated_at', 'created_at', 'updated_at']
+            ['Id', 'CompanyId', 'TypePeriodId', 'SetupAt', 'TerminatedAt', 'BilledAt', 'ValidatedAt', 'CreationDate', 'LastModifiedDate'],
+            ['id', 'company_id', 'type_period_id', 'setup_at', 'terminated_at', 'billed_at', 'validated_at', 'created_at', 'updated_at']
         );
 
         $this->migrateTable('ContractProductDetails', 'contract_product_details',
@@ -85,8 +85,8 @@ class HomeController
 
         $this->migrateTable(
             'Bills', 'bills',
-            ['Id', 'NoBill', 'Amount', 'OneBillPerPeriod', 'StartedAt', 'BilledAt', 'GeneratedAt', 'ValidatedAt', 'SentAt', 'ToBeCollected', 'CollectedAt', 'RecordedAt', 'FilePath', 'CreationDate', 'LastModifiedDate', 'AmountVatIncluded', 'CompanyId', 'TypePeriodId', 'ContractId'],
-            ['id', 'no_bill', 'amount', 'one_bill_per_period', 'started_at', 'billed_at', 'generated_at', 'validated_at', 'sent_at', 'to_be_collected', 'collected_at', 'recorded_at', 'file_path', 'created_at', 'updated_at', 'amount_vat_included', 'company_id', 'type_period_id', 'contract_id']
+            ['Id', 'NoBill', 'Amount', 'OneBillPerPeriod', 'StartedAt', 'BilledAt', 'GeneratedAt', 'ValidatedAt', 'SentAt', 'FilePath', 'CreationDate', 'LastModifiedDate', 'AmountVatIncluded', 'CompanyId', 'TypePeriodId', 'ContractId'],
+            ['id', 'no_bill', 'amount', 'one_bill_per_period', 'started_at', 'billed_at', 'generated_at', 'validated_at', 'sent_at', 'file_path', 'created_at', 'updated_at', 'amount_vat_included', 'company_id', 'type_period_id', 'contract_id']
         );
 
         echo "Migration terminée!";

@@ -80,6 +80,11 @@ class Company extends Model
         return $this->belongsTo(City::class);
     }
 
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;

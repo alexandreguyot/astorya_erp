@@ -18,8 +18,6 @@ class Contract extends Model
     protected $fillable = [
         'company_id',
         'setup_at',
-        'established_at',
-        'started_at',
         'terminated_at',
         'billed_at',
         'validated_at',
@@ -30,8 +28,6 @@ class Contract extends Model
         'company.name',
         'company.address',
         'setup_at',
-        'established_at',
-        'started_at',
         'terminated_at',
         'billed_at',
         'validated_at',
@@ -39,8 +35,6 @@ class Contract extends Model
 
     protected $dates = [
         'setup_at',
-        'established_at',
-        'started_at',
         'terminated_at',
         'billed_at',
         'validated_at',
@@ -54,8 +48,6 @@ class Contract extends Model
         'company.name',
         'company.address',
         'setup_at',
-        'established_at',
-        'started_at',
         'terminated_at',
         'billed_at',
         'validated_at',
@@ -76,6 +68,21 @@ class Contract extends Model
             ',',
             ''
         );
+    }
+
+    public function getTotalPriceWithVatAttribute()
+    {
+        $total = $this->contract_product_detail->sum(function ($detail) {
+            $basePrice = $detail->monthly_unit_price_without_taxe * $detail->quantity;
+
+            $vat = $detail->type_product->type_vat->percent ?? 0;
+
+            $priceWithVat = $basePrice * (1 + ($vat / 100));
+
+            return $priceWithVat;
+        });
+
+        return number_format($total, 2, ',', '');
     }
 
     public function company()
@@ -114,26 +121,6 @@ class Contract extends Model
     public function setSetupAtAttribute($value)
     {
         $this->attributes['setup_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
-    }
-
-    public function getEstablishedAtAttribute($value)
-    {
-        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
-    }
-
-    public function setEstablishedAtAttribute($value)
-    {
-        $this->attributes['established_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
-    }
-
-    public function getStartedAtAttribute($value)
-    {
-        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
-    }
-
-    public function setStartedAtAttribute($value)
-    {
-        $this->attributes['started_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getTerminatedAtAttribute($value)

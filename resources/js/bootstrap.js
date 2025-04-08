@@ -1,4 +1,5 @@
 window._ = require('lodash');
+import Swal from 'sweetalert2'
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -11,6 +12,8 @@ try {
     require('select2')
     window.Dropzone = require('dropzone').default
     require('flatpickr')
+
+    window.Swal = Swal
 } catch (e) {}
 
 /**

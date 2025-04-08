@@ -11,7 +11,7 @@
 
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.8.2/dist/alpine.min.js" defer></script>
     @livewireStyles
-        @stack('styles')
+    @stack('styles')
 </head>
 
 <body class="text-blueGray-800 antialiased">
@@ -29,12 +29,7 @@
             </div>
 
             <div class="relative px-4 md:px-10 mx-auto w-full min-h-full -m-48">
-                @if(session('status'))
-                    <x-alert message="{{ session('status') }}" variant="indigo" role="alert" />
-                @endif
-
                 @yield('content')
-
                 <x-footer />
             </div>
         </div>
@@ -46,23 +41,12 @@
     </form>
     <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.js"></script>
-        @livewireScripts
-            @yield('scripts')
-            @stack('scripts')
-    <script>
-        function closeAlert(event){
-            let element = event.target;
-            while(element.nodeName !== "BUTTON"){
-            element = element.parentNode;
-            }
-            element.parentNode.parentNode.removeChild(element.parentNode);
-        }
-    </script>
-    <script>
-        window.addEventListener('openPdf', event => {
-            window.open(event.detail.url, '_blank');
-        });
-    </script>
+    @livewireScripts
+    @livewireAlertScripts
+    <x-livewire-alert::scripts />
+
+    @yield('scripts')
+    @stack('scripts')
 </body>
 
 </html>

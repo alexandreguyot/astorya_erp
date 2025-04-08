@@ -203,8 +203,20 @@ textarea.form-control {
     @apply text-xs font-semibold inline-block py-1 px-2 rounded last:mr-0 mr-1
 }
 
-.badge-contract {
+.badge-red {
     @apply text-red-600 bg-red-200
+}
+
+.badge-green {
+    @apply text-green-600 bg-green-200
+}
+
+.badge-purple {
+    @apply text-purple-600 bg-purple-200
+}
+
+.badge-rose {
+    @apply text-rose-600 bg-rose-200
 }
 
 .badge-relationship {

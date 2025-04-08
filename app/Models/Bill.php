@@ -10,10 +10,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Traits\HasPriceCast;
 
 class Bill extends Model implements HasMedia
 {
-    use HasFactory, HasAdvancedFilter, SoftDeletes, InteractsWithMedia;
+    use HasFactory, HasAdvancedFilter, SoftDeletes, InteractsWithMedia, HasPriceCast;
 
     public $table = 'bills';
 
@@ -23,7 +24,6 @@ class Bill extends Model implements HasMedia
 
     protected $casts = [
         'one_bill_per_period' => 'boolean',
-        'to_be_collected'     => 'boolean',
     ];
 
     protected $dates = [
@@ -32,8 +32,6 @@ class Bill extends Model implements HasMedia
         'generated_at',
         'validated_at',
         'sent_at',
-        'collected_at',
-        'recorded_at',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -49,9 +47,6 @@ class Bill extends Model implements HasMedia
         'generated_at',
         'validated_at',
         'sent_at',
-        'to_be_collected',
-        'collected_at',
-        'recorded_at',
         'company_id',
         'type_period_id',
     ];
@@ -66,8 +61,6 @@ class Bill extends Model implements HasMedia
         'generated_at',
         'validated_at',
         'sent_at',
-        'collected_at',
-        'recorded_at',
         'company.name',
         'company.address',
         'type_period.title',
@@ -85,14 +78,19 @@ class Bill extends Model implements HasMedia
         'generated_at',
         'validated_at',
         'sent_at',
-        'to_be_collected',
-        'collected_at',
-        'recorded_at',
         'company.name',
         'company.address',
         'type_period.title',
         'type_period.nb_month',
     ];
+
+    protected function getPriceAttributes(): array
+    {
+        return [
+            'amount',
+            'amount_vat_included',
+        ];
+    }
 
     protected function serializeDate(DateTimeInterface $date)
     {
@@ -187,6 +185,26 @@ class Bill extends Model implements HasMedia
     public function typePeriod()
     {
         return $this->belongsTo(TypePeriod::class);
+    }
+
+    public static function getLastBillNumber()
+    {
+        $year = date('Y');
+
+        $lastNumber = self::where('no_bill', 'like', "FACT-$year-%")
+            ->selectRaw("CAST(SUBSTRING(no_bill, LENGTH('FACT-$year-') + 1) AS UNSIGNED) as number")
+            ->orderByDesc('number')
+            ->pluck('number')
+            ->first();
+
+        return $lastNumber ?? 1;
+    }
+
+    public function getBillNumber() {
+        $last = self::getLastBillNumber();
+        $new = $last + 1;
+        $no_bill = 'FACT-' . date('Y') . '-' . $new;
+        return $no_bill;
     }
 
     public function getCreatedAtAttribute($value)

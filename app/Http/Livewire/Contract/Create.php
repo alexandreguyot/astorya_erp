@@ -44,14 +44,6 @@ class Create extends Component
                 'nullable',
                 'date_format:' . config('project.datetime_format'),
             ],
-            'contract.established_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
-            'contract.started_at' => [
-                'nullable',
-                'date_format:' . config('project.datetime_format'),
-            ],
             'contract.terminated_at' => [
                 'nullable',
                 'date_format:' . config('project.datetime_format'),

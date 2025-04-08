@@ -26,23 +26,18 @@
                     <tr>
                         <th>
                             {{ trans('cruds.bill.fields.company') }}
-                            @include('components.table.sort', ['field' => 'company.name'])
                         </th>
                         <th>
-                            {{ trans('cruds.bill.fields.no_bill') }}
-                            @include('components.table.sort', ['field' => 'no_bill'])
+                            N° Facture
                         </th>
                         <th>
-                            {{ trans('cruds.bill.fields.amount') }}
-                            @include('components.table.sort', ['field' => 'amount'])
+                            Montant HT
                         </th>
                         <th>
                             {{ trans('cruds.bill.fields.generated_at') }}
-                            @include('components.table.sort', ['field' => 'generated_at'])
                         </th>
                         <th>
                             {{ trans('cruds.bill.fields.sent_at') }}
-                            @include('components.table.sort', ['field' => 'sent_at'])
                         </th>
                         <th>
                         </th>
@@ -57,27 +52,35 @@
                                 @endif
                             </td>
                             <td>
-                                {{ $bill->no_bill }}
+                                <div class="badge badge-red">
+                                    {{ $bill->no_bill }}
+                                </div>
                             </td>
                             <td>
-                                {{ number_format((float)$bill->amount, 2, ',', ''); }} €
+                                <div class="badge badge-red">
+                                    {{ number_format((float)$bill->amount, 2, ',', ''); }} €
+                                </div>
                             </td>
                             <td>
-                                {{ $bill->generated_at }}
+                                <div class="badge badge-purple">
+                                    {{ $bill->generated_at }}
+                                </div>
                             </td>
                             <td>
-                                {{ $bill->sent_at }}
+                                <div class="badge badge-purple">
+                                    {{ $bill->sent_at }}
+                                </div>
                             </td>
                             <td>
                                 <div class="flex justify-end">
                                     @can('bill_edit')
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.bills.edit', $bill) }}">
-                                            {{ trans('global.edit') }}
+                                        <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.edit', $bill) }}">
+                                           Télécharger la facture
                                         </a>
                                     @endcan
                                     @can('bill_delete')
-                                        <button class="btn btn-sm btn-rose mr-2" type="button" wire:click="confirm('delete', {{ $bill->id }})" wire:loading.attr="disabled">
-                                            {{ trans('global.delete') }}
+                                        <button class="btn btn-sm btn-indigo mr-2" type="button" wire:click="confirm('delete', {{ $bill->id }})" wire:loading.attr="disabled">
+                                            Envoyer la facture
                                         </button>
                                     @endcan
                                 </div>
