@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use PDO;
-use Illuminate\Support\Facades\DB;
+use App\Models\Bill;
 
 class HomeController
 {
@@ -88,6 +88,8 @@ class HomeController
             ['Id', 'NoBill', 'Amount', 'OneBillPerPeriod', 'StartedAt', 'BilledAt', 'GeneratedAt', 'ValidatedAt', 'SentAt', 'FilePath', 'CreationDate', 'LastModifiedDate', 'AmountVatIncluded', 'CompanyId', 'TypePeriodId', 'ContractId'],
             ['id', 'no_bill', 'amount', 'one_bill_per_period', 'started_at', 'billed_at', 'generated_at', 'validated_at', 'sent_at', 'file_path', 'created_at', 'updated_at', 'amount_vat_included', 'company_id', 'type_period_id', 'contract_id']
         );
+
+        Bill::where('no_bill', null)->delete();
 
         echo "Migration terminée!";
     }

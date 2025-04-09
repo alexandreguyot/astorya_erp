@@ -58,6 +58,20 @@ class Contract extends Model
         return $date->format('Y-m-d H:i:s');
     }
 
+    public function isActive()
+    {
+        return Carbon::now()
+            ->isBetween(
+                Carbon::createFromFormat(config('project.date_format'), $this->setup_at),
+                Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)
+            );
+    }
+
+    public function getLastBillingDateAttribute()
+    {
+        $today = Carbon::now();
+    }
+
     public function getTotalPriceAttribute()
     {
         return number_format(
@@ -95,6 +109,21 @@ class Contract extends Model
         return $this->belongsTo(TypePeriod::class);
     }
 
+    public function bills()
+    {
+        return $this->hasMany(Bill::class);
+    }
+
+    public function lastBill()
+    {
+        return $this->hasOne(Bill::class)->latestOfMany();
+    }
+
+    public function type_contract()
+    {
+        return $this->belongsTo(TypeContract::class);
+    }
+
     public function calculateBillingPeriod($dateStart)
     {
         if (!$this->type_period || !$this->type_period->nb_month) {
@@ -108,6 +137,8 @@ class Contract extends Model
 
         return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
     }
+
+
     public function contract_product_detail()
     {
         return $this->hasMany(ContractProductDetail::class);

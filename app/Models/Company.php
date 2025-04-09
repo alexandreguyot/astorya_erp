@@ -84,6 +84,10 @@ class Company extends Model
     {
         return $this->hasMany(Bill::class);
     }
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
 
     public function getCreatedAtAttribute($value)
     {

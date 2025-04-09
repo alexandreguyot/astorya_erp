@@ -82,7 +82,7 @@ class Index extends Component
 
     public function render()
     {
-        $query = Bill::with(['company', 'typePeriod'])
+        $query = Bill::with(['company', 'type_period'])
         ->whereNotNull('no_bill')
         ->where('no_bill', 'like', 'FACT-%')
         ->when($this->dateStart && !$this->dateEnd, function ($query) {

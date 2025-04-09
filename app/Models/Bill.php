@@ -84,6 +84,47 @@ class Bill extends Model implements HasMedia
         'type_period.nb_month',
     ];
 
+    public function contract()
+    {
+        return $this->belongsTo(Contract::class);
+    }
+
+    public function type_period() {
+        return $this->belongsTo(TypePeriod::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public static function getLastBillNumber()
+    {
+        $year = date('Y');
+
+        $lastNumber = self::where('no_bill', 'like', "FACT-$year-%")
+            ->selectRaw("CAST(SUBSTRING(no_bill, LENGTH('FACT-$year-') + 1) AS UNSIGNED) as number")
+            ->orderByDesc('number')
+            ->pluck('number')
+            ->first();
+
+        return $lastNumber ?? 1;
+    }
+
+    public function getBillNumber() {
+        $last = self::getLastBillNumber();
+        $new = $last + 1;
+        $no_bill = 'FACT-' . date('Y') . '-' . $new;
+        return $no_bill;
+    }
+
+    public function getLastBillPeriodAttribute()
+    {
+        $startedAt = Carbon::createFromFormat(config('project.date_format'), $this->started_at);
+        $billedAt = Carbon::createFromFormat(config('project.date_format'), $this->billed_at);
+        return 'Du ' . $startedAt->format('d/m/Y') . ' au ' . $billedAt->format('d/m/Y');
+    }
+
     protected function getPriceAttributes(): array
     {
         return [
@@ -175,36 +216,6 @@ class Bill extends Model implements HasMedia
 
             return $media;
         });
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
-    public function typePeriod()
-    {
-        return $this->belongsTo(TypePeriod::class);
-    }
-
-    public static function getLastBillNumber()
-    {
-        $year = date('Y');
-
-        $lastNumber = self::where('no_bill', 'like', "FACT-$year-%")
-            ->selectRaw("CAST(SUBSTRING(no_bill, LENGTH('FACT-$year-') + 1) AS UNSIGNED) as number")
-            ->orderByDesc('number')
-            ->pluck('number')
-            ->first();
-
-        return $lastNumber ?? 1;
-    }
-
-    public function getBillNumber() {
-        $last = self::getLastBillNumber();
-        $new = $last + 1;
-        $no_bill = 'FACT-' . date('Y') . '-' . $new;
-        return $no_bill;
     }
 
     public function getCreatedAtAttribute($value)

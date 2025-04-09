@@ -78,21 +78,29 @@ class Index extends Component
         $this->filterable         = (new Contract())->filterable;
         $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
         $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
-        $this->alert('success', 'Coucou');
     }
 
     public function render()
     {
-        // Récupération des contrats sans pagination
+        $groupedContracts = $this->getGroupedContracts();
+
+        return view('livewire.contract.index', [
+            'groupedContracts' => $groupedContracts
+        ]);
+    }
+
+
+    private function getGroupedContracts()
+    {
         $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
             ->whereNotNull('setup_at')
             ->where(function ($query) {
                 $query->whereNull('terminated_at')
-                        ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
+                    ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
             })
             ->when($this->search, function ($query) {
                 $query->whereHas('company', function ($q) {
-                    $q->where('companies.name', 'like', '%'.$this->search.'%');
+                    $q->where('companies.name', 'like', '%' . $this->search . '%');
                 });
             })
             ->whereHas('type_period', function ($query) {
@@ -102,26 +110,46 @@ class Index extends Component
             })
             ->whereDoesntHave('company.bills', function ($query) {
                 $query->whereMonth('bills.generated_at', Carbon::createFromFormat('d/m/Y', $this->dateStart)->month)
-                      ->whereYear('bills.generated_at', Carbon::createFromFormat('d/m/Y', $this->dateStart)->year);
+                    ->whereYear('bills.generated_at', Carbon::createFromFormat('d/m/Y', $this->dateStart)->year);
             })
             ->get();
 
-        $groupedContracts = $contracts->groupBy([
+        return $contracts->groupBy([
             function ($contract) {
-                $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart); // Calcul de la période de facturation
-                return $contract->company->name; // Groupe par entreprise
+                $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
+                return $contract->company->name;
             },
             function ($contract) {
-                return $contract->billing_period; // Groupe par période de facturation
+                return $contract->billing_period;
             }
         ])->sortKeys();
-        return view('livewire.contract.index', [
-            'groupedContracts' => $groupedContracts // Passer les groupes à la vue
+    }
+
+
+    public function generateAllBills()
+    {
+        $groupedContracts = $this->getGroupedContracts();
+
+        foreach ($groupedContracts as $companyName => $periods) {
+            foreach ($periods as $billingPeriod => $contracts) {
+                $contractIds = $contracts->pluck('id')->toArray();
+                $this->generateBill($companyName, implode('-', $contractIds), $billingPeriod);
+            }
+        }
+
+        $this->alert('success', 'Toutes les factures ont été générées avec succès !', [
+            'position' => 'top-end',
+            'timer' => 3000,
+            'toast' => true,
+            'showConfirmButton' => false,
         ]);
     }
 
-    public function generateBill($companyName, $contractIds) {
+
+    public function generateBill($companyName, $contractIds, $date) {
         $contractIds = explode('-', $contractIds);
+        $started_at = substr($date, 0, 10);
+        $billed_at = substr($date, 14, 14);
 
         $contracts = Contract::with([
             'type_period',
@@ -137,6 +165,8 @@ class Index extends Component
             $bill->company_id = $contracts->first()->company_id;
             $bill->no_bill = $bill->getBillNumber();
             $bill->generated_at = Carbon::now()->format(config('project.date_format'));
+            $bill->started_at = $started_at;
+            $bill->billed_at = $billed_at;
             $bill->amount = str_replace(',', '.', $contract->total_price);
             $bill->amount_vat_included = str_replace(',', '.', $contract->total_price_with_vat);
             $bill->type_period_id = $contract->type_period_id;
@@ -145,20 +175,12 @@ class Index extends Component
                 $contract->billed_at = Carbon::now()->format(config('project.date_format'));
                 $contract->save();
             }
-
         }
-
-
-
-        $this->alert('success', 'Facture générée avec succès !', [
+        $this->alert('success', 'Facture pour '. $companyName . 'générée avec succès !', [
             'position' => 'top-end',
             'timer' => 3000,
             'toast' => true,
             'showConfirmButton' => false,
         ]);
-    }
-
-    private function getAmountVatIncluded() {
-
     }
 }

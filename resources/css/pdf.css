@@ -40,12 +40,6 @@ hr {
     font-size: 20px;
 }
 
-.container .header .logo {
-    background-image: public_path('images/logo.jpg');
-    background-repeat: no-repeat;
-    min-width: 280px;
-}
-
 .container .header .row .left-info {
     width: 30mm;
     text-align: left;
@@ -83,13 +77,6 @@ hr {
     width: 5%;
 }
 
-.container .resume-table table,
-.container .amount-resume table,
-.container .resume-table th,
-.container .resume-table td {
-    /*border: 1px solid black;*/
-}
-
 .container .resume-table.main-col-min {
     height: 150mm;
 }
@@ -125,14 +112,13 @@ hr {
 
 .container .resume-table table,
 .container .amount-resume table {
-    /*border-collapse: collapse;*/
     width: 100%;
     word-break: break-word;
 }
 
-    .container .amount-resume table .border-bottom {
-        border-bottom: 1px solid black;
-    }
+.container .amount-resume table .border-bottom {
+    border-bottom: 1px solid black;
+}
 
 .container .footer {
     -webkit-box-pack: justify;
@@ -146,7 +132,6 @@ hr {
 }
 
 .container .footer .resume {
-/*        padding: 5px;*/
     max-width: 490px;
 }
 
@@ -166,19 +151,6 @@ hr {
     display: -webkit-box;
 }
 
-.container .footer .payment-coupon .scissors {
-    height: 24px;
-    margin: auto auto;
-    background-image: public_path('/images/scissors.png');
-    background-repeat: no-repeat;
-    background-position: right;
-    position: relative;
-    overflow: hidden;
-    background-size: 20px 20px;
-    top: 12px;
-    right: 10px;
-}
-
 .small-text {
     font-size: 9px;
 }
@@ -196,11 +168,9 @@ hr {
     text-align: center;
 }
 
-
 .left-align {
     text-align: left;
 }
-
 
 .width-70 {
     width: 70%;
@@ -249,40 +219,39 @@ table.rounded {
     border-radius: 10px;
 }
 
-    table.rounded td, th {
-        border-left: solid black 1px;
-        border-bottom: solid black 1px;
-    }
+table.rounded td, th {
+    border-left: solid black 1px;
+    border-bottom: solid black 1px;
+}
 
-    table.rounded tr:first-child th:first-child {
-        border-top-left-radius: 10px;
-    }
+table.rounded tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
 
-    /*top-right border-radius*/
-    table.rounded tr:first-child th:last-child {
-        border-top-right-radius: 10px;
-    }
+table.rounded tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
 
-    table.rounded tr:first-child th {
-        border-top: solid black 1.5px;
-        letter-spacing: 1px;
-    }
+table.rounded tr:first-child th {
+    border-top: solid black 1.5px;
+    letter-spacing: 1px;
+}
 
-    table.rounded th {
-        background-color: #eee;
-    }
+table.rounded th {
+    background-color: #eee;
+}
 
-    table.rounded td:first-child, th:first-child {
-        border-left: none;
-    }
+table.rounded td:first-child, th:first-child {
+    border-left: none;
+}
 
-    table.rounded.no-interline tr td {
-        border-top: none;
-    }
+table.rounded.no-interline tr td {
+    border-top: none;
+}
 
-    table.rounded tr:last-child td {
-        border-bottom: none;
-    }
+table.rounded tr:last-child td {
+    border-bottom: none;
+}
 
 table.rounded-amount-resume {
     border-collapse: separate;
@@ -292,25 +261,25 @@ table.rounded-amount-resume {
     border-radius: 10px;
 }
 
-    table.rounded-amount-resume .title {
-        letter-spacing: 1px;
-        padding: 3px 0px 3px 6px;
-    }
+table.rounded-amount-resume .title {
+    letter-spacing: 1px;
+    padding: 3px 0px 3px 6px;
+}
 
-    table.rounded-amount-resume tr:first-child td:first-child {
-        border-radius: 10px 0px 0px 0px;
-        border: none;
-    }
+table.rounded-amount-resume tr:first-child td:first-child {
+    border-radius: 10px 0px 0px 0px;
+    border: none;
+}
 
-    table.rounded-amount-resume tr:last-child td:first-child {
-        border-radius: 0px 0px 0px 10px;
-        border: none;
-    }
+table.rounded-amount-resume tr:last-child td:first-child {
+    border-radius: 0px 0px 0px 10px;
+    border: none;
+}
 
-    table.rounded-amount-resume tr:last-child td:last-child {
-        border-radius: 0px 0px 10px 0px;
-        border: none;
-    }
+table.rounded-amount-resume tr:last-child td:last-child {
+    border-radius: 0px 0px 10px 0px;
+    border: none;
+}
 
 .min-width-70 {
     min-width: 70px;

@@ -219,6 +219,14 @@ textarea.form-control {
     @apply text-rose-600 bg-rose-200
 }
 
+.badge-yellow {
+    @apply text-yellow-600 bg-yellow-200
+}
+
+.badge-blue {
+    @apply text-blue-600 bg-blue-200
+}
+
 .badge-relationship {
     @apply text-indigo-600 bg-indigo-200
 }

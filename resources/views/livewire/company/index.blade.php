@@ -18,15 +18,12 @@
                     <tr>
                         <th>
                             {{ trans('cruds.company.fields.name') }}
-                            @include('components.table.sort', ['field' => 'name'])
                         </th>
                         <th>
                             {{ trans('cruds.company.fields.accounting') }}
-                            @include('components.table.sort', ['field' => 'accounting'])
                         </th>
                         <th>
                             {{ trans('cruds.company.fields.ciel_reference') }}
-                            @include('components.table.sort', ['field' => 'ciel_reference'])
                         </th>
                         <th>
                         </th>

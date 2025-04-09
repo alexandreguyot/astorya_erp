@@ -44,4 +44,34 @@ class ContractProductDetail extends Model
     {
         return $this->belongsTo(TypeProduct::class);
     }
+
+    public function getTotalPriceAttribute()
+    {
+        return number_format(
+            $this->monthly_unit_price_without_taxe * $this->quantity,
+            2,
+            ',',
+            ' '
+        );
+    }
+
+    public function getFormattedMonthlyUnitPriceWithoutTaxeAttribute()
+    {
+        return number_format(
+            $this->monthly_unit_price_without_taxe,
+            2,
+            ',',
+            ' '
+        );
+    }
+
+    public function getMonthlyUnitPriceWithTaxeAttribute()
+    {
+        return number_format(
+            $this->monthly_unit_price_without_taxe * (1 + ($this->type_product->type_vat->percent / 100)),
+            2,
+            ',',
+            ' '
+        );
+    }
 }

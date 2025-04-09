@@ -1,4 +1,4 @@
-<form wire:submit.prevent="submit" class="pt-3">
+<form wire:submit.prevent="submit" class="grid grid-cols-2 gap-2 pt-3">
 
     <div class="form-group {{ $errors->has('company.name') ? 'invalid' : '' }}">
         <label class="form-label" for="name">{{ trans('cruds.company.fields.name') }}</label>
@@ -100,7 +100,7 @@
             {{ trans('cruds.company.fields.bill_payment_method_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('company.observations') ? 'invalid' : '' }}">
+    <div class="form-group {{ $errors->has('company.observations') ? 'invalid' : '' }} col-span-full">
         <label class="form-label" for="observations">{{ trans('cruds.company.fields.observations') }}</label>
         <textarea class="form-control" name="observations" id="observations" wire:model.defer="company.observations" rows="4"></textarea>
         <div class="validation-message">

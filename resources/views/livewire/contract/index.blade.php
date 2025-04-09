@@ -39,7 +39,7 @@
                         </th>
                         <th></th>
                         <th class="flex justify-end">
-                            <button class="btn btn-sm btn-info mr-2">
+                            <button class="btn btn-sm btn-info mr-2" wire:click="generateAllBills">
                                 Générer toutes les factures
                             </button>
                         </th>
@@ -62,10 +62,6 @@
                                 </td>
                                 <td>
                                     <div class="flex justify-end">
-                                        <button class="btn btn-sm btn-success mr-2"
-                                                wire:click="generateBill('{{ $companyName }}', '{{ implode('-', $contracts->pluck('id')->toArray()) }}')">
-                                            Générer la facture
-                                        </button>
                                         <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contracts.pdf.preview', [
                                             'company' => $companyName,
                                             'period' => str_replace('/', '-', str_replace(' au ', '-', $date)),
@@ -73,6 +69,10 @@
                                         ]) }}" target="_blank">
                                             Prévisualiser le PDF
                                         </a>
+                                        <button class="btn btn-sm btn-success mr-2"
+                                                wire:click="generateBill('{{ $companyName }}', '{{ implode('-', $contracts->pluck('id')->toArray()) }}', '{{ $date }}')">
+                                            Générer la facture
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
