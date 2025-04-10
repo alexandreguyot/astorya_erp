@@ -97,7 +97,7 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('factures/creation', [BillController::class, 'create'])->name('bills.create');
     Route::get('factures/{bill}', [BillController::class, 'show'])->name('bills.show');
     Route::get('factures/{bill}/edit', [BillController::class, 'edit'])->name('bills.edit');
-    Route::get('factures/{bill}/pdf/', [BillController::class, 'pdf'])->name('bills.pdf');
+    Route::get('factures/{bill}/pdf', [BillController::class, 'pdf'])->name('bills.pdf');
 
     // Contracts
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');

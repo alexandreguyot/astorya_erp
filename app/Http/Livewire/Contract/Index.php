@@ -160,10 +160,11 @@ class Index extends Component
         ->whereIn('id', $contractIds)
         ->get();
 
+        $no_bill = Bill::getBillNumber();
         foreach ($contracts as $contract) {
             $bill = new Bill();
             $bill->company_id = $contracts->first()->company_id;
-            $bill->no_bill = $bill->getBillNumber();
+            $bill->no_bill = $no_bill;
             $bill->generated_at = Carbon::now()->format(config('project.date_format'));
             $bill->started_at = $started_at;
             $bill->billed_at = $billed_at;

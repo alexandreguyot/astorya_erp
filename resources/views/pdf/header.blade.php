@@ -47,7 +47,7 @@
     </div>
     <div class="row bill-info">
         <div class="auto-fill">
-            Date : {{ $bill->no_bill ?? 'A DEFINIR' }}
+            Date : {{ $bill->generated_at ?? 'A DEFINIR' }}
         </div>
         <div class="auto-fill">
             Facture N° {{ $bill->no_bill ?? 'A DEFINIR' }}
@@ -63,7 +63,7 @@
             @endif
         </div>
         <div class="auto-fill">
-            Echéance : PAS ENCORE GENERER
+            Echéance : {{  \Carbon\Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') ?? 'A DEFINIR' }}
         </div>
         <div class="auto-fill">
             Type de Facturation : {{ $contract->type_period->title }}

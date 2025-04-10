@@ -23,15 +23,6 @@ class ContractController extends Controller
         return view('admin.contract.edit', compact('contract'));
     }
 
-    public function pdf(Contract $contract) {
-        $owner = Owner::first();
-
-        // Logique de génération du PDF
-        $pdf = Pdf::loadView('pdf.bills', compact('contract', 'owner'));
-
-        return $pdf->stream('contrat-'.$contract->id.'.pdf');
-    }
-
     public function preview($company, $period, $contractIds)
     {
         $period_bills = Carbon::createFromFormat('d-m-Y', substr($period, 0, 10))->format('m-Y');
@@ -63,7 +54,7 @@ class ContractController extends Controller
             }
         }
 
-        $pdf = Pdf::loadView('pdf.preview-bills', compact(
+        $pdf = Pdf::loadView('pdf.bills', compact(
             'contract',
             'contracts',
             'products',

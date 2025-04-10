@@ -111,7 +111,7 @@ class Bill extends Model implements HasMedia
         return $lastNumber ?? 1;
     }
 
-    public function getBillNumber() {
+    public static function getBillNumber() {
         $last = self::getLastBillNumber();
         $new = $last + 1;
         $no_bill = 'FACT-' . date('Y') . '-' . $new;

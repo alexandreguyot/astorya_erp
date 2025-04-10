@@ -80,7 +80,7 @@ class Index extends Component
         $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y'); // Dernier jour du mois
     }
 
-    public function render()
+    public function render2()
     {
         $query = Bill::with(['company', 'type_period'])
         ->whereNotNull('no_bill')
@@ -104,11 +104,57 @@ class Index extends Component
             })
             ->orWhere('no_bill', 'like', '%'.$this->search.'%');
 
-        })->orderBy($this->sortBy, $this->sortDirection);
+        })->orderBy($this->sortBy, $this->sortDirection)->groupBy('no_bill');
 
         $bills = $query->paginate($this->perPage);
 
         return view('livewire.bill.index', compact('bills', 'query'));
+    }
+
+    public function render() {
+        $query = Bill::with(['company', 'type_period'])
+            ->whereNotNull('no_bill')
+            ->where('no_bill', 'like', 'FACT-%')
+            ->when($this->dateStart && !$this->dateEnd, function ($query) {
+                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
+                $query->where('generated_at', '>=', $dateStart);
+            })
+            ->when(!$this->dateStart && $this->dateEnd, function ($query) {
+                $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
+                $query->where('generated_at', '<=', $dateEnd);
+            })
+            ->when($this->dateStart && $this->dateEnd, function ($query) {
+                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
+                $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
+                $query->whereBetween('generated_at', [$dateStart, $dateEnd]);
+            })
+            ->when($this->search, function ($query) {
+                $query->whereHas('company', function($q) {
+                    $q->where('companies.name', 'like', '%'.$this->search.'%');
+                })
+                ->orWhere('no_bill', 'like', '%'.$this->search.'%');
+            })
+            ->orderBy($this->sortBy, $this->sortDirection);
+
+        // On récupère toutes les factures
+        $bills = $query->get();
+
+        // On les groupe par `no_bill`
+        $groupedBills = $bills->groupBy('no_bill');
+
+        $billGroups = $groupedBills->map(function ($group, $noBill) {
+            return [
+                'no_bill' => $noBill,
+                'company' => $group->first()->company->name,
+                'generated_at' => $group->first()->generated_at,
+                'send_at' => $group->first()->generated_at,
+                'bills' => $group,
+                'total_ht' => $group->sum('amount'),
+            ];
+        });
+        return view('livewire.bill.index', [
+            'billGroups' => $billGroups,
+        ]);
     }
 
     private function convertDateFormat($date, $type)

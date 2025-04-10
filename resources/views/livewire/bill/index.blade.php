@@ -44,45 +44,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($bills as $bill)
+                    @forelse($billGroups as $no_bill => $bill)
                         <tr>
                             <td>
-                                @if($bill->company)
-                                    <span class="badge badge-relationship">{{ $bill->company->name ?? '' }}</span>
-                                @endif
+                                <span class="badge badge-relationship">{{ $bill['company'] ?? '' }}</span>
                             </td>
                             <td>
                                 <div class="badge badge-red">
-                                    {{ $bill->no_bill }}
+                                    {{ $bill['no_bill'] ?? '' }}
                                 </div>
                             </td>
                             <td>
                                 <div class="badge badge-red">
-                                    {{ number_format((float)$bill->amount, 2, ',', ''); }} €
+                                    {{ number_format((float)$bill['total_ht'], 2, ',', ''); }} €
                                 </div>
                             </td>
                             <td>
                                 <div class="badge badge-purple">
-                                    {{ $bill->generated_at }}
+                                    {{ $bill['generated_at'] ?? '' }}
                                 </div>
                             </td>
                             <td>
                                 <div class="badge badge-purple">
-                                    {{ $bill->sent_at }}
+                                    {{ $bill['sent_at'] ?? '' }}
                                 </div>
                             </td>
                             <td>
                                 <div class="flex justify-end">
-                                    @can('bill_edit')
-                                        <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.edit', $bill) }}">
-                                           Télécharger la facture
-                                        </a>
-                                    @endcan
-                                    @can('bill_delete')
-                                        <button class="btn btn-sm btn-indigo mr-2" type="button" wire:click="confirm('delete', {{ $bill->id }})" wire:loading.attr="disabled">
-                                            Envoyer la facture
-                                        </button>
-                                    @endcan
+                                    <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', $no_bill) }}">
+                                        Télécharger la facture
+                                    </a>
+                                    <a class="btn btn-sm btn-indigo mr-2"  wire:click="sendMail({{ $no_bill }})">
+                                        Envoyer la facture
+                                    </a>
                                 </div>
                             </td>
                         </tr>
@@ -95,29 +89,5 @@
             </table>
         </div>
     </div>
-
-    <div class="card-body">
-        <div class="pt-3">
-            @if($this->selectedCount)
-                <p class="text-sm leading-5">
-                    <span class="font-medium">
-                        {{ $this->selectedCount }}
-                    </span>
-                    {{ __('Entries selected') }}
-                </p>
-            @endif
-            {{ $bills->links() }}
-        </div>
-    </div>
 </div>
 
-@push('scripts')
-    <script>
-        Livewire.on('confirm', e => {
-    if (!confirm("{{ trans('global.areYouSure') }}")) {
-        return
-    }
-@this[e.callback](...e.argv)
-})
-    </script>
-@endpush
