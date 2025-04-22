@@ -11,7 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
+        Schema::table('contract_product_details', function (Blueprint $table) {
+            // Rendre les champs nullable
+            $table->timestamp('billing_started_at')->nullable()->change();
+            $table->timestamp('billing_terminated_at')->nullable()->change();
+            $table->timestamp('last_billed_at')->nullable()->change();
+        });
 
+        Schema::table('contracts', function (Blueprint $table) {
+            // Rendre les champs nullable
+            $table->timestamp('terminated_at')->nullable()->change();
+            $table->timestamp('billed_at')->nullable()->change();
+            $table->timestamp('validated_at')->nullable()->change();
+        });
     }
 
     /**

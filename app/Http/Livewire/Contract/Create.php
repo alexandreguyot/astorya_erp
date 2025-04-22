@@ -5,16 +5,38 @@ namespace App\Http\Livewire\Contract;
 use App\Models\Company;
 use App\Models\Contract;
 use Livewire\Component;
+use App\Models\TypeContract;
+use App\Models\TypePeriod;
+use App\Models\TypeProduct;
+use App\Models\TypeVat;
 
 class Create extends Component
 {
     public Contract $contract;
+    public Company $company;
 
     public array $listsForFields = [];
+    public array $filteredProducts = [];
 
-    public function mount(Contract $contract)
+    public int|null $selectedTypeContractId = null;
+
+
+    public array $selectedProduct = [
+        'type_product_id' => null,
+        'designation' => '',
+        'quantity' => 1,
+        'capacity' => null,
+        'monthly_unit_price_without_taxe' => 0,
+        'billing_started_at' => null,
+        'billing_terminated_at' => null,
+        'type_vat_id' => null,
+    ];
+
+    public function mount(Company $company)
     {
-        $this->contract = $contract;
+        $this->company = $company;
+        $this->contract = new Contract();
+        $this->contract->company_id = $this->company->id;
         $this->initListsForFields();
     }
 
@@ -23,13 +45,73 @@ class Create extends Component
         return view('livewire.contract.create');
     }
 
+    public function updatedSelectedTypeContractId($value)
+    {
+        $this->filteredProducts = TypeProduct::where('type_contract_id', $value)
+            ->pluck('designation_short', 'id')
+            ->toArray();
+
+        $this->resetSelectedProduct();
+    }
+
+    protected function resetSelectedProduct()
+    {
+        $this->selectedProduct = [
+            'type_product_id' => null,
+            'designation' => '',
+            'quantity' => 1,
+            'capacity' => null,
+            'monthly_unit_price_without_taxe' => 0,
+            'billing_started_at' => null,
+            'billing_terminated_at' => null,
+            'type_vat_id' => null,
+        ];
+    }
+
+    public function updatedSelectedProductTypeProductId($productId)
+    {
+        if ($productId) {
+            $product = TypeProduct::find($productId);
+            $this->selectedProduct['type_product_id'] = $product->id;
+            $this->selectedProduct['designation'] = $product->designation_long;
+            $this->selectedProduct['type_vat_id'] = $product->type_vat_id;
+        }
+    }
+
+    public function updatedSelectedProductMonthlyUnitPriceWithoutTaxe($value)
+    {
+        $value = floatval(str_replace(',', '.', $value)); // Conversion propre du string en float (gère les virgules)
+
+        $percent = TypeVat::where('id', $this->selectedProduct['type_vat_id'])->first()->percent ?? 0;
+
+        $withTaxe = $value * (1 + ($percent / 100));
+
+        $this->selectedProduct['monthly_unit_price_with_taxe'] = number_format($withTaxe, 2, ',', ' ');
+    }
+
+
     public function submit()
     {
         $this->validate();
 
         $this->contract->save();
 
-        return redirect()->route('admin.contracts.index');
+        $this->contract->products()->attach(
+            $this->selectedProduct['type_product_id'], // L'ID du produit
+            [
+                'contract_id' => $this->contract->id,
+                'type_product_id' => $this->selectedProduct['type_product_id'],
+                'designation' => $this->selectedProduct['designation'],
+                'quantity' => $this->selectedProduct['quantity'],
+                'capacity' => $this->selectedProduct['capacity'],
+                'monthly_unit_price_without_taxe' => $this->selectedProduct['monthly_unit_price_without_taxe'],
+                'billing_started_at' => $this->selectedProduct['billing_started_at'] ?? null,
+                'billing_terminated_at' => $this->selectedProduct['billing_terminated_at'] ?? null,
+            ]
+        );
+
+        return redirect()->route('admin.companies.edit', $this->company->id)
+            ->with('success', 'Contrat créé avec succès');
     }
 
     protected function rules(): array
@@ -42,25 +124,36 @@ class Create extends Component
             ],
             'contract.setup_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.terminated_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.billed_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'contract.validated_at' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
+            'contract.company_id' => ['integer', 'exists:companies,id', 'nullable'],
+            'contract.type_period_id' => ['required', 'exists:type_periods,id'],
+            'selectedProduct.type_product_id' => ['required', 'integer', 'exists:type_products,id'],
+            'selectedProduct.designation' => ['nullable', 'string'],
+            'selectedProduct.quantity' => ['required', 'integer', 'min:1'],
+            'selectedProduct.capacity' => ['nullable', 'string'],
+            'selectedProduct.monthly_unit_price_without_taxe' => ['required', 'numeric'],
+            'selectedTypeContractId' => ['required', 'exists:type_contracts,id'],
         ];
     }
 
     protected function initListsForFields(): void
     {
-        $this->listsForFields['company'] = Company::pluck('name', 'id')->toArray();
+        $this->listsForFields['company'] = Company::where('id', $this->company->id)->pluck('name', 'id')->toArray();
+        $this->listsForFields['type_contracts'] = TypeContract::pluck('title', 'id')->toArray();
+        $this->listsForFields['type_periods'] = TypePeriod::pluck('title', 'id')->toArray();
+        $this->listsForFields['products'] = TypeProduct::all(); // Pour récupérer les infos complètes
     }
 }

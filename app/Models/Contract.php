@@ -17,6 +17,7 @@ class Contract extends Model
 
     protected $fillable = [
         'company_id',
+        'type_period_id',
         'setup_at',
         'terminated_at',
         'billed_at',
@@ -74,14 +75,9 @@ class Contract extends Model
 
     public function getTotalPriceAttribute()
     {
-        return number_format(
-            $this->contract_product_detail->sum(function ($detail) {
-                return ($detail->monthly_unit_price_without_taxe * $detail->quantity);
-            }),
-            2,
-            ',',
-            ''
-        );
+        return round($this->contract_product_detail->sum(function ($detail) {
+            return ($detail->monthly_unit_price_without_taxe * $detail->quantity);
+        }), 2);
     }
 
     public function getTotalPriceWithVatAttribute()
@@ -119,9 +115,19 @@ class Contract extends Model
         return $this->hasOne(Bill::class)->latestOfMany();
     }
 
-    public function type_contract()
+    public function products()
     {
-        return $this->belongsTo(TypeContract::class);
+        return $this->belongsToMany(TypeProduct::class, 'contract_product_details')
+            ->withPivot([
+                'designation',
+                'quantity',
+                'capacity',
+                'monthly_unit_price_without_taxe',
+                'billing_started_at',
+                'billing_terminated_at',
+                'last_billed_at',
+            ])
+            ->withTimestamps();
     }
 
     public function calculateBillingPeriod($dateStart)
@@ -131,9 +137,16 @@ class Contract extends Model
         }
 
         $nbMonth = $this->type_period->nb_month;
-        $day = Carbon::createFromFormat('d/m/Y', $this->setup_at)->format('d');
-        $startBilling = Carbon::createFromFormat('d/m/Y', $dateStart)->day($day);
-        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay(1);
+
+        $setupDay = Carbon::createFromFormat('d/m/Y', $this->setup_at)->day;
+        $baseDate = Carbon::createFromFormat('d/m/Y', $dateStart);
+
+        // Ajuster le jour : si le jour dépasse le nombre de jours dans le mois
+        $day = min($setupDay, $baseDate->daysInMonth);
+        $startBilling = $baseDate->copy()->day($day);
+
+        // Calcul de la date de fin de facturation
+        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
 
         return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
     }
@@ -186,16 +199,16 @@ class Contract extends Model
 
     public function getCreatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getDeletedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 }

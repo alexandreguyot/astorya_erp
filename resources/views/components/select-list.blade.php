@@ -6,7 +6,7 @@
                 <button type="button" class="btn btn-info btn-sm deselect-all-button">{{ trans('global.deselect_all') }}</button>
             </div>
         @endif
-        <select class="select2 form-control" data-placeholder="{{ __('Select your option') }}" {{ $attributes }}>
+        <select class="select2 form-control" data-placeholder="Selectionnez" {{ $attributes }}>
             @if(!isset($attributes['multiple']))
                 <option></option>
             @endif

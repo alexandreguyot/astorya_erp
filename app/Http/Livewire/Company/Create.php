@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Company;
 use App\Models\City;
 use App\Models\Company;
 use Livewire\Component;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Create extends Component
 {
+    use LivewireAlert;
     public Company $company;
 
     public array $listsForFields = [];
@@ -31,7 +33,9 @@ class Create extends Component
 
         $this->company->save();
 
-        return redirect()->route('admin.companies.index');
+        $this->alert('success', 'Client créé avec succès');
+
+        return redirect()->route('admin.companies.edit', $this->company);
     }
 
     protected function rules(): array
@@ -73,8 +77,7 @@ class Create extends Component
                 'boolean',
             ],
             'company.bill_payment_method' => [
-                'string',
-                'nullable',
+                'boolean',
             ],
             'company.observations' => [
                 'string',
@@ -85,6 +88,9 @@ class Create extends Component
 
     protected function initListsForFields(): void
     {
-        $this->listsForFields['city'] = City::pluck('name', 'id')->toArray();
+        $this->listsForFields['city'] = City::pluck('name', 'id')
+        ->mapWithKeys(fn($name, $id) => [$id => $name])
+        ->unique(fn($name) => strtolower($name))
+        ->toArray();
     }
 }

@@ -86,6 +86,7 @@
             $('.datepicker-{{ $attributes['id'] }} input').datepicker({
                 dateFormat: "dd/mm/yy",
                 changeMonth: true,
+                changeYear: true,
                 onSelect: function(dateText) {
                     update(dateText);
                 },
@@ -99,21 +100,20 @@
                 }
             });
         @elseif($attributes->has('picker') && $attributes['picker'] === 'month')
-            $('.datepicker-{{ $attributes['id'] }} input').timepicker({
-                dateFormat: "dd/mm/yy",
+            $('.datepicker-{{ $attributes['id'] }} input').datepicker({
+                dateFormat: 'mm/yy',
                 changeMonth: true,
                 changeYear: true,
                 showButtonPanel: true,
-                onSelect: function(dateText) {
-                    update(dateText);
-                },
-                onClose: function() {
-                    update($('.datepicker-{{ $attributes['id'] }} input').val());
-                },
-                onChangeMonthYear: function(year, month) {
-                    let formattedDate = '01' + '/' +(month.toString().padStart(2, '0')) + '/' + year;
+                onClose: function(dateText, inst) {
+                    let month = inst.selectedMonth + 1;
+                    let year = inst.selectedYear;
+                    let formattedDate = (month < 10 ? '0' + month : month) + '/' + year;
                     $('.datepicker-{{ $attributes['id'] }} input').val(formattedDate);
                     update(formattedDate);
+                },
+                beforeShow: function(input, inst) {
+                    $(input).datepicker('widget').addClass('month-year-picker');
                 }
             });
         @elseif($attributes->has('picker') && $attributes['picker'] === 'time')

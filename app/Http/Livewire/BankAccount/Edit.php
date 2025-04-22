@@ -37,7 +37,7 @@ class Edit extends Component
             ],
             'bankAccount.effective_start_date' => [
                 'nullable',
-                'date_format:' . config('project.datetime_format'),
+                'date_format:' . config('project.date_format'),
             ],
             'bankAccount.bic' => [
                 'string',

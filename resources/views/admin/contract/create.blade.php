@@ -5,14 +5,13 @@
         <div class="card-header">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('global.create') }}
-                    {{ trans('cruds.contract.title_singular') }}
+                    Ajouter un contrat pour le client {{ $company->name }}
                 </h6>
             </div>
         </div>
 
         <div class="card-body">
-            @livewire('contract.create')
+            @livewire('contract.create', [$company])
         </div>
     </div>
 </div>

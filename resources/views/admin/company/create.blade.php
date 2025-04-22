@@ -5,8 +5,7 @@
         <div class="card-header">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    {{ trans('global.create') }}
-                    {{ trans('cruds.company.title_singular') }}
+                    Ajouter un client
                 </h6>
             </div>
         </div>

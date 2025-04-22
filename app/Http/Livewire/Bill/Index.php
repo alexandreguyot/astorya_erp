@@ -26,8 +26,10 @@ class Index extends Component
 
     public array $paginationOptions;
 
+    public ?string $dateStartView = null; // Date de début
     public ?string $dateStart = null; // Date de début
     public ?string $dateEnd = null;   // Date de fin
+    public ?string $dateEndView = null;   // Date de fin
 
     protected $queryString = [
         'search' => [
@@ -76,39 +78,10 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Bill())->orderable;
         $this->filterable         = (new Bill())->filterable;
-        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y'); // 1er jour du mois
-        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y'); // Dernier jour du mois
-    }
-
-    public function render2()
-    {
-        $query = Bill::with(['company', 'type_period'])
-        ->whereNotNull('no_bill')
-        ->where('no_bill', 'like', 'FACT-%')
-        ->when($this->dateStart && !$this->dateEnd, function ($query) {
-            $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-            $query->where('generated_at', '>=', $dateStart);
-        })
-        ->when(!$this->dateStart && $this->dateEnd, function ($query) {
-            $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-            $query->where('generated_at', '<=', $dateEnd);
-        })
-        ->when($this->dateStart && $this->dateEnd, function ($query) {
-            $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-            $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-            $query->whereBetween('generated_at', [$dateStart, $dateEnd]);
-        })
-        ->when($this->search, function ($query) {
-            $query->whereHas('company', function($q) {
-                $q->where('companies.name', 'like', '%'.$this->search.'%');
-            })
-            ->orWhere('no_bill', 'like', '%'.$this->search.'%');
-
-        })->orderBy($this->sortBy, $this->sortDirection)->groupBy('no_bill');
-
-        $bills = $query->paginate($this->perPage);
-
-        return view('livewire.bill.index', compact('bills', 'query'));
+        $this->dateStartView = Carbon::now()->startOfMonth()->format('m/Y');
+        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
+        $this->dateEndView = Carbon::now()->endOfMonth()->format('m/Y');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
     }
 
     public function render() {
@@ -155,6 +128,16 @@ class Index extends Component
         return view('livewire.bill.index', [
             'billGroups' => $billGroups,
         ]);
+    }
+
+    public function updatedDateStartView($value)
+    {
+        $this->dateStart = Carbon::createFromFormat('m/Y', $value)->startOfMonth()->format('d/m/Y');
+        $this->dateEndView = $value;
+    }
+    public function updatedDateEndView($value)
+    {
+        $this->dateEnd = Carbon::createFromFormat('m/Y', $value)->endOfMonth()->format('d/m/Y');
     }
 
     private function convertDateFormat($date, $type)

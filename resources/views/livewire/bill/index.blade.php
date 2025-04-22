@@ -7,11 +7,11 @@
             </div>
             <div>
                 Date de début :
-                <x-date-picker wire:model="dateStart" id="dateStart" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de début" picker="date"/>
+                <x-month-picker wire:model="dateStartView" id="dateStart" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de début"/>
             </div>
             <div>
                 Date de fin :
-                <x-date-picker wire:model="dateEnd" id="dateEnd" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de fin" picker="date"/>
+                <x-month-picker wire:model="dateEndView" id="dateEnd" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de fin"/>
             </div>
         </div>
     </div>

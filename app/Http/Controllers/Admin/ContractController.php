@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Models\Company;
 use App\Models\Owner;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
@@ -15,8 +16,8 @@ class ContractController extends Controller
         return view('admin.contract.index');
     }
 
-    public function create() {
-        return view('admin.contract.create');
+    public function create(Company $company) {
+        return view('admin.contract.create', compact('company'));
     }
 
     public function edit(Contract $contract) {

@@ -81,10 +81,10 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('contacts/{contact}/edit', [ContactController::class, 'edit'])->name('contacts.edit');
 
     // Bank Account
-    Route::get('compte-bancaire', [BankAccountController::class, 'index'])->name('bank-account.index');
-    Route::get('compte-bancaire/creation', [BankAccountController::class, 'create'])->name('bank-account.create');
-    Route::get('compte-bancaire/{bankAccount}', [BankAccountController::class, 'show'])->name('bank-account.show');
-    Route::get('compte-bancaire/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bank-account.edit');
+    Route::get('compte-bancaire', [BankAccountController::class, 'index'])->name('bank-accounts.index');
+    Route::get('compte-bancaire/creation', [BankAccountController::class, 'create'])->name('bank-accounts.create');
+    Route::get('compte-bancaire/{bankAccount}', [BankAccountController::class, 'show'])->name('bank-accounts.show');
+    Route::get('compte-bancaire/{bankAccount}/edit', [BankAccountController::class, 'edit'])->name('bank-accounts.edit');
 
     // Companies
     Route::get('clients', [CompanyController::class, 'index'])->name('companies.index');
@@ -101,10 +101,14 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
 
     // Contracts
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');
-    Route::get('contrats/creation', [ContractController::class, 'create'])->name('contracts.create');
-    Route::get('contrats/{contract}', [ContractController::class, 'show'])->name('contracts.show');
+    Route::get('contrats/creation/{company}', [ContractController::class, 'create'])->name('contracts.create');
     Route::get('contrats/{contract}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
     Route::get('contrats/previsualisation/{company}/{period}/{contracts}', [ContractController::class, 'preview'])->name('contracts.pdf.preview');
+
+    Route::post('/notifications/mark-all-read', function () {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back()->with('success', 'Toutes les notifications ont été marquées comme lues.');
+    })->name('notifications.markAllRead');
 });
 
 Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth']], function () {

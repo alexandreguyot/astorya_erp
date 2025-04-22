@@ -1,0 +1,765 @@
+Code;Nom;Nom du contact;Fax;Téléphone;Bloqué;Compte Comptable;E-mail
+411ABL;ATELIER BLAM;;;09 50 02 57 59;;411BLM;facture@bl-am.fr
+411AFI;AFIGEC;;;01 41 49 06 66;;411AFI;"comptagroupe@afigec.com; afigec-factures@afigec.com; accueil.levallois@afigec.com"
+411ASA;ASAMLA;;;02 40 48 51 99;;411ASA;"compta@asamla.org; "
+411LAB;LABORATOIRE DUPRAS;;;02 40 47 52 48;;411TOI;laboratoire.dupras@orange.fr
+411SAB;SABRINA ROGER;;;;;411SAB;sabrina.roger@avocat-sr.fr
+AVP;SARL AVPO LITTORAL;;;;;411AVP;accueil@avip44.fr
+CLI0016;MANQUILLET ET ASSOCIES;;;02 40 47 33 33 ;;411MAN;contact@cabinet-manquillet.fr
+CLI0021;DEPANN OUEST;;02 51 13 32 97;02 51 13 32 96;;411DEP;mickael@depannouest.com
+CLI0028;INVESTYL CONSEIL;;;06 25 04 60 33;;411INV;ctingry@investyl.com
+CLI0029;ELIBAT;;02 28 08 70 21;02 28 08 70 20;;411EXI;"factures-frs@batisante.fr; janne@elibat.pro; cjegat@elibat.pro"
+CLI0035;APLS;;;09 60 47 64 66;;411APL;comptabilite@apls-pontchateau.fr
+CLI0038;CUISINES PASCAL BONNET;;;;;411BON;arthur-bonnet.nantes-compta@pascalbonnet.com
+CLI0049;IFRB PAYS DE LA LOIRE ;BOUDET;;02 40 20 36 66;;411IRF;boudetl@paysloire.ffbatiment.fr
+CLI0050;FFB PAYS DE LA LOIRE ;;02 40 35 44 70;02 40 20 19 70;;411FFB;"barreauj@d44.ffbatiment.fr ; ChateauJP@paysloire.ffbatiment.fr"
+CLI0051;ATREALIS PROMOTION;Godier;02 72 56 00 61;02 40 20 68 77;;411ATR;compta@atrealis-promotion.com
+CLI0056;LOCAM SAS;;;02 51 86 05 00;;411LOC;
+CLI0057;SOCIALEA;;;02 52 56 03 09 ;;411AFC;helene.favreau@socialea.fr
+CLI0058;S.N. VULCA OUEST;;;02 40 86 68 55;;411VUL;vulca.ouest@wanadoo.fr
+CLI0060;FFB VENDEE ;;;02 51 07 06 65;;411FFV;marionc@d85.ffbatiment.fr
+CLI0077;EPMS EHRETIA;;;02 40 81 59 80 ;;411EPM;adeline.chaillot@cap-lan.fr
+CLI0081;CAPVEIL;;;02 41 47 35 00;;411CAP;comptabilite@capveil.fr
+CLI0091;MITIS INGENIEERING;;;02 40 59 24 21;;411MIT;factures@mitis.fr
+CLI0092;BAIE OUEST RENNES;Stéphane ROUSSY;;0299676060;;411BAI;factures-fournisseurs@baie-ouest.fr
+CLI0100;AVR AUTOMOBILE;;02 28 06 09 85;02 40 86 21 02;;411AVR;"avr_automobile@orange.fr; contact@avr-auto.fr; comptabilite@avr-auto.fr"
+CLI0102;ATHENA ARCHITECTURE;;;02 40 47 40 77;;411ATH;archi.athena@wanadoo.fr
+CLI0109;SOCIETE DE TRANSPORT GILBERT POUPARD;;;02 40 03 21 35;;411SOC;stgp-poupard@wanadoo.fr
+CLI0116; SOMOVER (SMFS);;;02 40 93 88 08;;411SOM;infos@somover.fr
+CLI0127;RESUMEMO;;;02 40 36 44 87;;411RES;compta@resumemo.com
+CLI0128;MACQF;;02 53 55 71 92;02 40 57 11 11;;411MAC;mfpigeault@macqf.fr
+CLI0131;BAOLGI;;;02 40 26 93 64;;411BAO;b.oppitz@baolgi.com
+CLI0134;KEOPS PERFORMANCE;CHEVALIER;;02 28 23 25 55;;411KEO;keops-performanc-qinhwks5@suppliers.pennylane.com
+CLI0140;JD CONSULTANTS;isabelle landreau;;02 40 68 70 58 ;;411JDC;compta@jdconsultants.fr
+CLI0145;CONCEPT GOUTTIERE ALU;;02 40 26 27 25;02 40 26 27 20;;411DAL;"compta@cga-dalalu.fr; contact@cga-dalalu.fr"
+CLI0147;LC SERIGRAPHIE;;;02 40 03 51 74;;411LCS;lcserigraphie@orange.fr
+CLI0150;BERRANGER ET VINCENT ARCHITECTES;;;02 51 72 37 82;;411BVA;bv.comptable@gmail.com
+CLI0155;AJP IMMOBILIER;;;02 40 40 47 40;;411AJP;parais.siege@ajp-immobilier.com
+CLI0160;AUDIT CONSEIL EXPERTISES ONE ACE REZE;Catherine MARCHAND;02 40 26 90 38;02 40 65 05 78;;411AUD;p.moinet@ac-sas.fr
+CLI0162;LEGI LC;CHANTAL ;02 46 65 02 83;02 46 65 02 82;;411LEG;contact@legilc.com
+CLI0165;BMPR;;;02 85 93 50 10;;411BMP;"compta@labobmpr.fr;fxhue@labobmpr.fr"
+CLI0171;CHILI CONCEPT;;;02 53 55 71 87 ;;411CHI;jguignon@chiliconcept.fr
+CLI0172;M.R.I;;;02 40 03 31 10;;411MRI;facturation@mrindustrie.fr
+CLI0178;MADAME COLUMBO;;02 40 86 57 91;02 40 86 60 26;;411MDC;"antoine@madame-columbo.fr; flora@madame-columbo.fr"
+CLI0185;AER EAU CONTROL;;02 51 70 13 81;02 40 02 99 83;;411AEC;factures@aereau-control.com
+CLI0191;BATI CLUB;Guichard;;02 28 44 38 42;;411BAT;baticlub44@gmail.com
+CLI0200;VICTOR PARTS;;02 28 00 11 11;02 28 00 11 10;;411VPA;thorette@victorparts.com
+CLI0206;AFFICHAGES PUBLICITAIRES DE L'OUEST;;02 51 13 72 39;02 51 13 72 77;;411DOU;contact@apo44.fr
+CLI0207;URBANMAKERS;;09 81 92 39 66;09 81 92 39 66;;411URB;m.lethelier@urbanmakers.eu
+CLI0208;ALIGA;;;02 40 35 38 40 ;;411ALI;"neffala@axelis.fr; siege@axelis.fr"
+CLI0211;SCM MIELLE DUHEN BILLY;;;02 40 80 15 20;;411SCM;secretariatdmb@gmail.com
+CLI0214;MILLE WATTS;;;02 40 84 08 94 ;;411MWA;anais.guyot@mille-watts.com
+CLI0219;CCGB CHEVAL SHOP;;;02 28 03 29 91;;411CCG;"fred@cheval-shop.fr ; isabelle@cheval-shop.com"
+CLI0220;DEUX COUPS D'CRAYON;Agathe Le Bohec;;02 53 45 30 71;;411DEU;agathe@dcdc.fr
+CLI0228;LE STUDIO DE LA DANSE;;;02 40 40 52 43;;411LSD;christine.foucault@lestudiodeladanse.com
+CLI0231;ASG CONSEIL;Sebastien Gandon;;02.85.52.32.11;;411ASG;"sgandon@asgconseil.com ; ayvard@asgconseil.com"
+CLI0234;FUZION SERVICES;;;;;411FUZ;"contact@fuzionservices.fr; fuzion.services@live.fr; khkonan@fuzionservices.fr"
+CLI0235;AUDIT CONSEIL EXPERTISES ONE ACE NANTES;LECOMTE;;02 40 73 77 71;;411CAC;"veronique.lecomte@ace-sas.fr; romain.leduc@ace-sas.fr"
+CLI0245;APAPA ROSENTHAL;PHELIPPOT;;02 40 43 44 78;;411APP;mathilde@apaparosenthal.com
+CLI0249;SAS BOYSCOOT SHOP;marc cluzet;;02 40 84 16 01;;411BOY;contact@boyscootshop.com
+CLI0251;INIT2;Aubineau;;02 85 52 14 01;;411INI;cyril.aubineau@init2.fr
+CLI0252;NOW AND ZEN EVOLUTION;Senbon;;02 40 60 69 24;;411NOW;"compta@nowandzen.fr; s.ibgui@nowandzen.fr"
+CLI0257;SARL TAG PERFORM;G.FAUVERGUE;;02 40 36 80 82;;411TAG;ecousin@tagperform.com
+CLI0259;ECONOMISTES DE LA CONSTRUCTION (ECMS);Luc Morice;02 40 58 73 28;02 40 58 71 97;;411ECM;agence@ec-ms.fr
+CLI0262;ATLANTIQUE HYDRAULIQUE;;;02 28 01 46 06;;411HYD;compta.atlantiquehydraulique@orange.fr
+CLI0275;FFB LOIRE ATLANTIQUE;;02 40 34 44 70;02 40 20 23 00;;411FBN;beckh@d44.ffbatiment.fr
+CLI0288;ISOCRATE;L.Brochard;02 51 89 03 78;02 51 89 77 56;;411ISC;" a.rolland@isocrate.com; "
+CLI0290;WKN FRANCE;;;02 40 58 73 10;;411WKN; a.barber@wkn-france.fr
+CLI0291;PROCONECT ORVAULT;;02 40 32 70 68;02 40 16 35 60;;411PRO;"b.barokhel@proconect.com; f.sarini@proconect.com"
+CLI0292;TURENNE AVOCATS;Nadine LARGOUET;02 51 89 41 39;02 40 84 23 04;;411RIN;doudard@rineauassocies.com
+CLI0293;CAPEB 44;Corinne Talle;02 40 08 99 61;02 40 08 99 60;;411SCI; m.guillet@capeb44.fr
+CLI0294;AGCI (ASS GESTION COMPTABILITE INTERPROFES);BRUNO GILLON;;02 51 44 55 55;;411AGI;p.turcot@agci-comptabilite.fr
+CLI0296;E.U.R.L NAONEC;HORDE;;07 60 90 13 06;;411NAO;contact@naonec.com
+CLI0300;ISO INSTITUT POUR LA SANTE DE L OUEST;morgane Billard;02 40 25 25 68;02 40 30 30 24;;411SAN;achats@isoprevention.fr
+CLI0307;LOCASKI 44;MOREZ;;06 50 60 15 24;;411LOK;bonjour@locaski44.fr
+CLI0308;AD HOC MEDIA;;02 51 13 47 48;02 51 13 47 47;;411ADH;"e.diez@adhocmedia.fr; malhere@adhocmedia.fr> "
+CLI0309;AZELAN - ATELIERS LATISSE;;;05 53 23 24 24;;411SOL;"compta@azelan.fr; esardan@azelan.fr"
+CLI0312;CBP SAS (Expertise Comptable);CHOQUET Isabelle;02 40 95 79 00;02 40 73 77 71;;411CBP;veronique.lecomte@ace-sas.fr
+CLI0313;PRECITEK (SAS);;02 28 23 15 02;02 51 70 75 97;;411PRE;francoise.boisseleau@precitek.fr
+CLI0314;MELIAD;Laurence BESNAULT;02 28 23 04 69;02 51 70 75 99;;411MEL;"p.jacob@meliad-sas.com; compta@edge-group.fr"
+CLI0315;MAIRIE DE RIAILLE;Andre Raimere;;02 40 97 80 25;;411RAI;k.robin@riaille.fr
+CLI0318;SARL LE NANTILLAIS COCKTAIL;;02 40 13 07 83;02 40 05 78 73;;411NAN;sophie@lenantillais.fr
+CLI0319;ETUDE GENEALOGIQUE LA FLEURIAYE;;02 53 55 73 79;02 53 55 73 66;;411GEN;cedric.picard@etudelafleuriaye.fr
+CLI0320;HIPRA FRANCE SAS;;02 51 80 82 20;02 51 80 77 91;;411HIP;"admin.france@hipra.com; melany.lhostis@hipra.com"
+CLI0321;AMATRANS SA;Xavier AICHOUCHE;02 40 12 04 34;02 40 12 19 00;;411AMR;florian.lequec@amatrans.fr
+CLI0325;SARL TR OPTIMA CONSEIL;;;02 40 74 73 51;;411TRO;"troptimaconseil@gmail.com; elisetelega@cabinetcdac.fr"
+CLI0329;JACQUES BOUCHETON ARCHITECTE;Marianne FAYOLLE;02 40 35 03 21;02 40 35 03 20;;411JAC;jf.leost@jba.archi
+CLI0330;PRAUD INOX;;02 51 13 71 83;02 51 13 72 72;;411PRA;compta@praud-inox.com
+CLI0331;CABINET PIAULT EXPERT COMPTABLE;Nicolas PIAULT;;02 40 89 27 61;;411PIA;"nicolaspiault@cabinetpiault.com; accueil@cabinetpiault.com"
+CLI0336;L'INTERIEUR SARL;;;02 40 67 92 22;;411INT;"honkanantes@gmail.com;linterieurnantes@gmail.com"
+CLI0338;KALISTEO;;;02 85 52 40 40;;411ALP;contact@kalisteo-services.fr
+CLI0339;O2A COURTAGE;SUBILEAU;;02 40 48 56 00;;411O2A;subileau@o2a.fr
+CLI0341;CISLED;Laurent Guillon;;02 85 52 39 21;;411CIS;"vguillon@cisled.fr; lguillon@cisled.fr"
+CLI0344;FAUN;TOUBLANC;02 40 12 01 03;02 40 48 50 13;;411IDE;"c.toublanc@faun.archi; b.ledebt@faun.archi"
+CLI0345;NANT'EST ENTREPRISE;MARREC;;02 40 50 03 85;;411NAE;contact@nantest-entreprises.fr
+CLI0350;TEKNITYS;Arnaud JACKYMSKI;;06 81 76 48 66;;411TEK;contact@teknitys.fr
+CLI0351;C.R.I.J PAYS DE LA LOIRE;;;02 51 72 94 50;;411CRJ;comptabilite@infos-jeunes.fr
+CLI0353;ORPAN;chereau;02 40 20 18 76;02 40 99 26 00;;411OPA;"sandrine.barranger@orpan.fr; helene.mauchretien@orpan.fr"
+CLI0359;EQUIPE JARDIN ILE DE FRANCE;;01 30 33 92 00;02 45 40 47 45;;411DPR;"fournisseur@equipjardin.com; l.courtin@equipjardin.com"
+CLI0360;SARL DOLITA;VERONIQUE ;;02 51 82 25 75;;411DOL;dolita.bijoux@orange.fr
+CLI0364;M.T.P.L. 44;;;02 40 35 21 61;;411MTP;jocelyne.quiniou@mtpl.fr
+CLI0365;O2A ASSURANCE;;;02 40 48 56 00;;411OAA;"subileau@o2a.fr; vasselot@o2a.fr"
+CLI0381;CINA CLUB IMMOBILIER DE NANTES ATLANTIQUE;;;07 77 75 82 30;;411CIN;cinagestion@cina.fr
+CLI0383;DEPAC ATLANTIQUE;Lemoel isabelle;02 40 68 06 13;02 40 18 35 50;;411DPA;"magali.langeard@cecop.com; herve.ktourza@cecop.com"
+CLI0385;AKTO;;;01 78 37 13 32;;411ING;l.sapountzidis@intergros.com
+CLI0391;PROTEXTYL;;;02 40 95 65 40;;411TEX;compta@protextyl.com
+CLI0393;MEDICO NANTES;;02 40 31 82 56;02 40 97 58 72;;411MED;contact@medico-nantes.fr
+CLI0395;NAODEN;Cyril TERRIEN;;02 85 52 43 23;;411NAD;compta@naoden.com
+CLI0396;ACCES 9;;;02 51 83 16 02;;411AC9;"gestion@aqua9.fr; pdh@acces9.com"
+CLI0398;GÉRONTOPOLE AUTONOMIE ET LONGEVITE ;Huges PORTE;;09 75 121 120;;411GER;"corinne.audureau@gerontopole-paysdelaloire.fr; valerie.bernat@gerontopole-paysdelaloire.fr"
+CLI0399;BUREAU ETUDE CHIRON;;;02 51 71 98 17;;411BEC;c.chiron@be-chiron.fr
+CLI0402;AXEMPLOI;;;02 51 84 38 48;;411AXP;dg@axemploi.fr
+CLI0403;GIP LOIRE ESTUAIRE;;;02 51 72 93 65;;411GIP;"gip@loire-estuaire.org ; sylvain.cerisier@loire-estuaire.org"
+CLI0409;MEPCO SA;;;02 40 92 02 22;;411MEP;factures@mepco.fr
+CLI0411;ACTECO RECYCLING;;09 82 63 23 53;09 54 41 54 86;;411ACT;gbureau@acteco-recycling.com
+CLI0412;CABINET ABD;;;02 40 12 43 44;;411ABD;brigitte.braud@cabinet-abd.fr
+CLI0413;VPC CONSULTING;;;02 28 08 75 11;;4112AF;brigittebraud@cabineta2f.fr
+CLI0414;YAOUANC IMMOBILIER;Guillaume YAOUANC;;02 40 73 09 60;;411EON;"yaouancguillaume@gmail.com;compta@yaouanc-immobilier.fr; contact@yaouanc-immobilier.fr"
+CLI0417;SYNDICAT LOIRE AVAL;Caroline ROHART ;;02 85 52 44 14;;411SYL;"syloa@syndicatloireaval.fr; admin@syndicatloireaval.fr "
+CLI0418;BCF INGENIERIE;Alexis MADELINE;02 40 69 90 09 ;02 40 69 00 02;;411BCF;bbiraud@bcfgroupe.com
+CLI0419;DICI CONSEIL & DESIGN;Tiphaine Igigabel;;02 85 67 20 53;;411DCD;comptabilite@dicidesign.com
+CLI0420;SYNDICAT MIXTE DE LA CHERE SMABVC;Tiphaine SECHET;;02 40 07 75 37;;411SMC;"compta@syndicatdelachere.fr; sylvie.simon@cheredonisac.fr"
+CLI0428;ASSYSTEM INV;;02 51 13 14 90;02 28 23 25 55;;411KEA;comptainv@assystem.com
+CLI0429;MES OBJETS PUBLICITAIRES SAS;;;02 85 52 46 26;;411MOP;"mlevron@sas-mop.com; qlevron@sas-mop.com"
+CLI0430;BUSQUETS FRANCE;;;02 28 23 53 00;;411BUS;"g.garcia@busquets.com; neus.matilles@busquets.es"
+CLI0431;GCSMS ESPMS ESPACE ANJOU;;;02 41 92 60 28;;411POA;"comptabilite@edla.fr ; b.bosse@edla.fr"
+CLI0436;SARL STUDIO LABO PHOTO GRAPHIC DAVID RICHARD;;;06 81 14 79 08;;411STU;dsprichard@hotmail.fr
+CLI0438;IDO ASSURANCES;;;04 94 49 08 36;;411IDA;sjanvier@ido-assurances.com
+CLI0442;CAPAERO;;02 28 23 04 69;02 51 70 75 99;;411CPO;p.jacob@meliad-sas.com
+CLI0446;ATOUT PEINTURE 44;;;02 40 95 09 93;;411ATT;"compta@atoutpeinture44.fr; l.birre@atoutpeinture44.fr"
+CLI0449;NEWEDGE;;;02 51 70 75 99;;411EDG;compta@edge-group.fr
+CLI0451;ATLANTIC AVENIR;Damien BOUILLAUD;;02 52 10 35 88;;411ATN;contact@atlanticavenir.fr
+CLI0452;SARL CONFORT DOMI NANTES OUEST;;;02 40 71 89 86;;411COF;team.coach@atousages.fr
+CLI0455;CAPEB PAYS DE LA LOIRE;;;02 40 89 81 90;;411CA2;sylviane.varasse@capeb-paysdelaloire.fr
+CLI0457;BCF ARCHITECTES;;;02 40 69 00 02;;411BCA;"bbiraud@bcfgroupe.com; acadran@bcfgroupe.com"
+CLI0458;BIOSENSE;;;02 85 52 33 46;;411BSS;"noujaimemmanuel@neuf.fr; hugues@cidema.fr"
+CLI0459;ATOUT BIRRE;;;02 40 95 09 93;;411ABI;l.birre@atoutbirre.fr
+CLI0462;BOURNIGAL SARL;Camille BOURNIGAL;;02 40 95 20 14;;411BNG;"elise.lelore@bournigalsarl.fr ; camille.bournigal@bournigalsarl.fr"
+CLI0463;LMR AUDIT;;;02 40 73 77 71;;411LMA;veronique.lecomte@ace-sas.fr
+CLI0464;ROSEMOOD;Guillaume de Beauvoir;;02 52 20 00 00;;411ROS;"compta@rosemood.fr; carla.lepinay@rosemood.fr; achats@rosemood.fr; lola.girault@rosemood.fr "
+CLI0465;SAP 44;;;02 55 99 27 27 ;;411SAP;"contact@sap-44.fr;richard@sap-44.fr "
+CLI0467;SOCIETE MENUISERIES FERMETURES STORES SMFS KOMILFO;;;02 40 04 14 32;;411SMF;infos@somover.fr
+CLI0471;ACCF;ANGELIQUE COLLARDEY;;07 71 64 22 34;;411ACF;votrepaie@gmail.com
+CLI0472;ALEO;Nawal RACHADI;;02 51 85 22 13;;411ALE;"compta@aleofrance.fr; LOIRAT <charley.loirat@aleofrance.fr>"
+CLI0475;Face Loire Atlantique ;;;02 40 16 10 83;;411FAC;fbrichart@facela.fr
+CLI0478;BCF CONSTRUCTIONS;;;02 40 69 00 02;;411BCC;bbiraud@bcfgroupe.com
+CLI0479;EMPREINTE OCEANE;;;02 40 92 10 92;;411EMP;alicia.lecleach@empreinte-oceane.com
+CLI0481;SYNDICAT DES COPRO RESIDENCE LES CASTALIES;;;02 40 29 17 78;;411CAS;"direction@lescastalies.fr; comptabilite@lescastalies.fr"
+CLI0484;DG ELEC - DAVID GUERY;;;02 52 35 07 97;;411DGE;dgelecguery@outlook.fr
+CLI0486;PRO IMPEC Nantes;BOUVIER;;02 51 13 99 57;;411ARE;factures.demat@pro-impec.fr
+CLI0502;SAINT FLORENT MOTOCULTURE;BEDUREAU DAMY;;02 52 35 07 32;;411SFM;stflomotoculture@gmail.com
+CLI0503;ENCHERES PAYS DE LOIRE;;;02 41 60 55 19;;411EPL;comptabilite@chauvire-courant.fr
+CLI0504;HEBE FREMY MENUISERIE;;;02 41 39 14 43;;411HEB;contact@menuiserie-hebefremy.fr
+CLI0505;CHOCOLATERIE PINEAU LA ROUTE DU CACAO;PINEAU;;02 40 53 78 51;;411CHO;croisic.cacao@orange.fr
+CLI0507;BAR LES DIMES;;;02 41 95 14 24;;411DIM;bar.les.dimes@gmail.com
+CLI0508;SCI L EPERONNIERE;;;06 08 83 66 17;;411EPE;"emilie.dequeant@hotmail.fr; Benoit.eperonniere@mailoo.org"
+CLI0509;GENESTON PASCAL BONNET;;;02 85 52 92 20;;411GPB;"arthur-bonnet.nantes-compta@pascalbonnet.com; arthur-bonnet.nantes@pascalbonnet.com"
+CLI0510;SOBOTECH;;;06 50 68 31 33;;411SOB;"gboullier@sobotech.fr; jsamenayre@sobotech.fr"
+CLI0512;MONIQUE ROYNARD;;;;;411ROY;m.roynard49@gmail.com
+CLI0513;SAS AVENIR PAIE;LAURE QUERIOZ;;05 55 37 10 24 ;;411AVE;contact@avenir-paie.fr
+CLI0514;AMS EVENEMENTS;François LEMARIÉ;;02 99 65 05 05;;411AMS;annabelle.binet@ams-evenements.com
+CLI0516;SARL AMC - NANTES ACADEMIE COIFFURE (NAC);ADELINE CHATELIER;;02 40 89 49 94;;411NAC;Admin@nac44.com
+CLI0517;CLIMAT ET CONFORT MOREAU CLISSON;;02 40 03 93 74;02 40 54 02 24;;411CCM;ifacture@climatconfort-moreau.fr
+CLI0518;ASK;Lauren EVEILLEAU;;06 71 84 56 51;;411ASK;lauren@asknco.com
+CLI0519;GROUPEMENT DES PISCINIERS ASSOCIES PISCINE GATEL;;;02 40 25 85 53;;411GAT;"exotique.paysage@wanadoo.fr; ctriballier@piscine-gatel.com "
+CLI0520;HUMEZ;;;06 89 46 75 59;;411HUM;"g.humez@baolgi.com; mahmaartisans@gmail.com"
+CLI0521;STUDIO PLUNE;benjamin balloche;;02 43 67 13 07 ;;411SPL;"comptabilite@studioplune.fr ; benjamin.baloche@studioplune.fr"
+CLI0523;CHRISTOPHE VARIN EI;;;0678090968;;411CHR;christophe.varin@encodit.com
+CLI0524;SCI 13 RABOTIERE;;;06 61 26 52 04;;411RAB;fx.dauphin@gmail.com
+CLI0526;A2PN DECOR;Romain TEXXIER;;02 51 70 25 48;;411AP2;secretariat@a2pn.fr
+CLI0530;INEXEL;;;02 51 13 72 72;;411INE;l.flao@praud-inox.com
+CLI0531;EL2D;NICOLAS OUDOT;;02 51 13 72 37;;411EL2;"Bertille.OUDOT@el2d.fr; Nadire.IBRAHIM@el2d.fr ; informatique@el2d.fr ; valere.pilloud@el2d.fr"
+CLI0532;CAPEB SERVICES / CAPEB JURIS;;;02 40 08 99 60;;411CPS;"m.letourneux@capebsolutions.fr; r.viretto@capebsolutions.fr "
+CLI0536;INSTITUT DE BEAUTE ZOELYS;;;02 41 43 37 71;;411ZOE;institutdebeautezoelys@yahoo.fr
+CLI0537;DLW ARCHITECTES;;;02 40 69 00 65;;411DLW;contact@dlw-architectes.fr
+CLI0538;SARL RICHARD GRELLIER - AU GRE DE LA LOIRE;;;02 41 43 68 61;;411AGL;augredelaloire@gmail.com
+CLI0541;NANTES GRAVURE;;;02 40 49 32 33;;411NGR;contact@nantes-gravure.fr
+CLI0542;SAS 2AB (Absolis Basse Goulaine);;;02 40 03 61 83;;4112AB;"compta2ab@absolis.fr; x.archambaud@absolis.fr"
+CLI0544;LMA SAS (Absolis Nantes);;;02 40 35 37 37;;411LM2;compta@axelis.fr
+CLI0545;GUICHET BOISSONS;;;02 40 06 62 00;;411GUI;compta@guichet.fr
+CLI0551;Agence ALTO - Architecture d intérieur;;;02 40 05 16 62;;411ALT;thomas@agencealto.com
+CLI0555;ATLANTIQUE BOBINAGE;XAVIER DERAME;02 40 78 78 64;02 40 78 71 37;;411ATB;atlantiquebobinage@orange.fr
+CLI0556;AGENCEMENT PB;;;02 40 54 83 29;;411APB;"arthur-bonnet.nantes-compta@pascalbonnet.com; arthur-bonnet.nantes@pascalbonnet.com"
+CLI0557;ADVENIS;Romain VINCENT GENOD;;02 53 73 02 51;;411ADV;romain.vincent-genod@advenis.com
+CLI0560;OXINET;;;02 40 57 11 11;;411OXI;mfpigeault@macqf.fr
+CLI0562;ALEO INTERVENTION;;;07 61 92 56 18;;411ALO;kathalyn.salmon@aleofrance.fr
+CLI0565;CAPEXIA ATLANTIQUE;;;02 28 01 15 66 ;;411CPX;comptable@capexia.fr
+CLI0567;MASTERPLAN;BOUCHETON Jacques;;06 64 22 08 11;;411MAP;"hello@masterplan.ltd; admin@masterplan.ltd"
+CLI0568;CABINET SARROUY;;0240957900;02 40 73 77 71;;411SAR;veronique.lecomte@ace-sas.fr
+CLI0569;ATD BOOSPA;;;02 53 35 41 49;;411BOO;comptabilite@boospagroup.net
+CLI0571;SYNEGORE;NOLWEEN KAZIRAS;;02 85 52 26 80;;411SYN;"nolwenn.hadet@synegore.fr ; secretariat1@synegore.fr"
+CLI0572;RISKOMNIUM SAS;;;02 85 52 46 40;;411RIS;caroline.madelaine@riskomnium.fr
+CLI0573;POMPES FUNEBRES APL ROBERT;;;02 40 25 96 16;;411POM;pfaplrobert@orange.fr
+CLI0574;SCI LBBG;;;;;411LBB;apigeault@oxinet.fr
+CLI0576;SAEML LA FOLLE JOURNEE;;;09 72 50 53 50;;411LFJ;magalie.duret@lacite-nantes.fr
+CLI0578;EXOTIQUES PAYSAGES;TRIBALLIER Carole;;02 40 25 04 31;;411EXP;exotique.paysage@wanadoo.fr
+CLI0583;GEO.CP;;;02 51 79 71 08;;411GHI;p.bardy@geocp.fr
+CLI0588;CERAMIDE;;;;;411CER;manuel.papin@ceramide.fr
+CLI0589;MAITRE ALBAN PERDEREAU;;;;;411ALB;ap@cpjrennes.fr
+CLI0590;FRANCK TRANSPORTS;;;;;411FTR;franck.transports@orange.fr
+CLI0591; POURTEAU THOMAS;;;;;411POT;
+CLI0592;PERRINE DEFEBVRE;;;;;411PDE;perrine.defebvre@synegore.fr
+CLI0596;PUGET IMMOBILIER;;;02 40 69 00 11;;411PUG;r.puget@puget-immobilier.fr
+CLI0600;CAPEXIA PARIS;;;01 46 22 84 60;;411CPP;patrice.le.roux@capexia.fr
+CLI0602;MCGL;;;02 40 76 67 77;;411MCG;mcgl44@orange.fr
+CLI0603;SLDC TRANSPORT;;;;;411SLD;factures+cSLD-031041@m.inexweb.fr
+CLI0604;NANTES ACCASTILLAGE;;;0033240631012 ;;411NCC;compta@adnantes.com
+CLI0605;BONG COMMUNICATION ;Gaudel Jean-Christophe ;;;;411BOG;jcgaudel@bongcommunication.com
+CLI0607;CABINET CLARENCE;BERNIER;;;;411CLA;jbernier@clarence-avocats.fr
+CLI0610;MAIRIE DE SAINT AUBIN DES CHATEAUX;;;02 40 28 47 13;;411AUB;comptabilite@saint-aubin-des-chateaux.fr
+CLI0611;ADAM INVESTISSEMENT;ADAM Laurence;;;;411ADA;l.adam@adam-invest.fr
+CLI0612;VIGNAULT X FAURE;;;02 51 25 02 49;;411VXF;compta@vxf.fr
+CLI0614;S.K.S Développement;;;02 51 70 12 03;;411SKS;contact@agencesks.fr
+CLI0615;RENTSCAPE;Nicolas ROTH;;02 40 31 61 85;;411REN; billing@rentscape.com
+CLI0618;CAPEB 72;;;02 43 52 05 20;;411CPB;a.gourmel@capeb-sarthe.fr
+CLI0622;OSCAR PRODUCTIONS;;;02 40 89 12 00;;411OSC; julie@oscar.tm.fr
+CLI0623;CREDIT OUEST SELECT;;;02 40 89 00 79;;411CRE;"christophe.boutin@creditouestselect.fr; gwenole.francois@creditouestselect.fr"
+CLI0624;IEPF;;;06 50 96 71 75;;411IEP;domitille@iletaitplusieursfois.com
+CLI0626;JOE & JANE;;;02 99 79 39 54;;411JOJ;dolita.bijoux@gmail.com
+CLI0627;CAPEB MAYENNE (53);;;02 43 49 38 00;;411MAY;pierre.fouillet@capeb-mayenne.fr
+CLI0632;ONE-SIXONE;COUSSEAU JEAN-FRANCOIS;; 02 48 16 74 62;;411ONE;"Jf.cousseau@one-sixone.com; c.gervier@one-sixone.com"
+CLI0637;Profil'A Consulting;;;;;411PRF;h.asses@profil-a-consulting.com
+CLI0638;CHEMINS DE TRAVERSE;Emmanuel ROLLAND;;;;411GRO;emmanuel.rolland@cheminsdetraverse.eu
+CLI0639;GOIOT SYSTEMS;;;02 40 92 29 30;;411GOI;comptabilite@goiot.fr
+CLI0640;PRO PHIL CONSEILS;;02 40 14 00 16;;;411PRH;"phn@prophilconseils.fr; vch@prophilconseils.fr"
+CLI0641;BAIE OUEST NANTES;;;;;411BAN;factures-fournisseurs@baie-ouest.fr
+CLI0643;TACCT;;;;;411TAC;phnicoleau@tacct.fr
+CLI0644;CLARENCE AVOCATS;;;02 85 52 94 48;;411CLA;jbernier@clarence-avocats.fr
+CLI0646;ADIL 44;;;02 40 89 30 15;;411ADL;"direction@adil44.fr; Marina COIRRE <marina.coirre@adil44.fr>"
+CLI0648;CAPEB SOLUTIONS;;;;;411CSO;"x.duchaine@capebsolutions.fr; j.gaudin-abeng@capebsolutions.fr"
+CLI0649;STEM;;;;;411ST1;comptabilite@oep.fr
+CLI0650;PHOSPHOTECH;;;02 28 03 14 77;;411PHO;mbirsin@phosphotech.com
+CLI0655;SCI CHABOT;;;02 40 05 74 61;;411BOT;jm.chabot@ac-sas.fr
+CLI0656;Syndicat Chère-Don-Isac;;;02 40 66 18 29;;411ISA;sylvie.simon@cheredonisac.fr
+CLI0659;RIDESCOPE;;;06 42 17 42 99;;411RID;xrousseau@ridescope.fr
+CLI0660;ZENITUDE HÔTEL-RESIDENCES NANTES LA BEAUJOIRE;;;02 40 75 77 63;;411ZEN;direction.nantes@zenitude-groupe.com
+CLI0661;SAS BOURNIGAL SUD LOIRE;BOURNIGAL CAMILLE;;;;411SUD;"camille.bournigal@bournigalsarl.fr; sylvie.rousseau@bournigalsarl.fr"
+CLI0663;BRUNO CLEMENT - SALARIE D'ASTORYA;;;;;411BRU;b.clement.44@gmail.com
+CLI0667;UDAF 44;PAYELLE NATHALIE;02 5180 30 10;02 51 80 30 00;;411UDA;compta-gestion@udaf44.asso.fr
+CLI0668;KESYS OUEST;Christophe CHASSIER;;02 51 79 14 79;;411KES;christophe.chassier@kesys.fr
+CLI0669;FEDERATION DES PROMOTEURS IMMOBILIERS;;;;;411FPI;contact@fpi-paysdeloire.fr
+CLI0670;HENRIMAN FORMATION;BRINDEAU;;02 28 23 79 85;;411HEN;directionhenrimanformation@gmail.com
+CLI0671;AFIGESE;;;02 28 25 45 15;;411AFE;contact@afigese.fr
+CLI0672;B2B FINANCE;;;06 12 94 72 50;;411B2B;"isabelle.debalanda@gmail.com; gdebalanda@solufinance.fr"
+CLI0676;GINKGO;;;;;411GIN;votrepaie@gmail.com
+CLI0678;TICA ARCHITECTES & URBANISTES;;;02 85 52 46 15;;411TIA;contact@ticarchitecture.fr
+CLI0679;Association ARRIA;;;02 28 25 29 65;;411ARR;entretienpoleperrines@arria.asso.fr
+CLI0680;HERIC AUTOMOBILES;;;02 40 57 60 00;;411AUT;compta@hericautomobiles.fr
+CLI0682;DOMAINE JO LANDRON;;;02 40 54 83 93;;411DOM;psecher@domaines-landron.fr 
+CLI0683;AVIATORS;;;02 53 78 04 13;;411AVA;factures@aviators.fr
+CLI0684;AVO FISC;GUILLAUME DE MONTGOLFIER;;;;411FIS;gdemontgolfier.pro@gmail.com
+CLI0685;MEOSIS;;;03 89 30 86 30 ;;411MEO;jdubourg@meosis.fr
+CLI0686;API Atelier des Paysages Interieurs;;;;;411API;contact@atelier-api.fr
+CLI0687;EVERDEV;BOUSSATON ;;05 35 54 08 10;;411EVE;hello@everdev.fr
+CLI0688;FEDERATION DU BATIMENT DE LA LOIRE ATLANTIQUE;;;02 40 20 23 00;;411FLA;BARREAU Julie ( FD 44 Loire-Atlantique ) <BarreauJ@d44.ffbatiment.fr>
+CLI0689;OCPME;;;;;411OCP;romain.leduc@ace-sas.fr
+CLI0691;Syndicat intercommunal du Candéen ;;;02 41 94 19 40;;411SYC;direction@sic-candeen.fr
+CLI0692;QUARTET CREATION;Jean-Baptiste PHILIPPE;;02 40 95 27 48;;411QUA;contact@hotelgroupes.com
+CLI0693;SILENCIO ACOUSTIQUE;;;;;411ACO;n.drouault@silencio-acoustique.com
+CLI0694;IVOIRE ENVIRONNEMENT SERVICES;;;;;411IVO;"contact@ivesfrance.fr; akonan@ivesfrance.fr"
+CLI0695;PC FIXE;;;;;411PCF;
+CLI0696;SERVEUR CLOUD;;;;;411SCL;
+CLI0697;SERVEUR;;;;;411SRV;
+CLI0698;NOM DE DOMAINE;;;;;411NDM;
+CLI0699;OFFICE;;;;;411OFF;
+CLI0700;PC PORTABLE;;;;;411PCP;
+CLI0701;TELEPHONE FIXE OVH;;;;;411OVH;
+CLI0702;TELEPHONE FIXE XIVO;;;;;411XIV;
+CLI0704;FIBRE OPTIQUE;;;;;411AFO;
+CLI0706;NAS;;;;;411NAS;
+CLI0707;IMPRIMANTE AVEC COUT A LA PAGE;;;;;411ICP;
+CLI0708;SERVEUR DE TELEPHONIE;;;;;411TEL;
+CLI0710;PFSENSE;;;;;411PFS;
+CLI0711;TELEPHONE PORTABLE;;;;;411POR;
+CLI0712;LINK6 INFORMATIQUE;;;;;411LI6;achats@link6.fr
+CLI0713;FI MEPCO SAS;;;;;411FME;factures@mepco.fr
+CLI0714;PETIT OEUVRE;;;;;411PET;contact@petit-oeuvre.fr
+CLI0715;SCI LE DOMAINE DE LA FORET;;;;;411LDF;anitafoucher8388@gmail.com
+CLI0718;SARL MACADO;;;;;411ADO;sophie@lenantillais.fr
+CLI0719;ATELIER 360°;;;02 28 02 24 39;;411A36;contact@atelier360.fr
+CLI0720;ABS SOLUTIONS;;;09 83 87 20 73;;411ION;contact@abssolutions.fr
+CLI0721;NOW FORMATION;PUYO Didier;;;;411NOF;didier.puyo@nowformation.fr
+CLI0722;ALEO EVOLUTION;;;09 67 71 36 09;;411EVO;compta@aleofrance.fr
+CLI0723;HSBT INVESTISSEMENT;;;;;411HSB;"siege@axelis.fr; compta@axelis.fr"
+CLI0724;AXELIS INTERIM;;;;;411AXI;"siege@axelis.fr; compta@axelis.fr"
+CLI0725;NOGA;;;;;411NOG;angelique.lannon@nogarest.fr
+CLI0727;DL SERVICES ;;;02 40 56 85 92;;411DLS;mathilde.laine@dl-services.com
+CLI0728;LOOPING & BRO;Martin JUTEL;;;;411BRO;"antoine@madame-columbo.fr; flora@madame-columbo.fr"
+CLI0729;LORIKA ISOLATION;;;02 28 16 68 00;;411LOR;contact@lorika-isolation.fr
+CLI0730;ALPHA SOFT;ERIC ROBINE;;01 48 90 05 00;;411SOF;e.robine@alpha-soft.fr
+CLI0731;DOCTEUR MATHE ET DOCTEUR THIERRY;;;;;411DOC;olivier.thierry44@orange.fr
+CLI0732;SECURITE;;;;;411SEC;
+CLI0733;VISIO CONFERENCE;;;;;411VIS;
+CLI0735;Bernard BABIN-CHEVAYE;;;;;411CHE;bbiraud@bcfgroupe.com
+CLI0736;AVOCAT LEFEUVRE ANDRE;;;;;411AND;Alefeuvre.avocat@orange.fr
+CLI0738;SCA CONSEILS;;;02 40 92 07 77;;411SCA;gaetan.champenois@sca-conseils.fr
+CLI0739;2ADIS;;;;;4112AD;m.vaillant@2adis.net
+CLI0740;SELARL JPK;;;02 40 49 97 97  ;;411JPK;comptabilite@oep.fr
+CLI0741;AVENIR ASSURANCES CONSEILS;Mohamed TRIA;;;;411AAC;mohamed_tria@yahoo.fr
+CLI0742;XAVIER GUITTON;;;;;411XAG;xavier.guitton@free.fr
+CLI0743;ASSOCIATION TOIT À MOI;;;;;411TAM;beatrice.goubaultmoulin@toitamoi.net
+CLI0744;FETES-ECO;;;03 20 93 71 44;;411FET;fetes-eco@orange.fr
+CLI0745;Valérie Gautier;;;;;411VAG;valerie@valeriegautier.com
+CLI0749;CPP OUEST IV;;;02 53 48 28 80;;411COI;bureau@cpp-ouest4.fr
+CLI0750;3 B STUDIO;;;07 86 80 30 43;;4113BS;whary@3bstudio.fr
+CLI0751;MADAME COUVREUR;;;;;411COV;couvreur.josee@sfr.fr
+CLI0752;AXELIS SAINT NAZAIRE;;;;;411ASN;"siege@axelis.fr; compta@axelis.fr"
+CLI0753;HANDIRECT SERVICES SAINT HERBLAIN 44;;;0240749250;;411HAN;"eric.leroy@handirect.com; nantes@handirect.com"
+CLI0754;SELARL JPK RENNES;;;;;411JPR;comptabilite@oep.fr
+CLI0755;TEMO FRANCE ;;;02 51 85 80 04;;411TEO;admin@temofrance.com
+CLI0756;ATESIS;;;02 40 25 74 25;;411ASI;jlrouat@atesis.fr
+CLI0757;ECLAT DE BEAUTE;;;;;411ECL;eclatdebeaute.institut@gmail.com
+CLI0758;OUEST ENCHERES PUBLIQUES;comptable;;02 40 49 97 97;;411OPU;"comptabilite@oep.fr; amorin@oep.fr; jjourdan@oep.fr"
+CLI0759;EV DEVELOPPEMENT;;;02 40 37 02 98;;411EVD;"jf.grosseau@agrowin-international.com; florence.evin@agrowin-international.com"
+CLI0760;MAISON MEDICALE CASTROCELSIENNE;;;;;411MCM;"helenebenth@free.fr;scmchamptoceaux@gmail.com"
+CLI0761;SAAS OTOLINK;;;06 44 07 48 49;;411OTO;contact@otolink.fr
+CLI0762;NANTES METROPOLE HABITAT;;;0673747502;;411NMH;Philippe.CHAUVIER@nmh.fr
+CLI0763;ARINFO;;;;;411ARI;
+CLI0764;SOPVEM;;;;;411SOV;ggicsecretariat@sopvem.fr
+CLI0765;EXEVE;;;;;411EXE;sadde@aiboartauction.com
+CLI0766;Addl-Formations;;;;;411ADD;
+CLI0767;AVOCAT LEFEUVRE SOPHIE;;;;;411FEU;sophie.lefeuvre@hotmail.fr
+CLI0769;MCM Architectes;;;;;411MCA;agence@mcmarchitectes.fr 
+CLI0770;BPCE LEASE;;;;;411BPC;AURELIE.RONDEAU@bpgo.fr
+CLI0771;SAINT GAL AVOCAT ;;;;;411SSG;s.saintgal@saintgal-avocat.fr
+CLI0772;CARRÉ VOYAGES;;;01 56 03 95 00;;411CRV;marcdenavacelle@gmail.com
+CLI0773;PRADEL ASSOCIES;;;04.28.29.25.80;;411PPA;spradel@pradelassocies.fr
+CLI0774;SCI DU BAC;;;;;411SDB;"dubac.sci@gmail.com; cabinet.herard@gmail.com; berthelot.claire@gmail.com"
+CLI0775;Centre de Soins QUAI WEST;;;02 85 52 41 50;;411CQW;claire.berthelot@gmail.com
+CLI0778;ETABLISSEMENT PUBLIC FONCIER DE LOIRE ATLANTIQUE;;;02 40 99 57 43;;411EPF;Virginie.RICORDEL@loire-atlantique.fr
+CLI0779;CHATEAU DE PLAISANCE ;;;02 41 78 33 01;;411CTP;bonjour@chateaudeplaisance.com
+CLI0780;E.P.M.S. DE L'ANJOU-ELDA;;;02 41 92 60 28     ;;411EAE;"b.bosse@edla.fr ; secretariat.general@edla.fr"
+CLI0781;BEWELL NUTRACEUTIQUE;;;;;411BWN;v.anthier@bewell-nutra.com
+CLI0782;COMMUNAUTE DE COMMUNE D'ANCENIS;;;02 40 96 31 89 ;;411CCA;"informatique@pays-ancenis.com; bertrand.chotard@pays-ancenis.com"
+CLI0783;GAËLLE SCORNET AVOCAT;;;0285528448;;411GSA;contact@scornet-avocat.fr
+CLI0784;AUDIT & COURTAGE;;;;;411AUC;pbensoussan@auditcourtage.com
+CLI0785;DNS ENGINEERING;;;;;411DNS;adenis@dns-engineering.fr
+CLI0787;CONSEIL OFFICE MANAGER;;;;;411CSM;vch@prophilconseils.fr
+CLI0788;COM4;;;0240735051;;411CO4;scruz@com-4.fr
+CLI0789;ASS. DES POLLINARIUMS SENTINELLES DE FRANCE (APSF);;;;;411APS;luc.lavrilleux@pollinarium.com
+CLI0790;LINMAN & ASSOCIÉS;;;02 40 46 33 33;;411LAS;ls@linmanetassocies.fr
+CLI0791;PROCONECT INTERNATIONAL;;;;;411PRC;b.barokhel@proconect.com
+CLI0794;A.R.S;;;;;411KHG;philippe@secches.fr
+CLI0796;AXELIS INTERIM 02;;;04 37 91 68 16;;411A02;"siege@axelis.fr; compta@axelis.fr; support@axelis.fr"
+CLI0798;ENNOVSYS;;;0228165217;;411ENV;"facturation@ennovsys.fr; contact@ennovsys.fr"
+CLI0799;JBL COURTAGE;;;02 85 67 00 02;;411JBL;edouard.tertrais@jbl-courtage.fr
+CLI0800;CLAIRE BERTHELOT;;;;;411CBE;berthelot.claire@gmail.com
+CLI0801;SELARL DU BAC - DAVID HERARD ;;;;;411DHE;"cabinet.herard@gmail.com; philippe.herard@icloud.com"
+CLI0803;SIBIO;;;;;411SIB;comptabilite@sibio.fr
+CLI0804;CHESNEAU IARD;;;;;411COG;"support@chesneau.net; informatique@chesneau.net"
+CLI0805;SAS OUEST PROTHÈSES;;;;;411OPR;"contact@atlanticscan.com ; morvanroudet@gmail.com"
+CLI0808;SLEATY;;;+32 478 28 25 63;;411SLE;thibault.poucet@sleaty.com
+CLI0810;FAGON Daniel;;;;;411DFA;fagon.daniel@orange.fr
+CLI0811;B2EB;;;02-40 61 16 65;;411B2E;"benjamin.dupouey@b2eb.fr; administratif@b2eb.fr"
+CLI0813;CARTOUCHE ARCHITECTURE URBANISME;;;0285528497;;411CTA;contact@cartouche.archi
+CLI0814;SAS HOLDING VAN DORT;;;;;411SVD;"ovandort@holdingvandort.fr; fournisseurs@climatconfort-moreau.fr"
+CLI0815;AXELIS LES HERBIERS;;;02.52.61.47.30;;411ALH;"siege@axelis.fr; compta@axelis.fr"
+CLI0817;CAE ASSURANCE;;;04.78.38.59.65;;411CSE;pierre.lapeyrere@cae.fr
+CLI0818;ISSEO ASSURANCES ;;;;;411ISS;marjorie.rigollet@isseo-assur.com
+CLI0820;TY ECO²;;;;;411TE2;contact@tyeco2.com
+CLI0823;A2CP;;;01 74 64 10 98;;411CMA;"axel.morvant@cabinet-morvant.fr; compta@cabinet-morvant.fr"
+CLI0824;LGP CONSEIL;;;02 53 35 51 00;;411LGP;jeanne.masson@lgpconseil.com 
+CLI0826;CF GESTION;FEVRIER;;06 61 33 39 96 ;;411CFG;c.fevrier@cf-gestion.fr
+CLI0827;BCF ENVIRONNEMENT;;;;;411BCE;"bbiraud@bcfgroupe.com; crigaud@bcfgroupe.com; dbiyi@bcfgroupe.com"
+CLI0828;NATURE & EXPRESSION;;;0631743937;;411NEX;"cedric@nature-expression.com; comptabilite@nature-expression.com; facture@nature-expression.com"
+CLI0829;AUDIT CONSEIL EXPERTISES ONE ACE ANCENIS;;;;;411ANC;veronique.lecomte@ace-sas.fr
+CLI0830;SILOTEC;;;0035 2 28 99 09 91 ;;411STC;silotec.siege@silotec-lux.com
+CLI0831;INIT - SOON;;;02 85 52 14 01;;411SOO;cyril.aubineau@init2.fr
+CLI0832;INIT - MAISON DE L EUROPE;;;0285521401;;411IME;cyril.aubineau@init2.fr
+CLI0833;INIT - GESTION BAT;;;0285521401;;411GES;cyril.aubineau@init2.fr
+CLI0834;INIT - ATPS;;;0285521401;;411ITP;cyril.aubineau@init2.fr
+CLI0835;INIT - GENS D EVENEMENTS;;;0285521401;;411IGE;cyril.aubineau@init2.fr
+CLI0836;INIT - CANEVET;;;0285521401;;411CAN;cyril.aubineau@init2.fr
+CLI0837;INIT - PUGET;;;0285521401;;411IPU;cyril.aubineau@init2.fr
+CLI0838;INIT - ROBERT MONE;;;0285521401;;411ROB;cyril.aubineau@init2.fr
+CLI0839;INIT - ATLANTIQUE VENDEE FINANCE;;;0285521401;;411IAT;cyril.aubineau@init2.fr
+CLI0840;INIT - HOTEL DUQUESNE;;;0285521401;;411HOT;cyril.aubineau@init2.fr
+CLI0841;INIT - POULARD AVOCATS;;;0285521401;;411IPO;cyril.aubineau@init2.fr
+CLI0842;INIT - RAJALU;;;0285521401;;411RAJ;cyril.aubineau@init2.fr
+CLI0843;INIT - MAGNUM;;;0285521401;;411IMG;cyril.aubineau@init2.fr
+CLI0844;INIT - BIOSENS;;;0285521401;;411IBI;cyril.aubineau@init2.fr
+CLI0845;INIT - DE STOPPANI;;;0285521401;;411STO;cyril.aubineau@init2.fr
+CLI0846;INIT - RESEAU COURSIER;;;0285521401;;411IRE;cyril.aubineau@init2.fr
+CLI0847;INIT - SARL FERRE JEAN-CHARLES;;;0285521401;;411JCF;cyril.aubineau@init2.fr
+CLI0848;STORES ET MENUISERIES DE L'AUBINIERE;;;02 40 52 02 60;;411STR;administration@quadrinov.com
+CLI0849;ALEO PREVENTION;Nawal RACHADI;;02 51 85 22 13;;411ALN;"compta@aleofrance.fr; LOIRAT <charley.loirat@aleofrance.fr>"
+CLI0850;PG Invest;;;0625221250;;411PGI;compta@hinoveo.com
+CLI0851;GARAGE DES EOLIENNES;;;02 41 92 78 80;;411GDE;garagedeseoliennes@free.fr
+CLI0852;SARL LA BARONNERIE;;;02 40 02 77 57;;411SLB;baronnerie@wanadoo.fr 
+CLI0854;BLANCHISSERIE MJM;;;;;411BMJ;info@mjmblanchisserie.com
+CLI0855;INIT - AEXPERTIS;;;0285521401;;411AEX;cyril.aubineau@init2.fr
+CLI0856;INIT - LA POSADA;;;0285521401;;411IPS;cyril.aubineau@init2.fr
+CLI0857;SMA 44;;;01 40 59 70 00 ;;411SMM;contact@sma44.fr
+CLI0858;SARL ELECTRON G;;;02 51 82 05 49;;411SEG;secretariat@electrong.fr
+CLI0859;WEST AVENIR ;;;;;411WSA;ovandort@climatconfort-moreau.fr
+CLI0860;SOFAME;;;02 43 76 50 00;;411SFA;claire.beche@sofame.fr
+CLI0861;INIT - ANTIGONE;;;0285521401;;411ANI;cyril.aubineau@init2.fr
+CLI0862;INIT - ACTIL AVOCAT;;;0285521401;;411IAC;cyril.aubineau@init2.fr
+CLI0863;INIT - CLAIR DE BAIE;;;0285521401;;411CDB;cyril.aubineau@init2.fr
+CLI0864;LINK6 INFORMATIQUE - GARAGE DES EOLIENNES;;;;;411LGA;achats@link6.fr
+CLI0865;MMA OULLINS;;;0472668668;;411MMA;philippe.giroudon@mma.fr
+CLI0866;LINK6-SCHNELLER ERIC;;;;;411SNH;achats@link6.fr
+CLI0867;SNC CABINET GASTAUD;;;;;411SCG;contact@cabinetgastaud.fr
+CLI0868;ECOSYS;;;02 28 20 20 20;;411ECY;bs.factfou@brangeon.fr
+CLI0869;2ACL;;;;;411ACL;romain.leduc@ace-sas.fr
+CLI0870;PROJASSUR;;;;;411PJA;latifa@projassur.com
+CLI0871;AGENCE MUSCADE;;;09 70 95 50 44;;411MSC;contact@agence-muscade.fr
+CLI0872;PODOLOGUE FREDERIC BLOINO;;;;;411BLO;frederic.bloino@gmail.com
+CLI0873;ADHOC-DSA ASSURANCES;SALVIA;;;;411DSA;contact@dsa-assurances.net
+CLI0874;LINK6-VMA;;;02 40 96 87 12 ;;411VMA;achats@link6.fr
+CLI0875;LINK6-LE COMPTOIR DES FLEURS;;;;;411CDF;achats@link6.fr
+CLI0876;LINK6-LEBON SERVICES ET TRANSPORT;;;;;411LST;achats@link6.fr
+CLI0877;GEO ECOLAND;;;;;411GEL;
+CLI0878;LINK6-V2B BATIMENT-MACONNERIE;;;;;411V2B;achats@link6.fr
+CLI0879;INIT - SYNERGIE ET FINANCE;;;0285521401;;411SEF;cyril.aubineau@init2.fr
+CLI0880;INIT - MAISON DE L EUROPE;;;0285521401;;411MDE;cyril.aubineau@init2.fr
+CLI0881;SAS GHI;;;;;411SGH;m.leperru@ghi-sas.fr
+CLI0882;SARECO;;;02 41 53 69 60;;411SRE;"administratif.saumur@cabinetsareco.fr; support.saumur@cabinetsareco.fr"
+CLI0884;LINK6-ARCADIA;;;;;411CAL;achats@link6.fr
+CLI0885;LU7;;;;;411LCT;assistante@44lucette.fr
+CLI0886;ARMEN-AVOCATS;;;02 40 20 43 45;;411ARA;v.delantivy@armen-avocats.com
+CLI0887;QUADRINOV;;;;;411QDN;administration@quadrinov.com
+CLI0888;LINK6-JEREMIE MOREAU-CARRELEUR;;;02 52 77 00 47;;411LJM;achats@link6.fr
+CLI0889;INIT - BARNABE;;;0285521401;;411BRB;cyril.aubineau@init2.fr
+CLI0890;ENTREPRISE DUPORT;;;;;411ELD;direction78@verdipro.fr
+CLI0891;ALTHECIA;;;02.28.02.12.55 ;;411AHA;genevieve@althecia.com
+CLI0892;MILKYCO STUDIO;;;;;411MSO;mathieu@milkyco-studio.com
+CLI0893;AXELIS INTERIM GAMBETTA;;;;;411A02;"siege@axelis.fr; compta@axelis.fr"
+CLI0894;LINK6-EOL;;;;;411LIE;achats@link6.fr
+CLI0895;FACT-AVOCAT;;;;;411FCT;alefeuvre.avocat@orange.fr
+CLI0896;LINK6-ECOLE SAINT MARTIN ;;;;;411ESM;achats@link6.fr
+CLI0897;LINK6-CINEMA EDEN;;;;;411CED;achats@link6.fr
+CLI0898;APONIE;;;;;411ANP;jocelyne.duval@aponie.com
+CLI0899;INIT - AIRIUS;;;0285521401;;411AIR;cyril.aubineau@init2.fr
+CLI0901;AUNEA INGENIERIE;;;02 28 23 62 78;;411AUN;gestion@aunea.eu
+CLI0902;ATELIER JHP;;;;;411JHP;atelier-jhp@couteaux-morta.com
+CLI0903;LINK6-TECHNOPOUDRE;;;;;411TCP;achats@link6.fr
+CLI0904;LINK6-USPAO;;;;;411USP;achats@link6.fr
+CLI0906;BAIE OUEST SAINT MALO;;;;;411BOS;agence.stmalo@baie-ouest.fr
+CLI0907;ICOMI FRANCE;;;;;411IMF;arnaudmadec@icomi-france.fr
+CLI0908;GAZOTECH;;;;;411GAZ;compta@gazo.tech
+CLI0909;GATTI CONSEIL;;;;;411BTG;Bertrand.gatti@gatticonseil.fr
+CLI0910;BRANGEON ECOSERVICES;;;;;411BRN;bs.factfou@brangeon.fr
+CLI0911;CREDIT MUTUEL LEASING;;;;;411CMU;mathieu@milkyco-studio.com
+CLI0912;SAS CABINET COURTAGE BANK;;;05 34 45 51 45;;411BAK;pierre-antoine@cabinetourliac.fr
+CLI0913;CUSTY;;;;;411CUS;
+CLI0914;RLC SUD 2023;;;;;411RLC;romain.leduc@ace-sas.fr
+CLI0915;AROL HEXAGONE;;;02 40 32 53 40;;411AHL;emilie.jocic@arol.com
+CLI0916;PHYTEXTRA SL FIGUERAS;;;;;411PHY;"administracion@phytextra.com; m.puig@phytextra.com"
+CLI0917;MES OBJETS PUBLICITAIRES SAS;;;;;411MOP;
+CLI0918;KEA COURTAGE;;;;;411KCT;mohamed_tria@yahoo.fr
+CLI0919;LA TOLERIE ARMORICAINE;;;02 40 72 56 79;;411TLM;compta@latoleriearmoricaine.com
+CLI0920;MIRARE;;;02 40 84 11 49;;411MIR;mhamon@mirare.fr
+CLI0921;ABE COURTAGE RENNES;;;02 99 78 00 86;;411CRT;"compta@abecourtage.com; gboulvais@abecourtage.com"
+CLI0922;LINK6-SUGARICH - INDUSTRIE ALIMENTAIRE;;;;;411LSI;achats@link6.fr
+CLI0923;LINK6-MAIRIE DE ST GERMAIN DES PRES;;;;;411MGP;achats@link6.fr
+CLI0924;LINK6-JP HABITAT;;;;;411LJH;achats@link6.fr
+CLI0925;BRASSERIE DU BOUFFAY;;;02 40 52 76 16;;411BFY;philippe@brasserie-du-bouffay.com
+CLI0927;ADES-PH44;;;;;411APH;"gmassonnet@ades-ph44.fr; dominique.meluc@free.fr; service.compta-finances@ades-ph44.fr"
+CLI0928;HINOVEO;;;;;411HIN;compta@hinoveo.com
+CLI0929;OVH SAS;;;;;411OVC;marine.terrier@ovhcloud.com
+CLI0930;KERN ASSURANCES;;;;;411KRN;"loic.kernassurances@gmail.com; florence.kernassurances@gmail.com"
+CLI0931;GRENKE LOCATION SAS;;;;;411GNK;
+CLI0932;CERCLE COLLIN DE SUSSY;;;0144604082;;411CLS;Alain.Gronier@wisetechglobal.com
+CLI0933;DEFIA COURTAGE;;;;;411APG;jph.bureau@defia-courtage.fr
+CLI0934;DL ABC;;;;;411DLC;sdoursat@dl-abc.fr
+CLI0935;LINK6-COLLEGE PRIVE SAINT JOSEPH;DEHEZ MATTHIEU;;;;411CPJ;achats@link6.fr
+CLI0936;LINK6-ECOLE PRIVEE NOTRE DAME LIGNE;;;;;411EPD;achats@link6.fr
+CLI0937;OFFICE COURTAGE;;;;;411OCT;serpil.maurer@assurentiel-courtage.com
+CLI0939;INIT - PRE-ETAT EN LIGNE;;;0285521401;;411PRL;cyril.aubineau@init2.fr
+CLI0940;INIT - FALGA VENNETIER;;;0285521401;;411FAL;cyril.aubineau@init2.fr
+CLI0941;CABINET D'ASSURANCES GERBAULT;;;02.47.63.34.28;;411CAG;contact@cabinetgerbault.com
+CLI0942;ARALVI;;;;;411ARL;jacques.leblais@aralvi.com
+CLI0943;CABINET PIERRE KLEINMANN;;;05 16 36 83 44;;411KLM;pk@pkpro.fr
+CLI0945;INIT 2 - SAINT-NAZAIRE ASSOCIATIONS;;;0285521401;;411SNA;cyril.aubineau@init2.fr
+CLI0947;CAPVEIL CONSEIL;;;0680366969;;411CAV;iwasinta@capveil.fr
+CLI0948;SE FORMER EN PAIE;;;;;411SFP;helene.favreau@socialea.fr
+CLI0949;GSAM 34 - GENERALE SERVICES ASSURANCES;;;0499542879;;411GSM;"s.demegille@gsam34.fr; g.poma@gsam34.fr"
+CLI0950;ECUS;;;05 45 65 77 77;;411ECU;ecus@ecus.fr
+CLI0951;MAGA ASSURANCES;;;06 31 96 16 61;;411MEG;mc@maga-assurances.fr
+CLI0952;NEXACOM;;;01 81 00 50 30;;411NXC;accueil@nexacom.fr
+CLI0953;INIT 2 - RUMIN AVOCATS;;;0285521401;;411000;cyril.aubineau@init2.fr
+CLI0954;COGEVIE;;;;;411CGV;support@chesneau.net
+CLI0955;CASACTECO ;;;;;411CAA;jsforza@acteco-recycling.com
+CLI0956;ECOLE NANTAISE DE NATATION;;;02 40 12 09 40;;411ENN;directeur@ecole-nantaise-natation.com
+CLI0957;OFFICE MUNICIPAL DU SPORT (OMS);;;02 40 47 75 54;;411OMS;"joel.guivarch@oms-nantes.fr; contact@oms-nantes.fr"
+CLI0958;CHOC DISCOUNT;;;02 41 56 18 25;;411CHC;christelle@chocdiscount.com
+CLI0959;HERIC DEPANN'AUTO;;;02.40.57.60.00;;411HED;melanie.seignard@hericautomobiles.fr
+CLI0960;BOVELO;;;02 28 49 20 44;;411BOV;gestion@bovelonantes.com
+CLI0961;AMA ASSURANCES;;;05.63.71.49.45;;411MAA;marie.amalric@ama.fr
+CLI0962;AXENERGIE;;;02 51 42 16 29;;411AXN;comptabilite@axenergie.com
+CLI0964;INIT - CLINIQUE VETERINAIRE GUENEGAN;;;0285521401;;411GUN;cyril.aubineau@init2.fr
+CLI0965;STEMA-FOUJOLS ASSURANCES;;;04 72 65 34 25;;411FJL;"dricci@stemassurances.com; smargall@stemassurances.com"
+CLI0966;IVOIRE CONSEILS HYGIENE ENVIRONNEMENT SERVICES;;;;;411IVS;"akonan@ichesinternational.fr; contact@ichesinternational.fr"
+CLI0967;INIT - EWEN AVOCAT;;;0285521401;;411EWE;cyril.aubineau@init2.fr
+CLI0968;MAISON BOIS'ART;;;0253453071;;411MBA;info@maisonboisart.com
+CLI0969;UDW;SIMONNET Bruno;;;;411UDW;bruno.simonnet@udw.fr
+CLI0971;AURA ARCHITECTURE;;;;;411AUR;"vo@aura.archi; r.montoir@aura.archi"
+CLI0972;NAONEXT;;;02 52 10 44 99;;411NXT;benjamin@naonext.com
+CLI0973;CPP IDF XI;;;;;411IDF;cppidf11.chips@ght-yvelinesnord.fr
+CLI0974;OZ ASSURANCES;;;;;411OZA;jphilippe@ozconseil.fr
+CLI0975;OZ CONSEILS;;;;;411OZC;jphilippe@ozconseil.fr
+CLI0976;COLBERT ASSURANCES;;;02 40 20 08 00;;411COA;comptabilite@colbertgroupe.com
+CLI0977;REFICIO;;;02 53 35 22 50;;411REF;direction@reficio.fr
+CLI0978;INIT - AVOCAT MARTIN GRIT;;;0285521401;;411INM;cyril.aubineau@init2.fr
+CLI0979;AUDIT CONSEIL ET ASSOCIES;;;;;411AUV;romain.leduc@ace-sas.fr
+CLI0980;RENTSCAPE MARSEILLE;;;0442026298;;411REM;billing@rentscape.com
+CLI0981;VPC CONSULTING;;;;;411VPC;brigitte.braud@cabinet-abd.fr
+CLI0982;CAMELEON DIFFUSION;;;02 41 56 18 25;;411CML;christelle@chocdiscount.com
+CLI0983;OZ COURTAGE;;;;;411OZE;lmessner@ozconseil.fr
+CLI0984;HANDIRECT SERVICES AVRILLE 49;;;;;411VRI;nantes@handirect.com
+CLI0985;INIT 2 - CUB;;;0285521401;;411CUB;cyril.aubineau@init2.fr
+CLI0986;L2C IMMO;;;;;411L2C;bcherel@axenergie.com
+CLI0987;LINK6 - HILLAIRE ENTREPRISE;;;;;411HIL;achats@link6.fr
+CLI0988;CLASS;;;;;411KLA;stephane.juredieu@classassurances.com
+CLI0989;JC2L;;;;;411JC2;josselin@joyeux-cse.fr
+CLI0990;PADW SCOP D'ARCHITECTURE ET D'URBANISME;;;02 40 48 41 42;;411PAD;
+CLI0991;INIT 2 - BECC;;;0285521401;;411ECC;cyril.aubineau@init2.fr
+CLI0992;AVIP;;;0228230090;;411AVI;olivier.guyau@avip44.fr
+CLI0993;OEIL SUR SOI;;;;;411OEI;k.cousseau@laposte.net
+CLI0994;EGEMA;;;02 40 50 52 34;;411EGE;a.vigneron@egema.fr
+CLI0995;ALTERNATIVE ENERGIES;;;05 46 50 29 87;;411AEN;compta@alternativesenergies.com 
+CLI0996;FORCE OUVRIÈRE 44;;;;;411FRC;mcornillaud@fo44.fr
+CLI0997;ALLIANCE OUVERTURES;;;02 40 26 50 05;;411ALL;marieguillard@alliance-ouvertures.fr
+CLI0998;3CX Ltd;;;;;4113CX;
+CLI0999;CFA METIERS DES ENERGIES AUVERGNE RHÔNE-ALPES;;;04 69 65 41 22 ;;411CME;rodolphe.dupuis@edf.fr
+CLI1000;SAS DUPONT TRANSPORTS;;;;;411SDU;factures+cDUP-06301f@m.inexweb.fr
+CLI1001;VALENCO ASSURANCES;;;04 58 14 12 64 ;;411VAE;gcordier@valenco-assurances.fr
+CLI1002;ELYENS;;;06 73 50 74 66;;411ELY;elisabeth.chevreul@elyens.fr
+CLI1003;SAS CAMPEN;;;;;411CPM;mickael.jaumouille@guichet.fr
+CLI1004;LA MAISON BLANCHE;;;02 40 30 11 99;;411LMB;restobbnantes@gmail.com
+CLI1005;SAS LMPB;;;;;411LMP;mickael.jaumouille@guichet.fr
+CLI1006;L'HOTENTIC;;;;;411OTE;hotentic49@gmail.com
+CLI1007;OCABURO;DUTHIL LAURINE;;02 40 94 80 16;;411OCA;ocaburo@ocaburo.fr
+CLI1008;ADE-DETEX;BOISSE ARNAUD;;02 40 66 10 16;;411ADX;arnaud@ade-detex.fr
+CLI1009;MIS-MARINE INDUSTRIES SERVICES;BAILLEUL;;240662470;;411MIS;martinebailleul@mis-marine.com
+CLI1010;BOUGLIONE SABRINA;BOUGLIONNE SABRINA;;;;411BOL;evelenproduction@gmail.com
+CLI1011;OLIVIER DENIS ET STÉPHANIE;OLIVIER DENIS ET STEPHANIE;;;;411OLD;phanie-denis@orange.fr
+CLI1012;JEAN-YVES SENAND;SENAND FRANCOISE;;;;411JYS;frsenand@gmail.com
+CLI1013;BRIDIER ERIC;BRIDIER ERIC;;;;411BRD;eric.bridier2020@gmail.com
+CLI1014;JAMONEAU YVES;JAMONEAU YVES;;02 23 10 02 08;;411JAM;ulyssenantes@free.fr
+CLI1015;GELOT JOCELYNE;GELOT JOCELYNE;;;;411GEJ;jocelyne.gelot@wanadoo.fr
+CLI1016;HPC - HIGHT PRINTED CIRCUIT;MELOCCO KARLINE;;;;411HPC;melocco@wanadoo.fr
+CLI1017;COLLÈGE SAINT JOSEPH;;;251769910;;411COS;direction@stjosephherbignac.fr
+CLI1018;AD CONSEIL;ADAMCZYK DELPHINE;;228087572;;411ADN;d.adamczyk@adconseil.net
+CLI1019;NICOLAS HARROUET;HARROUET NICOLAS;;;;411NIH;nharrouet@hbctransac.fr
+CLI1020;BATI OUEST;POIDEVIN CELINE;;02 40 45 02 20;;411BAS;c.poidevin@oceanehabitat44.fr
+CLI1021;FRANCE DANEMARK MATÉRIEL;FDM SANDRA;;02 40 00 13 00;;411FRM;fdm.sandra@francedanemarkmateriel.fr
+CLI1022;LOUET;LOUET CHRISTINE;;02 40 90 00 91;;411LOU;louetcompta@louetsas.fr
+CLI1023;JANOT CHANTAL;JANOT CHANTAL;;;;411JAN;chantalj44500@gmail.com
+CLI1024;GARAGE BICHON;TASSE SEBASTIEN;;240701526;;411GAB;garagebichon@orange.fr
+CLI1025;HÔTEL LE KORALI - SAS L'ESCALE MARITIME;FAVREAU SOPHIE;;;;411KOR;commercial.saint-nazaire@brithotel.fr
+CLI1026;ADRÉ ENERGIES;Bénédicte Legal;;;;411ENR;benedicte.legal@adre-energies.fr
+CLI1027;FRAIS ÉMINCÉS;DUPIN AMELIE;;02 40 45 00 45;;411FRA;fournisseurs@frais-eminces.fr
+CLI1028;FINAGIM;;;240009518;;411FIN;finagim@orange.fr
+CLI1029;HÉLIOS COIFFURE;JACOMET BRIGITTE;;02 40 61 02 72;;411HEL;jb@helioscoiffure.fr
+CLI1030;COUDERT ALAIN;COUDERT ALAIN;;;;411COR;alain.coudert407@gmail.com
+CLI1031;COSSON;COSSON REGIS;;02 40 70 18 31;;411COO;regiscosson44@orange.fr
+CLI1032;MABILEAU OLIVIER;MABILEAU OLIVIER;;240217082;;411MAB;agricole@mabileauolivier.fr
+CLI1033;ECHO POSITIF;MASSE GILLES;;;;411ECP;g.masse@echo-positif.fr
+CLI1034;LOCATRADING;MYRIAM;;;;411LTR;facture@locatrading.com
+CLI1035;PAMI;TESSIER JEAN-JACQUES;;02 51 10 16 44;;411PAM;tessierjj@orange.fr
+CLI1036;CENTURY 21 BY OUEST - BUSINESS PRO;;;0251160130;;411C21;century21@business-pro44.fr
+CLI1037;GCS DE MOYENS - CITÉ SANITAIRE;RIPAULT VALERIE;;02 72 27 89 34;;411GCS;v.ripault@ch-saintnazaire.fr
+CLI1038;HEALTHCARE FRANCE;GUILLERMOU FRANCOIS;;;;411HEA;francoisguillermou44@gmail.com
+CLI1039;ALLIANCE DIESEL REFIT;;;251160845;;411ARD;invoice@alliancede.fr
+CLI1040;BLANCHARD ANNIE;BLANCHARD ANNIE;;;;411BNN;ninoublan@orange.fr
+CLI1041;GECONR;;;;;411GEC;compta@geconr.com
+CLI1042;LEMARIÉ ELISABETH;LEMARIE ELISABETH;;;;411LEM;elisabeth.lemarie@orange.fr
+CLI1043;SHIPELEC;ROUSSEAU SOPHIE;;02 40 66 20 66;;411SHI;s.rousseau@shipelec.fr
+CLI1044;TIVA;GALLARD VALERIE;;;;411TIV;thierrygallard@outlook.fr
+CLI1045;APMD;;;02 52 59 48 35;;411APD;compta@locatrading.com
+CLI1046;MICA;CAILLAUD CATHY;;02 40 91 97 64;;411MIC;michel.caillaud5@wanadoo.fr
+CLI1047;PHILIPPE ADAM;ADAM PHILIPPE;;;;411PHI;adam.philippe44@wanadoo.fr
+CLI1048;ATELIERS MENUISERIE BOURGEOIS;;;02 40 66 00 15;;411AME;ateliersmenuiseriebourgeois@orange.fr
+CLI1049;ESTUAIRE AVOCATS;GENDRONNEAU PIERRE;;02 40 22 95 75;;411EVC;contact@estuaire-avocats.fr
+CLI1050;TECH DIAM;JOLY STEPHANIE;;;;411TED;stephanie.joly@techdiam.fr
+CLI1051;GOUESMAT PATRICE;GOUESMAT PATRICE;;;;411GOP;ps.gouesmat@free.fr
+CLI1052;MP DÉVELOPPEMENT;PRIOU MARTIN;;;;411MPD;martin.priou@mp-developpement.fr
+CLI1053;3D MOBILES;ADDAD RIAD;;09 80 67 75 18;;4113DM;comptabilite3d@gmail.com
+CLI1054;ENTRE CHÈVRES ET CHOUX;;;;;411CHX;comptabilite@entrechevresetchoux.fr
+CLI1055;POTERIE EVE;POTERIE EVE;;02.52.41.08.50;;411POE;contact@avocatpoterie.fr
+CLI1056;SENS & O CONSEILS;SANSEAU BERTRAND;;09 86 21 34 45;;411SEN;bsanseau@euklead.com
+CLI1057;COLLÈGE LE SACRÉ COEUR;PINEAU MAGALI;;02 40 61 10 70;;411SCC;mpineau@lesacrecoeur-lasalle.fr
+CLI1058;HBC TRANSACTIONS;GOUIN LEILA;;02 51 17 62 43;;411HBT;lgouin@hbctransac.fr
+CLI1059;JULIE CONTA;CONTA JULIE;;02 52 41 02 26;;411JLC;contact@avocatconta.fr
+CLI1060;RÉSUMÉMO;SEGUINEAU MATHIAS;;;;411REO;mathias.seguineau@resumemo.com
+CLI1061;CARRELAGE CARPENTIER;CARPENTIER MARTINE;;;;411CRL;martinepv.carpentier@hotmail.fr
+CLI1062;ART GOM'ECO;PAILLERET LUDOVIC;;02 59 57 10 11;;411ART;ludovic.pailleret@artgomeco.fr
+CLI1063;JOUBERT ERIC;JOUBERT ERIC;;;;411JOU;joubert.eric@aol.fr
+CLI1064;KAMENO;DUCHESNE CAROLINE;;02 40 15 31 82;;411KAM;contact@kameno.fr
+CLI1065;ANDRÉ CHRISTOPHE;ANDRE PATRICIA;;;;411CHN;yinyang44@free.fr
+CLI1066;CABINET FRANCE TESSIER;;;02 40 21 93 41;;411TEI;cabinet.francetessier@orange.fr
+CLI1067;GERGAUD PIERRETTE;GERGAUD PIERRETTE;;240611520;;411GEE;wlompg@orange.fr
+CLI1068;RESTAURANT LE DELPHANIE;NUTTIN PHILIPPE;;;;411DEI;phi.nuttin@gmail.com
+CLI1069;POLISHCAR;BEZZI OLIVIER;;;;411PLS;olivierbezzi@hotmail.fr
+CLI1070;YVETTE LE COZ;LE COZ YVETTE;;;;411COZ;roger.le-coz388@orange.fr
+CLI1071;DSM - EUROTYRE;PATOUILLERE SEBASTIEN;;09 54 09 71 98;;411DSM;premiumboss@outlook.fr
+CLI1072;GUILLÉ MICHÈLE;GUILLE MICHELE;;02 40 61 82 84;;411GUL;guillemich@aol.com
+CLI1073;LOGIOU ELEC;SIMON EMILIE;;;;411LOG;s.emily4481@gmail.com
+CLI1074;MBG CONSTRUCTION;;;;;411MBC;mbgconstruction44@gmail.com
+CLI1075;MG2R;LOTODE OLIVIER;;;;411MG2;lotode.olivier@free.fr
+CLI1076;SCALES;BRESSON STEPHANIE;;02 40 90 25 53;;411SCS;bresson@scales.fr
+CLI1077;SIMON EMILIE;SIMON EMILIE;;;;411SIO;s.emily4481@gmail.com
+CLI1078;AGMC;GUIHENEUF LUDOVIC;;;;411AGM;agmc.guiheneuf@gmail.com
+CLI1079;DRONEAU INVEST;DRONEAU STEPHANE;;;;411DRO;s.droneau@droneau-invest.fr
+CLI1080;ORDRE DES AVOCATS - MAISON DES AVOCATS;;;02 40 66 73 82;;411ORA;contact@barreau-saintnazaire.fr
+CLI1081;MPP;VIGNERON SYLVAIN;;;;411MPP;mpp.meca@gmail.com
+CLI1082;TAFOURNEL ARNAUD;TAFOURNEL ARNAUD;;;;411TAF;arnaud111r@yahoo.fr
+CLI1083;LA PLUME ET LE SECATEUR;PENEAU BENJAMIN;;;;411LAP;laplumeetlesecateur@gmail.com
+CLI1084;CAP ESPACES VERTS;ESCURAT JEAN;;02 40 88 67 98;;411CSS;contact@capespacesverts.fr
+CLI1085;ANEZO;MORIONNET ALINE;;02 40 42 50 25;;411ANZ;comptabilite@ets-anezo.fr
+CLI1086;SYMARTIN BOULANGERIE;MARTIN YOHANN;;02 40 60 24 26;;411SYM;contact@martin-labaule.fr
+CLI1087;OUEST UNION;JOUAN SEBASTIEN;;02 40 24 12 61;;411OUU;ouestunion@wanadoo.fr
+CLI1088;ENTREPRISE FRIARD FRÉDÉRIC;FRIARD FREDERIC;;02 40 24 81 93;;411ETF;friard.frederic@orange.fr
+CLI1089;GICQUIAUD PATRICK;GICQUIAUD PATRICK;;02 40 24 48 62;;411GIQ;jocelyne.gicquiaud@orange.fr
+CLI1090;ROUSSEAU JEAN-NOËL;ROUSSEAU JEAN-NOEL;;;;411JEN;rousseaujean-noel@orange.fr
+CLI1091;BISCUITERIE SAINT-GUÉNOLÉ;JADEAU CHRISTOPHE;;02 40 23 90 01;;411BIA;contact@biscuitstguenole.fr
+CLI1092;BIARD - ADMH;ETS BIARD COMPTABLE;;02 40 60 24 94;;411BIR;biardcompta@ets-biard.fr
+CLI1093;AREA ETUDES LA BAULE;MAGRE YANNICK;;02 40 62 44 00;;411BAU;areaelb-bet@orange.fr
+CLI1094;HOUGARD YOHANN;HOUGARD YOHANN;;;;411HOU;contact@hougard-peinture.com
+CLI1095;HÔTEL LE LUTETIA & SPA;DELAHAYE CHRISTOPHE;;02 40 60 25 81;;411LUT;contact@lutetia-labaule.com
+CLI1096;FABRICE LEGOUIC;LE GOUIC FABRICE;;02 40 61 10 44;;411FAG;fabrice.le-gouic@orange.fr
+CLI1097;LOUET HUBERT;LOUET;;02 40 15 31 03;;411LOH;hubertlouet@wanadoo.fr
+CLI1098;ABELJADE;SOURICE HELENE;;02 40 39 13 05;;411ABJ;compta-abeljade@orange.fr
+CLI1099;LIONEL SAGOT;SAGOT LIONEL;;02 40 24 21 89;;411LIS;lionel.sagot@free.fr
+CLI1100;ECOLE SAINT AUBIN;QUINTIN MARIE;;0240247780;;411SAU;comptastaubin@wanadoo.fr
+CLI1101;ECOLE SAINTE MARIE;TARDIVEL ;;02 40 24 91 48;;411MAT;ec.guerande.ste-marie@ec44.fr
+CLI1102;MECAMAINT;ELISABETH;;02 40 90 00 89;;411MEI;standard@mecamaint.fr
+CLI1103;MILLON FABIENNE;MILLON FABIENNE;;02 40 01 56 44;;411MIF;contact@fabienne-millon.com
+CLI1104;LETERTE;LETERTE;;;;411LET;leterte.katia@orange.fr
+CLI1105;LANTANA LOIRAT PAYSAGE;LEROY CLARA;;02 40 24 98 95;;411LOD;cleroy@groupe-lantana.fr
+CLI1106;LE FUR JEAN-PIERRE;LE FUR JEAN-PIERRE;;02 40 23 15 85;;411FUR;lefur.jp.anita@wanadoo.fr
+CLI1107;MIMATE;PICOT MICHEL;;;;411MIM;mthmich@orange.fr
+CLI1108;ECOLE SAINT GOUSTAN;BRICAUD LAURENCE;;02 40 23 92 16;;411GOU;ec.croisic.st-goustan@ec44.fr
+CLI1109;BISCUITERIE BRETONNE - LA BOUTIQUE;RETAILLEAU BRIGITTE;;02 40 42 95 12;;411LAI;biscuiteriebretonnelaboutique@orange.fr
+CLI1110;COURANTS LIBRES;LETERTE ANTHONY;;02 40 15 57 48;;411COB;contact@courants-libres.fr
+CLI1111;EICA ECLAIRAGE;HERVY FRANCK;;;;411EIC;franckhervy@eica-eclairage.fr
+CLI1112;GUIHÉNEUF PEINTURE;MEDARD MURIELLE;;;;411GUF;contact@guiheneuf-peinture.fr
+CLI1113;MENUISERIE HODÉ;HODE PHILIPPE;;02 40 24 70 41;;411MEH;menuiserie-hode-t7qp8c6s@suppliers.pennylane.com
+CLI1114;OLLIVIER MICKAEL;OLLIVIER MICKAEL;;;;411OLM;mick-olli@live.fr
+CLI1115;CHASTEL;CHASTEL SYLVIE;;;;411CHS;sylvie.chastel@wanadoo.fr
+CLI1116;ALIETTE AVERTY;AVERTY ALIETTE;;;;411ALV;porzbossinot@orange.fr
+CLI1117;ARCHEN PHILIPPE;ARCHEN PHILIPPE;;;;411ARP;parchen@orange.fr
+CLI1118;GAEC DE LA PATURE;DESBOIS BENJAMIN;;;;411PAC;gaecdelapature@gmail.com
+CLI1119;DE RANLIEU;HASPOT PASCAL;;;;411DER;haspotpascal.isabelle@gmail.com
+CLI1120;HOUGARD THIERRY;HOUGARD THIERRY;;02 40 24 91 78;;411HOG;contact@hougard-thierry.com
+CLI1121;CRENIER MICHELLE;CRENIER MICHELLE;;02 40 60 75 39;;411CRN;jpcrenier@orange.fr
+CLI1122;LA BAULE OPTIQUE - GUILLAUME SALAZARD MON LUNETIER;SALAZARD SANDRINE;;;;411LAG;sandrinesalazard@gmail.com
+CLI1123;DAGO MAHÉ ROBIN;MAHE MICKAEL;;02 51 10 22 90;;411DAG;mickael.mahe@hotmail.fr
+CLI1124;KERVALET;GINGUENEAU JEAN-MICHEL;;02 40 42 33 28;;411KER;jean-michel.gingueneau@orange.fr
+CLI1125;SARL CITEAU;CITEAU NICOLAS;;02 40 42 60 36;;411CIU;nicolaspaysage@hotmail.com
+CLI1126;ECOLE SAINT JEAN;LARJERON;;02 40 61 10 76;;411SAJ;saintjean-pornichet@orange.fr
+CLI1127;ENTREPRISE ORAIN ERWAN;ORAIN ERWAN;;0607497165;;411ORN;erwan@ent-orain.fr
+CLI1128;A L'ETABLI GUÉRANDAIS;PAGEAUD MARYSE;;;;411ETG;maryse.pageaud@laposte.net
+CLI1129;AUDIGER HERVÉ;AUDIGER HERVE;;;;411AUH;famille.herveflo@gmail.com
+CLI1130;FB CONSEIL - MAUGEST FRANÇOISE;MAUGEST FRANCOISE;;02 40 24 10 38;;411FBC;fmaugest@hotmail.com
+CLI1131;PEM'SERVICES - PEMLOC;LESERF CORINNE;;02 40 27 46 84;;411PEM;contact@pem-services.com
+CLI1132;THALASSO LA BAULE - RIVAGE;SORAYA ELUERE;;02 40 23 10 20;;411RIV;Seluere@thalasso-rivage.com
+CLI1133;CHARPENTE MENUISERIE BERTHO OLIVIER;BERTHO OLIVIER;;02 40 70 41 94;;411CHP;olivier.bertho1@orange.fr
+CLI1134;COADOU;COADOU;;;;411OAD;ma.coadou@gmail.com
+CLI1135;COFY'LAV;DELMOTTE FREDDY;;;;411COY;contact@cofylav.com
+CLI1136;COMECA;JACQUES MARTINE;;;;411COC;martine@maisons-comeca.com
+CLI1137;FRIARD;FRIARD DANIEL;;02 40 61 62 77;;411FRR;danielfriard@outlook.fr
+CLI1138;J.H.G;GUERIN YVES;;;;411JHG;yvesguerin44@gmail.com
+CLI1139;LEFEVRE;LEFEVRE EMILIE;;02 40 88 85 36;;411LER;compta@lefevre-motoculture.com
+CLI1140;MICKAEL MAHÉ;MAHE MICKAEL;;;;411MIH;mickael.mahe@hotmail.fr
+CLI1141;BRASSERIE A LA PINCÉE DE SEL;PAITEL GERARD;;02 40 62 09 89;;411SEL;paitel.gerard@orange.fr
+CLI1142;Mme DOMINIQUE DEPLAGNE;DEPLAGNE DOMINIQUE;;;;411DOP;deplagne.dominique@bbox.fr
+CLI1143;MONDIAL BOX;CHAUVIN ALAIN;;02 40 45 16 36;;411MOD;mondialbox.guerande@orange.fr
+CLI1144;CHAUVIN ALAIN;CHAUVIN ALAIN;;;;411ALU;mondialbox.guerande@orange.fr
+CLI1145;CRESPIN;CRESPIN;;;;411CRS;maguy.crespin@gmail.com
+CLI1146;ECOLE SAINT JOSEPH PAVIE;LECHAT ANNE;;02 40 60 05 40;;411PAI;contact@ecole-pavie.fr
+CLI1147;LEHAY-BRANGOLEAU FRANÇOISE;LEHAY-BRANGOLEAU FRANCOISE;;02 40 42 41 04;;411LEH;f.brangoleau@hotmail.fr
+CLI1148;KI'WIND ESPACE NAUTIQUE;GUERIN HUGO;;02 40 11 10 81;;411KIW;kiwind44@gmail.com
+CLI1149;TECHNODAL;HERPIN CHLOE;;;;411TCN;info@technodal.fr
+CLI1150;TRELCAT PHILIPPE;TRELCAT BRIGITTE;;;;411TRE;briphi.trelcat@wanadoo.fr
+CLI1151;L'ADRESSE ST-ANDRÉ-DES-EAUX;LAVAZAIS LAURE;;02 44 07 07 61;;411EAU;laure.lavazais@ladresse.com
+CLI1152;ALINE MORIONNET;MORIONNET ALINE;;;;411ALM;aline.morionnet@gmail.com
+CLI1153;DOCET JEAN-CLAUDE;DOCET JEAN-CLAUDE;;02 40 61 69 45;;411DOJ;jeanclaude.docet@yahoo.fr
+CLI1154;Madame PAJOLEC;PAJOLEC;;;;411PAJ;lefevre-motoculture@orange.fr
+CLI1155;COUPANNEC ANNICK;COUPANNEC ANNICK;;;;411ANN;naikcoupannec@gmail.com
+CLI1156;BICHON PATRICK;BICHON PATRICK;;;;411BIP;pbat4@wanadoo.fr
+CLI1157;BOURGINE CÉLINE;BOURGINE CELINE;;;;411BOC;celine.bourgine44@gmail.com
+CLI1158;DIXIE;COYNAULT NADEGE;;;;411DII;nadegecoynault@gmail.com
+CLI1159;ECOLE SAINT FRANÇOIS;HALGAND FRANCK;;02 40 62 58 95;;411ECF;franck.Halgand@ac-nantes.fr
+CLI1160;I2J SECRÉTARIAT - CÉLINE MONVOISIN;MONVOISIN CELINE;;;;411I2J;i2j.secretaire@gmail.com
+CLI1161;IMMODVISOR;LAPITRE MAELLA;;;;411MOV;maella@immodvisor.com
+CLI1162;Mr et Mme LAGADEC;LAGADEC CHANTAL;;;;411LAD;chantal.lagadec@hotmail.fr
+CLI1163;LA BAULE INVEST;HERVY CHRISTELLE;;;;411BAL;calinours44@orange.fr
+CLI1164;Association USBP;RETAILLEAU BRIGITTE;;;;411USB;retailleau.patrickusbp@gmail.com
+CLI1165;BARRE YOANN;BARRE YOANN;;;;411BAY;yoyo.barre@hotmail.fr
+CLI1166;ZOHRA BONNO;BONNO ZOHRA;;;;411ZOH;zohrayasmina@orange.fr
+CLI1167;CLR LOCATION;GERARD FABRICE;;;;411CLR;contact@clrlocation.com
+CLI1168;GRAFF CATHERINE;GRAFF CATHERINE;;;;411GRF;graffbreton@hotmail.fr
+CLI1169;KARATÉ TAÏ PORNICHET;HERVY CHRISTELLE;;;;411KAT;christelle.hervy@bbox.fr
+CLI1170;LA BAULE BEAUTÉ;KRAGEL VIRGINIE;;02 40 17 01 41;;411LBE;contact@labaulebeaute.fr
+CLI1171;MARC BLANCHARD;BLANCHARD MARC;;02 40 45 17 72;;411MAL;contact.blanchard.ei@gmail.com
+CLI1172;TAFFORIN JOSETTE;TAFFORIN JOSETTE;;;;411TAJ;josette.tafforin@free.fr
+CLI1173;MAÇONNERIE DALLA-VIA;DALLA-VIA STEPHANE;;02 40 42 80 12;;411MAO;contact@dalla-via.fr
+CLI1174;CAMPING LES VALLONS DE L’OCÉAN;TOUGERON JUSTINE;;02 40 21 58 83;;411CAI;direction@camping-lesvallonsdelocean.com
+CLI1175;RETZ'AGIR;PINCHON PATRICIA;;;;411RET;comptabilite@retzagir.fr
+CLI1176;BOURNET MARILYN;BOURNET MARILYN;;;;411BOM;michel.marilyn@free.fr
+CLI1177;NADIA BARBÉ;BARBE NADIA;;;;411BAE;nadiabarbe35@gmail.com
+CLI1178;L'EVEIL DU ROHIG;LEBOEUF ROSELYNE;;02 97 67 61 08;;411ROH;comptabilite@leptitclub.com
+CLI1179;ISOLAVIE;NEYRAUD LAURENCE;;02 40 89 00 35;;411ISL;adminnantes@isolavie.fr
+CLI1180;ACTUARES;PHILIPPE AMELIE;;02 40 88 00 49;;411ACU;aphilippe@actuares.fr
+CLI1181;LE PETIT CHART'TRAIN;LEMESLE YANNICK;;;;411CTI;lepetitchartrain@orange.fr
+CLI1182;PRIMINVEST;BAHOLET AURELIE;;;;411PRV;ab@priminvest.fr
+CLI1183;OUEST ATLANTIQUE DEVELOPPEMENT - OAD;LATREILLE SERGE;;;;411OAE;latreille.family@yahoo.fr
+CLI1184;DOLIVET SÉBASTIEN;DOLIVET SEBASTIEN;;;;411DOS;sebastien.dolivet@gmail.com
+CLI1185;Mme GRENOUILLEAU MARIE;GRENOUILLEAU MARIE ;;;;411GRN;luisanne85@orange.fr
+CLI1186;OLIVIER ELAGAGE;ROLLAND NADINE;;;;411OAL;olivierelagage56130@gmail.com
+CLI1187;ATLANTIC ENDURANCE;BEGAUD MARIE ;;;;411END;jack.begaud@wanadoo.fr
+CLI1188;INIT - DROUET PLOMBERIE;;;0285521401;;411DRP;cyril.aubineau@init2.fr
+CLI1189;Ecole Ste Marie / St Pierre;BRICAUD Laurence;;02 40 23 92 16;;411SMP;lbricaud@ec44.fr
+CLI1190;CLARA MANQUILLET;;;;;411CLM;clara@cabinet-manquillet.fr
+CLI1191;SOLULOC;LEGUEBE Ludovic;;;;411SLC;ludovic.leguebe@soluloc-france.fr
+CLI1192;3D INFORMATIQUE;;;;;4113DI;jcd@3dinformatique.fr
+CLI1193;CREDIT FINANCE ASSURANCES;;;03 20 22 94 31 ;;411CRF;katia.bally@cfa-rachat-credit.fr
+CLI1194;ARDEMO;;;;;411ARO;benoit.dugast@ardemo-france.com
+CLI1195;LUCIEN SCHMITT;;;07 63 43 68 57;;411LUC;l.schmitt@lulucreperie.com
+CLI1196;SCP TREILLARD ET ASSOCIES, NOTAIRES;Treillard;;02 40 24 28 29;;411TRI;patreillard@notaires.fr
+CLI1197;ASSELIO;;;04 37 49 89 49;;411ASO;priso@asselio.com
+CLI1198;TEMGO;;;02 40 85 97 76;;411TEG;adrien.touron@temgo.fr
+CLI1199;IMMO ASSURANCES;;;;;411IMO;adrien.jacquet@immo-assurances.fr
+CLI1200;BREIZH DISTRI 56;François Guillermou;;;;411BD5;francoisguillermou44@gmail.com
+CLI1201;Pascal L'Hostis;;;;;411PAH;pascal@tpagri.fr
+CLI1202;CAIRN TRANSPORTS;;;;;411CTR;gbureau@acteco-recycling.com
+CLI1203;PARHESIA;;;04 87 74 20 22;;411PAR;adrien.jacquet@immo-assurances.fr
+CLI1204;COURTAGE BRESSANE ASSURANCES;;;;;411LAA;isabelle.monin@la-bressane.fr
+CLI1205;OFFICE RHENAN D'ASSURANCES;;;03 88 32 37 71;;411OFA;f.lung@orange.fr
+CLI1206;INIT - SDL PAIE;;;;;411SLP;
+CLI1207;TELLOC CONSEILS;;;;;411LCN;cyrille.collet@telloc-conseils.fr
+CLI1208;LEFEVRE MOTOCULTURE;;;02 40 88 85 36;;411LMO;compta@lefevre-motoculture.com
+CLI1209;CONSEILS BATIMENT SERVICES - CBS;Eric GUETAULT;;;;411CBS;cbs.guetault@gmail.com
+CLI1210;Café des Sports;;;;;411SPO;mahemanuella@hotmail.fr
+CLI1211;NICOLAS DEFEBVRE;;;;;411NID;nicolasdefebvre@gmail.com
+CLI1212;LANTANA LOIRAT JARDINAGE;LEROY CLARA;;02 40 24 98 95;;411LOD;cleroy@groupe-lantana.fr
+CLI1213;JADE BOWLING;;;;;411JDB;
+CLI1214;OUEST SOLS MATERIELS (OSM);;;;;411OST;m.hurdyk@ouestsols.fr
+CLI1215;SODIKART;;;;;411SOD;cindy.deguy@ovhcloud.com
+CLI1216;PARIS ACCASTILLAGE;;;;;411PAA;
+CLI1217;FINITION 2000;;;02 51 66 68 70;;411FNT;veronique.dugast@finition2000.com
+CLI1224;RENTSCAPE PUSIGNAN;;;04 87 63 83 83;;411RNT;billing@rentscape.com
+CLI1225;CABINET SAVOYE;;;0437034718;;411SVY;contact@cabinetsavoye.fr
+CLI1226;SC CONSEILS;;;;;411SCO;jf.mioque@sc-conseils.fr
+CLI1227;TERRE D'ASSURANCE;;;02 40 48 83 46;;411TER;n.fleury@o2a.fr
+CLI1228;ONE-SIXONE TESTING;COUSSEAU JEAN-FRANCOIS;; 02 48 16 74 62;;411ONT;"Jf.cousseau@one-sixone.com; c.gervier@one-sixone.com"
+CLI1229;SOLIYO;;;04 95 08 18 60;;411SLY;alexandre.dupuis@soliyo.fr
+CLI1230;Association Les 2 Jours du Quercy;BEGAUD MARIE ;;;;411END;marie.begaud@wanadoo.fr
+CLI1231;LOBORNE;;;06 65 58 49 62;;411LOB;contact@loborne.com
+CLI1232;Eric Carré;;;;;411ERI;riquettez44@gmail.com
+CLI1233;AGASSE Tanguy;;;;;411AGA;agasse.tanguy@orange.fr
+CLI1234;INIT 2 - GRAPHICA;;;;;411GRP;cyril.aubineau@init2.fr
+CLI1235;DROST HABITAT;;;;;411DST;s.droneau@droneau-invest.fr
+CLI1236;SOGELEASE FRANCE;;;;;411SOG;
+CLI1237;Coynault Nadège;;;;;411AUL;nadegecoynault@gmail.com
+CLI1238;BELLE DE JOUR;;;;;411BEJ;info@belledejour.org
+CLI1239;PRUNAY GESTION ASSURANCES ;;;01 30 78 18 18;;411PRU;killian.carvalho@groupeprunay.com
+CLI1240;Jean-François ESCURAT;;;;;411ESC;jfv.escurat@wanadoo.fr
+CLI1241;ABCP;;;02 40 09 63 96;;411ABP;direction@abcpcuisinepro.fr
+CLI1242;FEDEREC;;;;;411FED;gbureau@acteco-recycling.com
+CLI1670;ABSOLIS;;;02 40 35 37 37;;411ABS;"siege@axelis.fr; pmanolas@axelis.fr"
+CLICFA;CFA DES METIERS DE L'ENERGIE - EDF;;;;;411CFC;isabelle.ducher-peron@edf.fr
+;;;;;0;;

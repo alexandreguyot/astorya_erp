@@ -1,8 +1,8 @@
-<form wire:submit.prevent="submit" class="pt-3">
+<form wire:submit.prevent="submit" class="grid grid-cols-2 gap-2 pt-3">
 
     <div class="form-group {{ $errors->has('company.name') ? 'invalid' : '' }}">
-        <label class="form-label" for="name">{{ trans('cruds.company.fields.name') }}</label>
-        <input class="form-control" type="text" name="name" id="name" wire:model.defer="company.name">
+        <label class="form-label required" for="name">{{ trans('cruds.company.fields.name') }}</label>
+        <input class="form-control" required type="text" name="name" id="name" wire:model.defer="company.name">
         <div class="validation-message">
             {{ $errors->first('company.name') }}
         </div>
@@ -10,9 +10,19 @@
             {{ trans('cruds.company.fields.name_helper') }}
         </div>
     </div>
+    <div class="form-group {{ $errors->has('company.email') ? 'invalid' : '' }}">
+        <label class="form-label required" for="email">{{ trans('cruds.company.fields.email') }}</label>
+        <input class="form-control" required type="email" name="email" id="email" wire:model.defer="company.email">
+        <div class="validation-message">
+            {{ $errors->first('company.email') }}
+        </div>
+        <div class="help-block">
+            {{ trans('cruds.company.fields.email_helper') }}
+        </div>
+    </div>
     <div class="form-group {{ $errors->has('company.address') ? 'invalid' : '' }}">
-        <label class="form-label" for="address">{{ trans('cruds.company.fields.address') }}</label>
-        <input class="form-control" type="text" name="address" id="address" wire:model.defer="company.address">
+        <label class="form-label required" for="address">{{ trans('cruds.company.fields.address') }}</label>
+        <input class="form-control" required type="text" name="address" id="address" wire:model.defer="company.address">
         <div class="validation-message">
             {{ $errors->first('company.address') }}
         </div>
@@ -40,19 +50,9 @@
             {{ trans('cruds.company.fields.city_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('company.email') ? 'invalid' : '' }}">
-        <label class="form-label" for="email">{{ trans('cruds.company.fields.email') }}</label>
-        <input class="form-control" type="email" name="email" id="email" wire:model.defer="company.email">
-        <div class="validation-message">
-            {{ $errors->first('company.email') }}
-        </div>
-        <div class="help-block">
-            {{ trans('cruds.company.fields.email_helper') }}
-        </div>
-    </div>
     <div class="form-group {{ $errors->has('company.accounting') ? 'invalid' : '' }}">
-        <label class="form-label" for="accounting">{{ trans('cruds.company.fields.accounting') }}</label>
-        <input class="form-control" type="text" name="accounting" id="accounting" wire:model.defer="company.accounting">
+        <label class="form-label required" for="accounting">{{ trans('cruds.company.fields.accounting') }}</label>
+        <input class="form-control" required type="text" name="accounting" id="accounting" wire:model.defer="company.accounting">
         <div class="validation-message">
             {{ $errors->first('company.accounting') }}
         </div>
@@ -61,8 +61,8 @@
         </div>
     </div>
     <div class="form-group {{ $errors->has('company.ciel_reference') ? 'invalid' : '' }}">
-        <label class="form-label" for="ciel_reference">{{ trans('cruds.company.fields.ciel_reference') }}</label>
-        <input class="form-control" type="text" name="ciel_reference" id="ciel_reference" wire:model.defer="company.ciel_reference">
+        <label class="form-label required" for="ciel_reference">{{ trans('cruds.company.fields.ciel_reference') }}</label>
+        <input class="form-control" required type="text" name="ciel_reference" id="ciel_reference" wire:model.defer="company.ciel_reference">
         <div class="validation-message">
             {{ $errors->first('company.ciel_reference') }}
         </div>
@@ -91,8 +91,8 @@
         </div>
     </div>
     <div class="form-group {{ $errors->has('company.bill_payment_method') ? 'invalid' : '' }}">
-        <label class="form-label" for="bill_payment_method">{{ trans('cruds.company.fields.bill_payment_method') }}</label>
-        <input class="form-control" type="text" name="bill_payment_method" id="bill_payment_method" wire:model.defer="company.bill_payment_method">
+        <input class="form-control" type="checkbox" name="bill_payment_method" id="bill_payment_method" wire:model.defer="company.bill_payment_method">
+        <label class="form-label inline ml-1" for="bill_payment_method">{{ trans('cruds.company.fields.bill_payment_method') }}</label>
         <div class="validation-message">
             {{ $errors->first('company.bill_payment_method') }}
         </div>
@@ -100,7 +100,7 @@
             {{ trans('cruds.company.fields.bill_payment_method_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('company.observations') ? 'invalid' : '' }}">
+    <div class="form-group {{ $errors->has('company.observations') ? 'invalid' : '' }} col-span-full">
         <label class="form-label" for="observations">{{ trans('cruds.company.fields.observations') }}</label>
         <textarea class="form-control" name="observations" id="observations" wire:model.defer="company.observations" rows="4"></textarea>
         <div class="validation-message">

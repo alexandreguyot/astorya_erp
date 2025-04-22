@@ -1,8 +1,6 @@
-# For more information: https://laravel.com/docs/sail
 services:
     laravel.test:
         build:
-            # PHP 8.2
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
             args:
@@ -24,6 +22,24 @@ services:
             - astorya_erp_network
         depends_on:
             - mysql
+
+    queue:
+        build:
+            context: ./vendor/laravel/sail/runtimes/8.2
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${WWWGROUP}'
+        image: sail-8.2/app
+        restart: always
+        command: php artisan queue:work --sleep=3 --tries=3 --timeout=120
+        volumes:
+            - '.:/var/www/html'
+            - './imports:/var/www/html/imports'
+        depends_on:
+            - mysql
+        networks:
+            - astorya_erp_network
+
     mysql:
         image: 'mysql/mysql-server:8.0'
         container_name: astorya_erp-mysql
@@ -44,6 +60,7 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
+
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         ports:
@@ -59,9 +76,11 @@ services:
             UPLOAD_LIMIT: 256M
         networks:
             - astorya_erp_network
+
 networks:
     astorya_erp_network:
         driver: bridge
+
 volumes:
     astorya_erp-mysql-data:
         driver: local

@@ -84,23 +84,32 @@ class Company extends Model
     {
         return $this->hasMany(Bill::class);
     }
+
     public function contracts()
     {
         return $this->hasMany(Contract::class);
     }
 
+    public function bank_account() {
+        return $this->belongsTo(BankAccount::class);
+    }
+
+    public function contact() {
+        return $this->belongsTo(Contact::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getDeletedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 }

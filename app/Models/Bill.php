@@ -190,22 +190,22 @@ class Bill extends Model implements HasMedia
 
     public function getCollectedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.')) : null;
     }
 
     public function setCollectedAtAttribute($value)
     {
-        $this->attributes['collected_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d') : null;
+        $this->attributes['collected_at'] = $value ? Carbon::createFromFormat(config('project.'), $value)->format('Y-m-d') : null;
     }
 
     public function getRecordedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.')) : null;
     }
 
     public function setRecordedAtAttribute($value)
     {
-        $this->attributes['recorded_at'] = $value ? Carbon::createFromFormat(config('project.datetime_format'), $value)->format('Y-m-d') : null;
+        $this->attributes['recorded_at'] = $value ? Carbon::createFromFormat(config('project.'), $value)->format('Y-m-d') : null;
     }
 
     public function getFilePathAttribute()
@@ -220,16 +220,16 @@ class Bill extends Model implements HasMedia
 
     public function getCreatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 
     public function getDeletedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.datetime_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
     }
 }

@@ -63,7 +63,11 @@
             @endif
         </div>
         <div class="auto-fill">
-            Echéance : {{  \Carbon\Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') ?? 'A DEFINIR' }}
+            @if ($bill)
+                Echéance : {{  \Carbon\Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') }}
+                @else
+                Echeance: 'A DEFINIR'
+            @endif
         </div>
         <div class="auto-fill">
             Type de Facturation : {{ $contract->type_period->title }}

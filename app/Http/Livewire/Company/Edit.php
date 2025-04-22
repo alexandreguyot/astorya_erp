@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Company;
 use App\Models\City;
 use App\Models\Company;
 use Livewire\Component;
-
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 class Edit extends Component
 {
+    use LivewireAlert;
+
     public Company $company;
 
     public array $listsForFields = [];
@@ -29,7 +31,7 @@ class Edit extends Component
 
         $this->company->save();
 
-        return redirect()->route('admin.companies.index');
+        $this->alert('success', 'Client mis à jour avec succès');
     }
 
     protected function rules(): array
@@ -71,8 +73,7 @@ class Edit extends Component
                 'boolean',
             ],
             'company.bill_payment_method' => [
-                'string',
-                'nullable',
+                'boolean',
             ],
             'company.observations' => [
                 'string',

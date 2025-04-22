@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Company;
 use Livewire\Component;
 use App\Models\Company;
 use Illuminate\Support\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Contracts extends Component
 {
+    use LivewireAlert;
     public Company $company;
     public $contracts;
     public $bills;
@@ -30,6 +32,7 @@ class Contracts extends Component
                 : now()->subYears(100); // place les contrats sans facture à la fin
         })
         ->values();
-        return view('livewire.company.contrats');
+
+        return view('livewire.company.contracts');
     }
 }
