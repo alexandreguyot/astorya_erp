@@ -100,8 +100,8 @@ class HomeController
     {
         global $oldDb, $newDb;
 
-        $oldDb = new PDO('mysql:host=mysql;dbname=test', 'root', 'astorya_erp');
-        $newDb = new PDO('mysql:host=mysql;dbname=astorya_erp', 'root', 'astorya_erp');
+        $oldDb = new PDO('mysql:host=mysql;dbname=test', 'admin-bdd', 'khdflhlhkjcbqkjc13513dq');
+        $newDb = new PDO('mysql:host=mysql;dbname=astorya_erp', 'admin-bdd', 'khdflhlhkjcbqkjc13513dq');
 
 
         // Colonnes qui, dans la nouvelle table, sont définies en type DATE

@@ -18,6 +18,23 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => null,
                 'locale'         => 'fr',
             ],
+            [
+                'id'             => 2,
+                'name'           => 'Laurent Aubineau',
+                'email'          => 'l.aubineau@astorya.fr',
+                'password'       => bcrypt('laurent'),
+                'remember_token' => null,
+                'locale'         => 'fr',
+            ],
+
+            [
+                'id'             => 3,
+                'name'           => 'Louise Neau',
+                'email'          => 'l.neau@astorya.fr',
+                'password'       => bcrypt('louise'),
+                'remember_token' => null,
+                'locale'         => 'fr',
+            ],
         ];
 
         User::insert($users);
