@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 use PDO;
 use App\Models\Bill;
+use Illuminate\Support\Carbon;
 
 class HomeController
 {
@@ -102,6 +103,15 @@ class HomeController
         $oldDb = new PDO('mysql:host=mysql;dbname=test', 'root', 'astorya_erp');
         $newDb = new PDO('mysql:host=mysql;dbname=astorya_erp', 'root', 'astorya_erp');
 
+
+        // Colonnes qui, dans la nouvelle table, sont définies en type DATE
+        $dateOnlyOldCols = [
+            'SetupAt',
+            'TerminatedAt',
+            'BilledAt',
+            'ValidatedAt',
+        ];
+
         // Récupérer toutes les données de l'ancienne table
         $query = "SELECT " . implode(",", $oldColumns) . " FROM $oldTable";
         $stmt = $oldDb->query($query);
@@ -119,6 +129,17 @@ class HomeController
             }
             if ($row['CreationDate'] === '0001-01-01 00:00:00.000000') {
                 $row['CreationDate'] = null;
+            }
+
+            foreach (['SetupAt','TerminatedAt','BilledAt','ValidatedAt'] as $dateCol) {
+                $val = $row[$dateCol] ?? null;
+                if ($val === null || strpos($val, '0001-01-01') === 0) {
+                    // date fantôme ou vide -> NULL
+                    $row[$dateCol] = null;
+                } else {
+                    // on conserve uniquement le 'YYYY-MM-DD'
+                    $row[$dateCol] = substr($val, 0, 10);
+                }
             }
 
             // Préparer les données pour l'insertion

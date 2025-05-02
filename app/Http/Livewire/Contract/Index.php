@@ -3,16 +3,14 @@
 namespace App\Http\Livewire\Contract;
 
 use App\Http\Livewire\WithSorting;
-use App\Jobs\GenerationAllBills;
-use App\Jobs\GenerationSelectedBills;
-use App\Jobs\ProcessBills;
-use App\Models\Contract;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Jobs\ProcessBills;
+use App\Models\Contract;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
-use App\Models\Bill;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 
 class Index extends Component
 {
@@ -34,6 +32,9 @@ class Index extends Component
     public ?string $dateStart = null; // Date de début
     public ?string $dateEnd = null;   // Date de fin
     public ?string $dateEndView = null;   // Date de fin
+    public array $processingRows = [];
+
+    protected $listeners = ['refreshComponent' => '$refresh'];
 
     protected $queryString = [
         'search' => [
@@ -77,7 +78,7 @@ class Index extends Component
     {
         $this->sortBy            = 'company.name';
         $this->sortDirection     = 'asc';
-        $this->perPage           = 100;
+        $this->perPage           = 10;
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Contract())->orderable;
         $this->filterable         = (new Contract())->filterable;
@@ -117,65 +118,86 @@ class Index extends Component
         $this->dateEnd = Carbon::createFromFormat('m/Y', $value)->endOfMonth()->format('d/m/Y');
     }
 
+    public function checkProcessingRow($groupKey)
+    {
+        $this->processingRows[$groupKey] = Cache::has("processing.{$groupKey}");
+    }
+
     private function getGroupedContracts()
     {
+        $dateStart = Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth();
+
         $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
             ->whereNotNull('setup_at')
-            ->where(function ($query) {
+            ->where(function ($query) use ($dateStart) {
                 $query->whereNull('terminated_at')
-                    ->orWhere('terminated_at', '>=', Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth());
+                      ->orWhere('terminated_at', '>=', $dateStart);
             })
             ->when($this->search, function ($query) {
                 $query->whereHas('company', function ($q) {
                     $q->where('companies.name', 'like', '%' . $this->search . '%');
                 });
             })
-            ->whereHas('type_period', function ($query) {
+            ->whereHas('type_period', function ($query) use ($dateStart) {
                 $query->whereRaw('(TIMESTAMPDIFF(MONTH, terminated_at, ?) % nb_month) = 0', [
-                    Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth()
+                    $dateStart
                 ]);
             })
-            ->whereDoesntHave('company.bills', function ($query) {
-                $query->whereMonth('bills.generated_at', Carbon::createFromFormat('d/m/Y', $this->dateStart)->month)
-                    ->whereYear('bills.generated_at', Carbon::createFromFormat('d/m/Y', $this->dateStart)->year);
+            ->whereDoesntHave('bills', function ($query) use ($dateStart) {
+                $query->whereMonth('generated_at', $dateStart->month)
+                  ->whereYear('generated_at',  $dateStart->year);
+            })
+            ->whereHas('contract_product_detail', function ($query) use ($dateStart) {
+                $query->where('monthly_unit_price_without_taxe', '>', 0)
+                      ->where(function ($q) use ($dateStart) {
+                          $q->whereNull('billing_terminated_at')
+                            ->orWhereDate('billing_terminated_at', '0001-01-01')
+                            ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+                      });
             })
             ->get()
-            ->filter(function ($contract) {
-                return $contract->contract_product_detail->contains(function ($detail) {
-                    return floatval($detail->monthly_unit_price_without_taxe) > 0;
-                });
-            })->groupBy([
-                function ($contract) {
-                    $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
-                    return $contract->company->name;
-                },
-                function ($contract) {
-                    return $contract->billing_period;
-                }
-            ])->sortKeys();
+            ->each(function ($contract) {
+                $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
+            })
+            ->groupBy([
+                fn ($contract) => $contract->company->name,
+                fn ($contract) => $contract->billing_period,
+            ])
+            ->sortKeys();
 
         return $contracts;
     }
 
     public function generateSelectedBills()
     {
-        dispatch(new GenerationSelectedBills($this->selectedContracts, auth()->id()));
-        $this->alert('success', 'Factures en cours de génération pour celles sélectionnés.', [
+        foreach ($this->selectedContracts as $selected) {
+            $data = json_decode($selected, true);
+            $ids  = implode('-', $data['contracts']);
+            $this->generateBill($data['company'], $ids, $data['date']);
+        }
+
+        $this->alert('success', 'Factures en cours de génération pour celles sélectionnées.', [
             'position' => 'top-end',
-            'timer' => 3000,
-            'toast' => true,
-            'showConfirmButton' => false,
+            'timer'    => 3000,
+            'toast'    => true,
         ]);
+
         $this->selectedContracts = [];
     }
+
 
     public function generateAllBills()
     {
         $groupedContracts = $this->getGroupedContracts();
 
-        dispatch(new GenerationAllBills($groupedContracts, auth()->id()));
+        foreach ($groupedContracts as $companyName => $periods) {
+            foreach ($periods as $billingPeriod => $contracts) {
+                $ids = implode('-', $contracts->pluck('id')->toArray());
+                $this->generateBill($companyName, $ids, $billingPeriod);
+            }
+        }
 
-        $this->alert('success', 'Toutes les factures sont en cours de génération !', [
+        $this->alert('success', 'Toutes les factures sont en cours de génération...', [
             'position' => 'top-end',
             'timer' => 3000,
             'toast' => true,
@@ -183,9 +205,13 @@ class Index extends Component
         ]);
     }
 
-
     public function generateBill($companyName, $contractIds, $date)
     {
+        $groupKey = md5($companyName . $date . $contractIds);
+
+        // marque tout de suite comme "en cours"
+        $this->processingRows[$groupKey] = true;
+
         $contractIds = explode('-', $contractIds);
         $started_at = substr($date, 0, 10);
         $billed_at = substr($date, 14, 14);
@@ -193,6 +219,7 @@ class Index extends Component
         $contracts = Contract::with([
             'type_period',
             'company.city',
+            'company.bank_account',
             'contract_product_detail.type_product.type_contract',
             'contract_product_detail.type_product.type_vat',
         ])
@@ -214,14 +241,8 @@ class Index extends Component
             $contractIds,
             $started_at,
             $billed_at,
-            auth()->user()->id
+            auth()->user()->id,
+            $groupKey
         ));
-
-        $this->alert('success', "Facture pour {$companyName} générée avec succès !", [
-            'position' => 'top-end',
-            'timer' => 3000,
-            'toast' => true,
-            'showConfirmButton' => false,
-        ]);
     }
 }

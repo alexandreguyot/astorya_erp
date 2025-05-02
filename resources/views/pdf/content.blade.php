@@ -1,4 +1,4 @@
-@foreach ($products->chunk(4) as $index => $chunk)
+@foreach ($products->chunk(3) as $index => $chunk)
     {{-- Saut de page sauf pour le premier bloc --}}
     @if ($index > 0)
         <div style="page-break-before: always;"></div>

@@ -11,12 +11,13 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
+use Illuminate\Support\Facades\Config;
 class GenerateBillPdf implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
     public string $no_bill;
+    public string $previewUrl;
 
     public function __construct(string $no_bill)
     {
@@ -30,7 +31,9 @@ class GenerateBillPdf implements ShouldQueue
             'contract.type_period',
             'type_period',
             'company.city',
-            'contract.contract_product_detail.type_product.type_contract'
+            'company.bank_account',
+            'contract.contract_product_detail.type_product.type_contract',
+            'contract.contract_product_detail.type_product.type_vat',
         ])
         ->where('no_bill', $this->no_bill)
         ->get();

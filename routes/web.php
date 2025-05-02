@@ -103,6 +103,7 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');
     Route::get('contrats/creation/{company}', [ContractController::class, 'create'])->name('contracts.create');
     Route::get('contrats/{contract}/edit', [ContractController::class, 'edit'])->name('contracts.edit');
+    Route::get('contrats/previsualisation-html/{company}/{period}/{contracts}', [ContractController::class, 'previewHtml'])->withoutMiddleware('auth')->name('contracts.pdf.calculate.preview');
     Route::get('contrats/previsualisation/{company}/{period}/{contracts}', [ContractController::class, 'preview'])->name('contracts.pdf.preview');
 
     Route::post('/notifications/mark-all-read', function () {
@@ -118,3 +119,4 @@ Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['auth'
 });
 
 Route::get('/install', [HomeController::class, 'install'])->name('install');
+

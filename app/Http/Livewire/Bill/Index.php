@@ -2,18 +2,22 @@
 
 namespace App\Http\Livewire\Bill;
 
-use App\Http\Livewire\WithConfirmation;
 use App\Http\Livewire\WithSorting;
 use App\Models\Bill;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Carbon\Carbon;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ComptableExport;
+
 
 class Index extends Component
 {
-    use WithPagination, WithSorting, WithConfirmation;
+    use WithPagination, WithSorting, LivewireAlert;
 
     public int $perPage;
 
@@ -74,7 +78,7 @@ class Index extends Component
     {
         $this->sortBy            = 'no_bill';
         $this->sortDirection     = 'asc';
-        $this->perPage           = 100;
+        $this->perPage           = 10;
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Bill())->orderable;
         $this->filterable         = (new Bill())->filterable;
@@ -109,10 +113,8 @@ class Index extends Component
             })
             ->orderBy($this->sortBy, $this->sortDirection);
 
-        // On récupère toutes les factures
         $bills = $query->get();
 
-        // On les groupe par `no_bill`
         $groupedBills = $bills->groupBy('no_bill');
 
         $billGroups = $groupedBills->map(function ($group, $noBill) {
@@ -125,8 +127,21 @@ class Index extends Component
                 'total_ht' => $group->sum('amount'),
             ];
         });
+
+        $currentPage = $this->page;
+        $perPage = $this->perPage;
+        $pagedData = $billGroups->forPage($currentPage, $perPage);
+
+        $paginatedGroups = new LengthAwarePaginator(
+            $pagedData,
+            $billGroups->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url(), 'query' => request()->query()]
+        );
+
         return view('livewire.bill.index', [
-            'billGroups' => $billGroups,
+            'billGroups' => $paginatedGroups,
         ]);
     }
 
@@ -167,54 +182,48 @@ class Index extends Component
         return null;
     }
 
-    public function deleteSelected()
+    public function downloadZipFile()
     {
-        Bill::whereIn('id', $this->selected)->delete();
+        $monthFolder = Carbon::createFromFormat('m/Y', $this->dateStartView)->startOfMonth()->format('m-Y');;
 
-        $this->resetSelected();
-    }
+        $pdfPath = "private/factures/{$monthFolder}";
+        $fullPath = storage_path("app/{$pdfPath}");
 
-    public function delete(Bill $bill)
-    {
-        $bill->delete();
-    }
-
-    public function confirmDeleteSelected()
-    {
-        if (Gate::allows('bill_delete')) {
-            $this->confirm('Êtes-vous sûr de vouloir supprimer ces factures ?', [
-                'accept' => 'deleteSelected',
-            ]);
-        } else {
-            abort(Response::HTTP_FORBIDDEN);
+        if (!is_dir($fullPath)) {
+            $this->alert('error', "Aucune facture trouvée pour le mois {$monthFolder}.");
+            return null;
         }
-    }
-    public function confirmDelete(Bill $bill)
-    {
-        if (Gate::allows('bill_delete')) {
-            $this->confirm('Êtes-vous sûr de vouloir supprimer cette facture ?', [
-                'accept' => 'delete',
-                'params' => [$bill],
-            ]);
-        } else {
-            abort(Response::HTTP_FORBIDDEN);
+
+        // 3. Créer un fichier ZIP temporaire
+        $zipFileName = "factures_{$monthFolder}.zip";
+        $zipFilePath = storage_path("app/tmp/{$zipFileName}");
+
+        // Créer le dossier tmp si besoin
+        Storage::makeDirectory('tmp');
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            $this->alert('error','Impossible de créer le fichier ZIP.');
+            return null;
         }
-    }
-    public function confirmDeleteAll()
-    {
-        if (Gate::allows('bill_delete')) {
-            $this->confirm('Êtes-vous sûr de vouloir supprimer toutes les factures ?', [
-                'accept' => 'deleteAll',
-            ]);
-        } else {
-            abort(Response::HTTP_FORBIDDEN);
+
+        // 4. Ajouter tous les fichiers PDF du dossier
+        $files = glob("{$fullPath}/*.pdf");
+        foreach ($files as $file) {
+            $zip->addFile($file, basename($file)); // Ajout en conservant juste le nom
         }
+
+        $zip->close();
+
+        // 5. Télécharger le fichier ZIP et le supprimer après
+        return response()->download($zipFilePath)->deleteFileAfterSend(true);
     }
 
-    public function getPdf()
-    {
-        $this->confirm('Êtes-vous sûr de vouloir télécharger le PDF ?', [
-            'accept' => 'getPdf',
-        ]);
-    }
+    public function generateComptableFile()
+{
+    $date = now()->format('Y-m-d_His');
+    $fileName = "export-comptable-{$date}.xlsx";
+
+    return Excel::download(new ComptableExport($this->dateStart, $this->dateEnd), $fileName);
+}
 }

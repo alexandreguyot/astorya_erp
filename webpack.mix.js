@@ -16,4 +16,3 @@ mix.js('resources/js/app.js', 'public/js')
         require("tailwindcss")
     ])
     .postCss('resources/css/pdf.css', 'public/css')
-    .postCss('resources/css/pdf-test.css', 'public/css');

@@ -9,7 +9,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
-class GenerationSelectedBills implements ShouldQueue
+class GenerateSelectedBills implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -30,13 +30,11 @@ class GenerationSelectedBills implements ShouldQueue
      */
     public function handle(): void
     {
-        $user = User::find($this->userId);
         foreach ($this->selectedContracts as $selected) {
             $data = json_decode($selected, true);
             $started_at = substr($data['date'], 0, 10);
             $billed_at = substr($data['date'], 14, 14);
-
-            dispatch(new ProcessBills($data['company'], implode('-', $data['contracts']), $started_at, $billed_at, $user->id));
+            dispatch(new ProcessBills($data['company'], implode('-', $data['contracts']), $started_at, $billed_at, $this->userId));
         }
     }
 }

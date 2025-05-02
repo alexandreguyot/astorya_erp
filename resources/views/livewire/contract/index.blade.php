@@ -28,10 +28,6 @@
             </div>
         </div>
     </div>
-    <div wire:loading.delay>
-        Chargement...
-    </div>
-
     <div class="overflow-hidden">
         <div class="overflow-x-auto">
             <table class="table table-index w-full">
@@ -66,14 +62,15 @@
                         @foreach($contractsByDate as $date => $contracts)
                             @php
                                 $contractIds = $contracts->pluck('id')->toArray();
-                                $groupKey = md5($companyName . $date . implode('-', $contractIds)); // identifiant unique
+                                $groupKey = md5($companyName . $date . implode('-', $contracts->pluck('id')->toArray()));
                             @endphp
-                            <tr class="hover:bg-gray-200">
+                            <tr wire:poll.5s="checkProcessingRow('{{ $groupKey }}')" class="hover:bg-gray-200">
                                 <td>
                                     <input type="checkbox" wire:model="selectedContracts" value="{{ json_encode([
                                         'company' => $companyName,
                                         'contracts' => $contractIds,
-                                        'date' => $date
+                                        'date' => $date,
+                                        'groupKey' => $groupKey,
                                     ]) }}">
                                 </td>
                                 <td class="text-blue-500 font-medium">
@@ -98,18 +95,26 @@
                                 </td>
                                 <td class="w-1/4">
                                     <div class="flex justify-end">
-                                        <a class="btn btn-sm btn-success mr-2"
-                                           href="{{ route('admin.contracts.pdf.preview', [
-                                                'company' => $companyName,
-                                                'period' => str_replace('/', '-', str_replace(' au ', '-', $date)),
-                                                'contracts' => implode('-', $contracts->pluck('id')->toArray())
-                                           ]) }}" target="_blank">
-                                            Prévisualiser
-                                        </a>
-                                        <button class="btn btn-sm btn-success"
-                                                wire:click="generateBill('{{ $companyName }}', '{{ implode('-', $contracts->pluck('id')->toArray()) }}', '{{ $date }}')">
-                                            Générer la facture
-                                        </button>
+
+                                        @if($processingRows[$groupKey] ?? false)
+                                            <svg class="animate-spin h-5 w-5 text-blue-600 text-left" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                                            </svg>
+                                        @else
+                                            <a class="btn btn-sm btn-success mr-2"
+                                            href="{{ route('admin.contracts.pdf.preview', [
+                                                    'company' => $companyName,
+                                                    'period' => str_replace('/', '-', str_replace(' au ', '-', $date)),
+                                                    'contracts' => implode('-', $contracts->pluck('id')->toArray())
+                                            ]) }}" target="_blank">
+                                                Prévisualiser
+                                            </a>
+                                            <button class="btn btn-sm btn-success"
+                                                wire:click="generateBill(@js($companyName), @js(implode('-', $contracts->pluck('id')->toArray())), @js($date))">
+                                                Générer la facture
+                                            </button>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

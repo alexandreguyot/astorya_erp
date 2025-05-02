@@ -97,7 +97,7 @@ class Create extends Component
         $this->contract->save();
 
         $this->contract->products()->attach(
-            $this->selectedProduct['type_product_id'], // L'ID du produit
+            $this->selectedProduct['type_product_id'],
             [
                 'contract_id' => $this->contract->id,
                 'type_product_id' => $this->selectedProduct['type_product_id'],

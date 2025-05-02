@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Bill;
 use App\Models\Contract;
+use App\Actions\GenerateAccountingHisto;
 use App\Jobs\GenerateBillPdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 
 class ProcessBills implements ShouldQueue
 {
@@ -22,18 +24,22 @@ class ProcessBills implements ShouldQueue
     public $startedAt;
     public $billedAt;
     public $userId;
+    public string $groupKey;
 
-    public function __construct($companyName, $contractIds, $startedAt, $billedAt, $userId)
+    public function __construct($companyName, $contractIds, $startedAt, $billedAt, $userId, string $groupKey)
     {
         $this->companyName = $companyName;
         $this->contractIds = $contractIds;
         $this->startedAt = $startedAt;
         $this->billedAt = $billedAt;
         $this->userId = $userId;
+        $this->groupKey = $groupKey;
     }
 
     public function handle()
     {
+        Cache::put("processing.{$this->groupKey}", true);
+
         $contracts = Contract::with([
             'type_period',
             'company.city',
@@ -67,13 +73,21 @@ class ProcessBills implements ShouldQueue
             }
         });
 
+        $bills = Bill::with('contract.contract_product_detail.type_product')
+                    ->where('no_bill', $noBill)
+                    ->get();
+
+        app(GenerateAccountingHisto::class)
+            ->handleCollection($bills);
+
         dispatch(new GenerateBillPdf($noBill));
 
-        // Envoie une notification à l'utilisateur
         $user = User::find($this->userId);
         if ($user) {
             $user->notify(new \App\Notifications\BillGenerationCompletedNotification($this->companyName, $noBill));
         }
+        Cache::forget("processing.{$this->groupKey}");
+        event(new \App\Events\NotificationsUpdated);
     }
 }
 
