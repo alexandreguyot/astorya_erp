@@ -13,7 +13,8 @@ use ZipArchive;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComptableExport;
-
+use App\Mail\InvoiceMail;
+use Illuminate\Support\Facades\Mail;
 
 class Index extends Component
 {
@@ -27,6 +28,7 @@ class Index extends Component
     public string $search = '';
 
     public array $selected = [];
+    public array $selectedBills = [];
 
     public array $paginationOptions;
 
@@ -122,7 +124,7 @@ class Index extends Component
                 'no_bill' => $noBill,
                 'company' => $group->first()->company->name,
                 'generated_at' => $group->first()->generated_at,
-                'send_at' => $group->first()->generated_at,
+                'sent_at' => $group->first()->sent_at,
                 'bills' => $group,
                 'total_ht' => $group->sum('amount'),
             ];
@@ -220,10 +222,80 @@ class Index extends Component
     }
 
     public function generateComptableFile()
-{
-    $date = now()->format('Y-m-d_His');
-    $fileName = "export-comptable-{$date}.xlsx";
+    {
+        $dateStart = $this->dateStart;   // 'd/m/Y' start of month
+        $dateEnd   = $this->dateEnd;     // 'd/m/Y' end of month
 
-    return Excel::download(new ComptableExport($this->dateStart, $this->dateEnd), $fileName);
-}
+        $fileName  = "export-comptable.xlsx";
+
+        return Excel::download(
+            new ComptableExport($dateStart, $dateEnd),
+            $fileName
+        );
+    }
+
+    public function sendInvoice(string $noBill): void
+    {
+        $bill = Bill::with('company')->where('no_bill', $noBill)->first();
+
+        if (! $bill) {
+            $this->alert('error', "Facture {$noBill} introuvable.");
+            return;
+        }
+
+        Mail::to($bill->company->email)
+            ->queue(new InvoiceMail($bill));
+
+        $bill->sent_at = Carbon::now()->format('d/m/Y');
+        $bill->save();
+
+        $this->alert('success', "Email envoyé pour la facture {$noBill} le "
+            . now()->format('d/m/Y à H:i') . ".");
+    }
+
+    public function sendMail(string $noBill)
+    {
+        $this->sendInvoice($noBill);
+    }
+
+    public function sendSelectedBills()
+    {
+        if (empty($this->selectedBills)) {
+            $this->alert('warning', "Aucune facture sélectionnée.");
+            return;
+        }
+
+        $toSend = Bill::whereIn('no_bill', $this->selectedBills)
+                    ->whereNull('sent_at')
+                    ->pluck('no_bill')
+                    ->toArray();
+
+        if (empty($toSend)) {
+            $this->alert('info', "Toutes les factures sélectionnées ont déjà été envoyées.");
+        } else {
+            foreach ($toSend as $noBill) {
+                $this->sendInvoice($noBill);
+            }
+            $this->alert('success', "Envoi lancé pour " . count($toSend) . " factures.");
+        }
+
+        $this->selectedBills = [];
+    }
+
+    public function sendAllBills()
+    {
+        $toSend = Bill::whereIn('no_bill', $this->billGroups->pluck('no_bill')->toArray())
+                    ->whereNull('sent_at')
+                    ->pluck('no_bill')
+                    ->toArray();
+
+        if (empty($toSend)) {
+            $this->alert('info', "Toutes les factures de cette page ont déjà été envoyées.");
+        } else {
+            foreach ($toSend as $noBill) {
+                $this->sendInvoice($noBill);
+            }
+            $this->alert('success', "Envoi lancé pour toutes les factures non envoyées.");
+        }
+    }
 }

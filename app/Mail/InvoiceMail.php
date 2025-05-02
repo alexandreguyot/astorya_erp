@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Mail;
+
+use App\Models\Bill;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+class InvoiceMail extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    public Bill $bill;
+
+    /**
+     * @param  Bill  $bill
+     */
+    public function __construct(Bill $bill)
+    {
+        $this->bill = $bill;
+    }
+
+    public function build()
+    {
+        $pdfPath = storage_path("app/private/factures/"
+            . now()->createFromFormat('d/m/Y', $this->bill->generated_at)->format('m-Y')
+            . "/{$this->bill->no_bill}.pdf"
+        );
+
+        return $this
+            ->subject("Votre facture n° {$this->bill->no_bill}")
+            ->markdown('emails.invoices.send')
+            ->attach($pdfPath, [
+                'as'   => "{$this->bill->no_bill}.pdf",
+                'mime' => 'application/pdf',
+            ])
+            ->with([
+                'bill'    => $this->bill,
+                'company' => $this->bill->company,
+            ]);
+    }
+}

@@ -19,6 +19,7 @@ class Create extends Component
         $this->company                      = $company;
         $this->company->send_bill_type      = false;
         $this->company->one_bill_per_period = false;
+        $this->company->bill_payment_method = false;
         $this->initListsForFields();
     }
 

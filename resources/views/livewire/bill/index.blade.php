@@ -37,6 +37,7 @@
             <table class="table table-index w-full">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>
                             {{ trans('cruds.bill.fields.company') }}
                         </th>
@@ -53,11 +54,26 @@
                             {{ trans('cruds.bill.fields.sent_at') }}
                         </th>
                         <th class="flex flex-col space-y-2 justify-end">
-                            <button class="btn btn-sm btn-info mr-2" wire:loading.attr="disabled" wire:click="generateAllBills">
-                                Envoyer les mails des factures séléctionnées
+                            @php
+                                $unsentCount = $billGroups->filter(fn($b) => is_null($b['sent_at']))->count();
+                            @endphp
+
+                            <button
+                                class="btn btn-sm btn-info mr-2"
+                                wire:loading.attr="disabled"
+                                wire:click="sendSelectedBills"
+                                @disabled($unsentCount === 0)
+                            >
+                            Envoyer les mails des factures sélectionnées
                             </button>
-                            <button class="btn btn-sm btn-info mr-2" wire:loading.attr="disabled" wire:click="generateAllBills">
-                                Envoyer tous les mails des factures
+
+                            <button
+                                class="btn btn-sm btn-info mr-2"
+                                wire:loading.attr="disabled"
+                                wire:click="sendAllBills"
+                                @disabled($unsentCount === 0)
+                            >
+                            Envoyer tous les mails des factures
                             </button>
                         </th>
                     </tr>
@@ -65,6 +81,9 @@
                 <tbody>
                     @forelse($billGroups as $bill)
                         <tr>
+                            <td>
+                                <input type="checkbox" wire:model="selectedBills" value="{{ $bill['no_bill'] }}" class="form-checkbox" />
+                            </td>
                             <td>
                                 <span class="badge badge-relationship">{{ $bill['company'] ?? '' }}</span>
                             </td>
@@ -93,9 +112,13 @@
                                     <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', $bill['no_bill']) }}" target="_blank">
                                         Télécharger la facture
                                     </a>
-                                    <a class="btn btn-sm btn-indigo mr-2"  wire:click="sendMail({{ $bill['no_bill'] }})">
-                                        Envoyer la facture
-                                    </a>
+                                    @if(is_null($bill['sent_at']))
+                                        <button class="btn btn-sm btn-indigo" wire:click="sendMail('{{ $bill['no_bill'] }}')" wire:loading.attr="disabled">
+                                            Envoyer la facture
+                                        </button>
+                                    @else
+                                        <span class="text-green-600 font-semibold">Envoyée</span>
+                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -121,9 +144,9 @@
             <button class="btn btn-sm btn-info mr-2" wire:loading.attr="disabled" wire:click="generateComptableFile">
                 Télécharger le fichier comptable
             </button>
-            <button class="btn btn-sm btn-info mr-2" wire:loading.attr="disabled" wire:click="generateOrderFile">
-                Télécharger le fichier ordre de prélevement
-            </button>
+            <a href="{{ route('admin.bills.export_order_prlv', ['dateStart' => Carbon\Carbon::createFromFormat('d/m/Y', $dateStart)->format('Y-m-d'), 'dateEnd' =>  Carbon\Carbon::createFromFormat('d/m/Y', $dateEnd)->format('Y-m-d')])}}" class="btn btn-sm btn-info" target="_blank">
+                Télécharger ordre prélevement
+            </a>
         </div>
     </div>
 </div>

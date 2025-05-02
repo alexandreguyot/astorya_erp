@@ -20,6 +20,7 @@ class Contacts extends Component
         $this->contact = Contact::where('id', $this->company->contact_id)->first();
         if (!$this->contact) {
             $this->contact = new Contact();
+            $this->contact->is_director= false;
             $this->contact->company_id = $company->id;
         }
     }

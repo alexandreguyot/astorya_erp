@@ -2,54 +2,47 @@
 
 namespace App\Exports;
 
-use App\Models\Bill;
-use Illuminate\Support\Collection;
+use App\Models\AccountingHisto;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Illuminate\Support\Facades\Date;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ComptableExport implements FromCollection, WithHeadings
+class ComptableExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
-    protected $dateStart;
-    protected $dateEnd;
+    protected string $start;
+    protected string $end;
 
-    public function __construct($dateStart, $dateEnd)
+    /**
+     * @param  string  $dateStart  format 'd/m/Y'
+     * @param  string  $dateEnd    format 'd/m/Y'
+     */
+    public function __construct(string $dateStart, string $dateEnd)
     {
-        $this->dateStart = $dateStart;
-        $this->dateEnd = $dateEnd;
+        // On convertit en Y-m-d pour la requête DB
+        $this->start = Carbon::createFromFormat('d/m/Y', $dateStart)
+                              ->startOfDay()
+                              ->format('Y-m-d');
+        $this->end = Carbon::createFromFormat('d/m/Y', $dateEnd)
+                              ->endOfDay()
+                              ->format('Y-m-d');
     }
 
+    /**
+     * Récupère toutes les écritures du mois donné, triées par date.
+     */
     public function collection()
     {
-        $query = Bill::with(['company'])
-            ->whereNotNull('no_bill')
-            ->where('no_bill', 'like', 'FACT-%')
-            ->when($this->dateStart && !$this->dateEnd, function ($query) {
-                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-                $query->where('generated_at', '>=', $dateStart);
-            })
-            ->when(!$this->dateStart && $this->dateEnd, function ($query) {
-                $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-                $query->where('generated_at', '<=', $dateEnd);
-            })
-            ->when($this->dateStart && $this->dateEnd, function ($query) {
-                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-                $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-                $query->whereBetween('generated_at', [$dateStart, $dateEnd]);
-            })
-            ->orderBy('generated_at', 'asc')
+        return AccountingHisto::query()
+            ->whereBetween('date', [$this->start, $this->end])
+            ->orderBy('date')
             ->get();
-
-        return $query->map(function ($bill) {
-            return [
-                'Journal' => 'VT',
-                'Numéro facture' => $bill->no_bill ?? '',
-                'Montant HT'     => $bill->amount ?? 0,
-                'Date génération'=> $bill->generated_at ? $bill->generated_at->format('d/m/Y') : '',
-            ];
-        });
     }
 
+    /**
+     * Les titres de colonnes dans l’ordre.
+     */
     public function headings(): array
     {
         return [
@@ -60,23 +53,31 @@ class ComptableExport implements FromCollection, WithHeadings
             'Libellé',
             'Montant débit',
             'Montant crédit',
-            'Date d\'échéance',
+            "Date d'échéance",
             'Code mode de paiement',
         ];
     }
 
-    protected function convertDateFormat($date, $boundary = null)
+    /**
+     * Conversion de chaque ligne AccountingHisto en tableau.
+     */
+    public function map($row): array
     {
-        $parsed = \Carbon\Carbon::createFromFormat('d/m/Y', $date);
+        // On prend le raw DB pour avoir Y-m-d
+        $rawDate     = $row->getRawOriginal('date');
+        $rawDeadline = $row->getRawOriginal('deadline');
 
-        if ($boundary === 'start') {
-            return $parsed->startOfDay();
-        }
-
-        if ($boundary === 'end') {
-            return $parsed->endOfDay();
-        }
-
-        return $parsed;
+        return [
+            $row->journal,
+            Carbon::parse($rawDate)->format('d/m/Y'),
+            $row->no_bill,
+            $row->account_number,
+            $row->label,
+            // on formate à la française
+            number_format($row->debit_amount, 2, ',', ''),
+            number_format($row->credit_amount, 2, ',', ''),
+            Carbon::parse($rawDeadline)->format('d/m/Y'),
+            $row->payment_code,
+        ];
     }
 }
