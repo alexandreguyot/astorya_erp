@@ -38,8 +38,6 @@ class ProcessBills implements ShouldQueue
 
     public function handle()
     {
-        Cache::put("processing.{$this->groupKey}", true);
-
         $contracts = Contract::with([
             'type_period',
             'company.city',
@@ -55,6 +53,14 @@ class ProcessBills implements ShouldQueue
 
         DB::transaction(function () use ($contracts, $noBill) {
             foreach ($contracts as $contract) {
+
+                $exists = Bill::where('contract_id', $contract->id)
+                          ->where('started_at', $this->startedAt)
+                          ->exists();
+                if ($exists) {
+                    continue;
+                }
+
                 $bill = new Bill();
                 $bill->company_id = $contracts->first()->company_id;
                 $bill->no_bill = $noBill;

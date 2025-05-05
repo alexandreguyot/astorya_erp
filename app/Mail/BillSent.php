@@ -7,7 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class InvoiceMail extends Mailable
+class BillSent extends Mailable
 {
     use Queueable, SerializesModels;
 

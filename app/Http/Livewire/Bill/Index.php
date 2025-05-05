@@ -13,8 +13,7 @@ use ZipArchive;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComptableExport;
-use App\Mail\InvoiceMail;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Cache;
 
 class Index extends Component
 {
@@ -29,6 +28,7 @@ class Index extends Component
 
     public array $selected = [];
     public array $selectedBills = [];
+    public array $sending = [];
 
     public array $paginationOptions;
 
@@ -234,23 +234,23 @@ class Index extends Component
         );
     }
 
+    public function isSending(string $noBill): bool
+    {
+        return Cache::has("sending.bill.{$noBill}");
+    }
+
     public function sendInvoice(string $noBill): void
     {
         $bill = Bill::with('company')->where('no_bill', $noBill)->first();
+        $company = $bill->company;
 
         if (! $bill) {
             $this->alert('error', "Facture {$noBill} introuvable.");
             return;
         }
+        Cache::put("sending.bill.{$noBill}", true, now()->addHour());
 
-        Mail::to($bill->company->email)
-            ->queue(new InvoiceMail($bill));
-
-        $bill->sent_at = Carbon::now()->format('d/m/Y');
-        $bill->save();
-
-        $this->alert('success', "Email envoyé pour la facture {$noBill} le "
-            . now()->format('d/m/Y à H:i') . ".");
+        dispatch(new \App\Jobs\SendBillEmail($bill));
     }
 
     public function sendMail(string $noBill)

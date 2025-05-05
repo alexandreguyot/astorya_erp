@@ -118,9 +118,9 @@ class Index extends Component
         $this->dateEnd = Carbon::createFromFormat('m/Y', $value)->endOfMonth()->format('d/m/Y');
     }
 
-    public function checkProcessingRow($groupKey)
+    public function isProcessingRow($groupKey)
     {
-        $this->processingRows[$groupKey] = Cache::has("processing.{$groupKey}");
+        return Cache::has("processing.{$groupKey}");
     }
 
     private function getGroupedContracts()
@@ -209,8 +209,7 @@ class Index extends Component
     {
         $groupKey = md5($companyName . $date . $contractIds);
 
-        // marque tout de suite comme "en cours"
-        $this->processingRows[$groupKey] = true;
+        Cache::put("processing.{$groupKey}", true);
 
         $contractIds = explode('-', $contractIds);
         $started_at = substr($date, 0, 10);
@@ -233,6 +232,7 @@ class Index extends Component
                 'toast' => true,
                 'showConfirmButton' => false,
             ]);
+            Cache::forget("processing.{$groupKey}");
             return;
         }
 
