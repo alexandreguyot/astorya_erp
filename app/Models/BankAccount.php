@@ -52,26 +52,26 @@ class BankAccount extends Model
 
     public function getEffectiveStartDateAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.date_format')) : null;
     }
 
     public function setEffectiveStartDateAttribute($value)
     {
-        $this->attributes['effective_start_date'] = $value ? Carbon::createFromFormat(config('project.'), $value)->format('Y-m-d H:i:s') : null;
+        $this->attributes['effective_start_date'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d H:i:s') : null;
     }
 
     public function getCreatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.date_format')) : null;
     }
 
     public function getUpdatedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.date_format')) : null;
     }
 
     public function getDeletedAtAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.date_format')) : null;
     }
 }

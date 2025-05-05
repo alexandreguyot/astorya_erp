@@ -14,6 +14,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Carbon\Carbon;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class ProcessBills implements ShouldQueue
 {
@@ -55,7 +58,7 @@ class ProcessBills implements ShouldQueue
             foreach ($contracts as $contract) {
 
                 $exists = Bill::where('contract_id', $contract->id)
-                          ->where('started_at', $this->startedAt)
+                          ->where('started_at', Carbon::createFromFormat(config('project.date_format'), $this->startedAt)->format('Y-m-d'))
                           ->exists();
                 if ($exists) {
                     continue;
@@ -94,6 +97,26 @@ class ProcessBills implements ShouldQueue
         }
         Cache::forget("processing.{$this->groupKey}");
         event(new \App\Events\NotificationsUpdated);
+    }
+
+    /**
+     * Méthode de nettoyage commune à handle() et failed()
+     */
+    protected function cleanup(): void
+    {
+        Cache::forget("processing.{$this->groupKey}");
+    }
+
+    /**
+     * Appelé automatiquement par Laravel si le job lève une exception.
+     */
+    public function failed(Throwable $exception)
+    {
+        $this->cleanup();
+
+        Log::error("ProcessBills failed for group {$this->groupKey}", [
+            'exception' => $exception,
+        ]);
     }
 }
 

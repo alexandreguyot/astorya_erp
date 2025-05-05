@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->decimal('credit_amount', 10, 2);
             $table->date('deadline');
             $table->longText('product_code')->nullable();
-            $table->longText('product_short_description')->nullable();
+            $table->longText('product_designation_short')->nullable();
             $table->longText('company_name')->nullable();
             $table->longText('company_accounting')->nullable();
             $table->longText('company_ciel_reference')->nullable();

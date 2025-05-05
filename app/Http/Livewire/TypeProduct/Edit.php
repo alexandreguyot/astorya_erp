@@ -35,11 +35,11 @@ class Edit extends Component
                 'string',
                 'required',
             ],
-            'typeProduct.short_description' => [
+            'typeProduct.designation_short' => [
                 'string',
                 'nullable',
             ],
-            'typeProduct.description_longue' => [
+            'typeProduct.designation_long' => [
                 'string',
                 'nullable',
             ],

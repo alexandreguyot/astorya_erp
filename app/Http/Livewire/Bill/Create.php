@@ -91,15 +91,15 @@ class Create extends Component
             ],
             'bill.generated_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bill.validated_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bill.sent_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'mediaCollections.bill_file_path' => [
                 'array',

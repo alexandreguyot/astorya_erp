@@ -28,10 +28,6 @@
             </div>
         </div>
     </div>
-    <div wire:loading.delay>
-        Chargement...
-    </div>
-
     <div class="overflow-hidden">
         <div class="overflow-x-auto">
             <table class="table table-index w-full">
@@ -108,7 +104,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="flex justify-end">
+                                <div class="flex justify-end" wire:poll.5s="isSending('{{ $bill['no_bill'] }}')">
                                     <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', $bill['no_bill']) }}" target="_blank">
                                         Télécharger la facture
                                     </a>
@@ -121,8 +117,6 @@
                                         <button class="btn btn-sm btn-indigo" wire:click="sendMail('{{ $bill['no_bill'] }}')" wire:loading.attr="disabled">
                                             Envoyer la facture
                                         </button>
-                                    @else
-                                        <span class="text-green-600 font-semibold">Envoyée</span>
                                     @endif
                                 </div>
                             </td>

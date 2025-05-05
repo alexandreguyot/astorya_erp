@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\Bill;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,12 +10,9 @@ class BillSent extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public Bill $bill;
+    public $bill;
 
-    /**
-     * @param  Bill  $bill
-     */
-    public function __construct(Bill $bill)
+    public function __construct($bill)
     {
         $this->bill = $bill;
     }

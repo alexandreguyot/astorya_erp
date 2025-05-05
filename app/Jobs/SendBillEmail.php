@@ -1,22 +1,23 @@
 <?php
 namespace App\Jobs;
 
-use App\Mail\BillSent;
-use App\Models\Bill;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
+use Illuminate\Support\Facades\Log;
 
 class SendBillEmail implements ShouldQueue
 {
     use Dispatchable, Queueable;
 
-    public Bill $bill;
+    public $bill;
 
-    public function __construct(Bill $bill)
+    public function __construct($bill)
     {
         $this->bill = $bill;
     }
@@ -41,12 +42,26 @@ class SendBillEmail implements ShouldQueue
         }
 
         Mail::to($toEmail, $toName)
-            ->send(new \App\Mail\BillSent($company, $this->bill));
+            ->send(new \App\Mail\BillSent($this->bill));
 
         // mise à jour du modèle
-        $this->bill->update(['sent_at' => now()]);
+        $this->bill->update(['sent_at' => Carbon::now()->format('d/m/Y')]);
 
         // suppression du flag
         Cache::forget("sending.bill.{$this->bill->no_bill}");
+    }
+
+    protected function cleanup(): void
+    {
+        Cache::forget("sending.bill.{$this->bill->no_bill}");
+    }
+
+    public function failed(Throwable $exception)
+    {
+        $this->cleanup();
+
+        Log::error("SendBillEmail failed for group {$this->bill->no_bill}", [
+            'exception' => $exception,
+        ]);
     }
 }

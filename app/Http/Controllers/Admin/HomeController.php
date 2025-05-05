@@ -17,7 +17,7 @@ class HomeController
         $this->migrateTable(
             'AccountingHistos', 'accounting_histos',
             ['Id', 'Journal', 'Date', 'NoBill', 'AccountNumber', 'Label', 'DebitAmount', 'CreditAmount', 'Deadline', 'ProductCode', 'ProductShortDescription', 'CompanyName', 'CompanyAccounting', 'CompanyCielReference', 'PaymentCode', 'CreationDate', 'LastModifiedDate'],
-            ['id', 'journal', 'date', 'no_bill', 'account_number', 'label', 'debit_amount', 'credit_amount', 'deadline', 'product_code', 'product_short_description', 'company_name', 'company_accounting', 'company_ciel_reference', 'payment_code', 'created_at', 'updated_at']
+            ['id', 'journal', 'date', 'no_bill', 'account_number', 'label', 'debit_amount', 'credit_amount', 'deadline', 'product_code', 'product_designation_short', 'company_name', 'company_accounting', 'company_ciel_reference', 'payment_code', 'created_at', 'updated_at']
         );
 
         $this->migrateTable(

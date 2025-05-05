@@ -52,7 +52,7 @@ class BankAccount extends Component
             ],
             'bankAccount.effective_start_date' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bankAccount.bic' => [
                 'string',

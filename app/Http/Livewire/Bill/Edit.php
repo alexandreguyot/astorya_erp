@@ -92,7 +92,7 @@ class Edit extends Component
             ],
             'bill.started_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bill.billed_at' => [
                 'nullable',
@@ -100,15 +100,15 @@ class Edit extends Component
             ],
             'bill.generated_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bill.validated_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'bill.sent_at' => [
                 'nullable',
-                'date_format:' . config('project.'),
+                'date_format:' . config('project.date_format'),
             ],
             'mediaCollections.bill_file_path' => [
                 'array',

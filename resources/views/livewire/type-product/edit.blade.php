@@ -10,24 +10,24 @@
             {{ trans('cruds.typeProduct.fields.code_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('typeProduct.short_description') ? 'invalid' : '' }}">
-        <label class="form-label" for="short_description">{{ trans('cruds.typeProduct.fields.short_description') }}</label>
-        <textarea class="form-control" name="short_description" id="short_description" wire:model.defer="typeProduct.short_description" rows="4"></textarea>
+    <div class="form-group {{ $errors->has('typeProduct.designation_short') ? 'invalid' : '' }}">
+        <label class="form-label" for="designation_short">{{ trans('cruds.typeProduct.fields.designation_short') }}</label>
+        <textarea class="form-control" name="designation_short" id="designation_short" wire:model.defer="typeProduct.designation_short" rows="4"></textarea>
         <div class="validation-message">
-            {{ $errors->first('typeProduct.short_description') }}
+            {{ $errors->first('typeProduct.designation_short') }}
         </div>
         <div class="help-block">
-            {{ trans('cruds.typeProduct.fields.short_description_helper') }}
+            {{ trans('cruds.typeProduct.fields.designation_short_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('typeProduct.description_longue') ? 'invalid' : '' }}">
-        <label class="form-label" for="description_longue">{{ trans('cruds.typeProduct.fields.description_longue') }}</label>
-        <textarea class="form-control" name="description_longue" id="description_longue" wire:model.defer="typeProduct.description_longue" rows="4"></textarea>
+    <div class="form-group {{ $errors->has('typeProduct.designation_long') ? 'invalid' : '' }}">
+        <label class="form-label" for="designation_long">{{ trans('cruds.typeProduct.fields.designation_long') }}</label>
+        <textarea class="form-control" name="designation_long" id="designation_long" wire:model.defer="typeProduct.designation_long" rows="4"></textarea>
         <div class="validation-message">
-            {{ $errors->first('typeProduct.description_longue') }}
+            {{ $errors->first('typeProduct.designation_long') }}
         </div>
         <div class="help-block">
-            {{ trans('cruds.typeProduct.fields.description_longue_helper') }}
+            {{ trans('cruds.typeProduct.fields.designation_long_helper') }}
         </div>
     </div>
     <div class="form-group {{ $errors->has('typeProduct.accounting') ? 'invalid' : '' }}">

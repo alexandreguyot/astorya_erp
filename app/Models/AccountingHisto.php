@@ -22,7 +22,7 @@ class AccountingHisto extends Model
         'credit_amount',
         'deadline',
         'product_code',
-        'product_short_description',
+        'product_designation_short',
         'company_name',
         'company_accounting',
         'company_ciel_reference',

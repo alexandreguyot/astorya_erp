@@ -241,15 +241,13 @@ class Index extends Component
 
     public function sendInvoice(string $noBill): void
     {
-        $bill = Bill::with('company')->where('no_bill', $noBill)->first();
-        $company = $bill->company;
+        $bill = Bill::with('company', 'company.contact')->where('no_bill', $noBill)->first();
 
         if (! $bill) {
             $this->alert('error', "Facture {$noBill} introuvable.");
             return;
         }
         Cache::put("sending.bill.{$noBill}", true, now()->addHour());
-
         dispatch(new \App\Jobs\SendBillEmail($bill));
     }
 
