@@ -1,15 +1,21 @@
-@component('mail::message')
-# Bonjour {{ $company->name }},
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <title>Facture {{ $bill->no_bill }}</title>
+</head>
+<body>
+    <p>
+        Bonjour,<br /><br />
 
-Veuillez trouver en pièce jointe votre facture **n° {{ $bill->no_bill }}** datée du **{{ $bill->generated_at }}**.
+        Je vous prie de trouver ci-joint la Facture <strong>{{ $bill->no_bill }}</strong>
+        à échéance du <strong>{{ \Carbon\Carbon::createFromFormat('Y-m-d', $bill->generated_at)->addDays(7)->format('d/m/Y') }}</strong>.<br />
+        Vous avez opté pour un règlement par <strong>{{ $company->payment_method == 0 ? 'prélèvement.' : ($company->payment_method == 1 ? 'virement.' : 'Autre.'); }}</strong>.<br /><br />
 
-Montant **HT** : {{ number_format($bill->amount, 2, ',', ' ') }} €
-Montant **TTC** : {{ number_format($bill->amount_vat_included, 2, ',', ' ') }} €
+        Je vous en souhaite bonne réception et reste à votre disposition.<br /><br />
 
-@component('mail::button', ['url' => url('/')])
-Visitez notre site
-@endcomponent
-
-Merci pour votre confiance,<br>
-{{ config('app.name') }}
-@endcomponent
+        Cordialement,<br />
+        Le service Comptabilité
+    </p>
+</body>
+</html>
