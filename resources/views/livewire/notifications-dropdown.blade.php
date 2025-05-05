@@ -2,7 +2,7 @@
     <div>
         <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
                 id="notifications-menu-button" aria-expanded="true" aria-haspopup="true">
-            🔔 Notifications
+            Notifications
             @if(auth()->user()->unreadNotifications->count())
                 <span class="ml-2 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
                     {{ auth()->user()->unreadNotifications->count() }}
@@ -32,7 +32,7 @@
         @if($notifications->count())
             <div class="border-t px-4 py-2">
                 <button wire:click="markAllRead" class="w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-md">
-                    ✅ Marquer toutes comme lues
+                    Marquer toutes comme lues
                 </button>
             </div>
         @endif
