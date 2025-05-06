@@ -229,15 +229,14 @@ class Index extends Component
         }
         $zip->close();
 
-        // 6) Retourner le ZIP au téléchargement et le supprimer après envoi
         return response()->download($zipFilePath)
                          ->deleteFileAfterSend(true);
     }
 
     public function generateComptableFile()
     {
-        $dateStart = $this->dateStart;   // 'd/m/Y' start of month
-        $dateEnd   = $this->dateEnd;     // 'd/m/Y' end of month
+        $dateStart = $this->dateStart;
+        $dateEnd   = $this->dateEnd;
 
         $fileName  = "export-comptable.xlsx";
 
