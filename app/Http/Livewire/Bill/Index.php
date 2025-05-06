@@ -14,6 +14,7 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComptableExport;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Admin\BillController;
 
 class Index extends Component
 {
@@ -84,24 +85,17 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Bill())->orderable;
         $this->filterable         = (new Bill())->filterable;
-        $this->dateStartView = Carbon::now()->startOfMonth()->format('m/Y');
-        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = Carbon::now()->endOfMonth()->format('m/Y');
-        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
+        $this->dateStartView = Carbon::now()->subMonth(1)->startOfMonth()->format('m/Y');
+        $this->dateStart = Carbon::now()->subMonth(1)->startOfMonth()->format('d/m/Y');
+        $this->dateEndView = Carbon::now()->subMonth(1)->endOfMonth()->format('m/Y');
+        $this->dateEnd = Carbon::now()->subMonth(1)->endOfMonth()->format('d/m/Y');
     }
 
     public function render() {
         $query = Bill::with(['company', 'type_period'])
             ->whereNotNull('no_bill')
             ->where('no_bill', 'like', 'FACT-%')
-            ->when($this->dateStart && !$this->dateEnd, function ($query) {
-                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
-                $query->where('generated_at', '>=', $dateStart);
-            })
-            ->when(!$this->dateStart && $this->dateEnd, function ($query) {
-                $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
-                $query->where('generated_at', '<=', $dateEnd);
-            })
+
             ->when($this->dateStart && $this->dateEnd, function ($query) {
                 $dateStart = $this->convertDateFormat($this->dateStart, 'start');
                 $dateEnd = $this->convertDateFormat($this->dateEnd, 'end');
@@ -186,39 +180,58 @@ class Index extends Component
 
     public function downloadZipFile()
     {
-        $monthFolder = Carbon::createFromFormat('m/Y', $this->dateStartView)->startOfMonth()->format('m-Y');;
-
-        $pdfPath = "private/factures/{$monthFolder}";
+        $monthFolder = Carbon::createFromFormat('m/Y', $this->dateStartView)
+            ->startOfMonth()
+            ->format('m-Y');
+        $pdfPath  = "private/factures/{$monthFolder}";
         $fullPath = storage_path("app/{$pdfPath}");
 
-        if (!is_dir($fullPath)) {
-            $this->alert('error', "Aucune facture trouvée pour le mois {$monthFolder}.");
-            return null;
+        $query = Bill::with(['company', 'type_period'])
+            ->whereNotNull('no_bill')
+            ->where('no_bill', 'like', 'FACT-%')
+            ->when($this->dateStart && $this->dateEnd, function($q) {
+                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
+                $dateEnd   = $this->convertDateFormat($this->dateEnd,   'end');
+                $q->whereBetween('generated_at', [$dateStart, $dateEnd]);
+            })
+            ->orderBy($this->sortBy, $this->sortDirection);
+
+        $bills = $query->get();
+
+        if ($bills->isEmpty()) {
+            $this->alert('error', "Aucune facture trouvée avec ces critères.");
+            return;
         }
 
-        // 3. Créer un fichier ZIP temporaire
-        $zipFileName = "factures_{$monthFolder}.zip";
-        $zipFilePath = storage_path("app/tmp/{$zipFileName}");
+        $existingFiles = collect(glob("{$fullPath}/*.pdf"))
+            ->map(fn($path) => basename($path))
+            ->all();
+        $controller = app(BillController::class);
+        foreach ($bills as $bill) {
+            $filename = $bill->no_bill . '.pdf';
+            if (! in_array($filename, $existingFiles, true)) {
+                $controller->pdf($bill->no_bill, $this->dateStart);
+            }
+        }
 
-        // Créer le dossier tmp si besoin
+        $zipFileName = "factures_{$monthFolder}.zip";
         Storage::makeDirectory('tmp');
+        $zipFilePath = storage_path("app/tmp/{$zipFileName}");
 
         $zip = new ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            $this->alert('error','Impossible de créer le fichier ZIP.');
-            return null;
+            $this->alert('error', "Impossible de créer le fichier ZIP.");
+            return;
         }
 
-        // 4. Ajouter tous les fichiers PDF du dossier
-        $files = glob("{$fullPath}/*.pdf");
-        foreach ($files as $file) {
-            $zip->addFile($file, basename($file)); // Ajout en conservant juste le nom
+        foreach (glob("{$fullPath}/*.pdf") as $file) {
+            $zip->addFile($file, basename($file));
         }
-
         $zip->close();
 
-        // 5. Télécharger le fichier ZIP et le supprimer après
-        return response()->download($zipFilePath)->deleteFileAfterSend(true);
+        // 6) Retourner le ZIP au téléchargement et le supprimer après envoi
+        return response()->download($zipFilePath)
+                         ->deleteFileAfterSend(true);
     }
 
     public function generateComptableFile()

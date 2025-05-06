@@ -17,7 +17,7 @@ class BillController extends Controller
         return view('admin.bill.index');
     }
 
-    public function pdf($no_bill)
+    public function pdf($no_bill, $dateStart)
     {
         $bills = Bill::with([
             'contract',
@@ -30,8 +30,8 @@ class BillController extends Controller
         ->get();
 
         $filename = $bills->first()->no_bill . '.pdf';
-        $period_bills = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('m-Y');
-        $dateStart = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('d/m/Y');
+        $period_bills = Carbon::createFromFormat('d/m/Y', $dateStart)->format('m-Y');
+        $date = Carbon::createFromFormat('d/m/Y', $dateStart);
 
         $path = "private/factures/{$period_bills}/{$filename}";
 
@@ -42,7 +42,7 @@ class BillController extends Controller
 
         $contract = $bills->first()->contract;
         $owner = Owner::first();
-        $vatResumes = $this->getVatResumesFromContracts($contracts);
+        $vatResumes = $this->getVatResumesFromContracts($contracts, $date);
         $totals = $this->getTotalsFromVatResumes($vatResumes);
         $products = collect();
         foreach ($contracts as $contract) {
@@ -72,10 +72,9 @@ class BillController extends Controller
         return response()->file(storage_path("app/{$path}"));
     }
 
-    public function getVatResumesFromContracts($contracts)
+    public function getVatResumesFromContracts($contracts, $date = null)
     {
         $vatResumes = [];
-
         foreach ($contracts as $contract) {
             foreach ($contract->contract_product_detail as $detail) {
                 $vat = $detail->type_product->type_vat ?? null;
@@ -83,13 +82,12 @@ class BillController extends Controller
 
                 $key = $vat->code_vat;
 
-                $ht = $detail->monthly_unit_price_without_taxe * $detail->quantity;
-                $tva = $ht * ($vat->percent / 100);
+                $ht = $detail->proratedBase($date);
+                $tva = $detail->proratedWithVat($date) - $ht;
 
                 if (!isset($vatResumes[$key])) {
                     $vatResumes[$key] = [
                         'code' => $vat->code_vat,
-                        'account' => $vat->account_vat,
                         'percent' => $vat->percent,
                         'amount_ht' => 0,
                         'amount_tva' => 0,
@@ -104,7 +102,6 @@ class BillController extends Controller
         return collect($vatResumes)->map(function ($item) {
             return [
                 'code' => $item['code'],
-                'account' => $item['account'],
                 'percent' => number_format($item['percent'], 2, ',', ' '),
                 'amount_ht' => number_format($item['amount_ht'], 2, ',', ' '),
                 'amount_tva' => number_format($item['amount_tva'], 2, ',', ' '),

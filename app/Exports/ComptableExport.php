@@ -36,7 +36,7 @@ class ComptableExport implements FromCollection, WithHeadings, WithMapping, Shou
     {
         return AccountingHisto::query()
             ->whereBetween('date', [$this->start, $this->end])
-            ->orderBy('date')
+            ->orderByRaw("CAST(SUBSTRING_INDEX(no_bill, '-', -1) AS UNSIGNED) ASC")
             ->get();
     }
 

@@ -68,6 +68,7 @@ class ProcessBills implements ShouldQueue
                 $bill->company_id = $contracts->first()->company_id;
                 $bill->no_bill = $noBill;
                 $bill->generated_at = now()->format(config('project.date_format'));
+                $bill->validated_at = now()->format(config('project.date_format'));
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
                 $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice($this->startedAt));
