@@ -35,6 +35,7 @@ class ContractController extends Controller
 
         $period_bills = Carbon::createFromFormat('d-m-Y', substr($period, 0, 10))->format('m-Y');
         $dateStart = Carbon::createFromFormat('d-m-Y', substr($period, 0, 10))->startOfMonth()->format('d/m/Y');
+        $date = Carbon::createFromFormat('d-m-Y', substr($period, 0, 10))->startOfMonth();
 
         $filename = "BRO-2025-{$company}-{$period_bills}.pdf";
         $path = "private/contracts/{$period_bills}/{$filename}";
@@ -51,13 +52,13 @@ class ContractController extends Controller
 
         $contract = $contracts->first();
         $owner = Owner::first();
-        $vatResumes = $this->getVatResumesFromContracts($contracts);
+        $vatResumes = $this->getVatResumesFromContracts($contracts, $date);
         $totals = $this->getTotalsFromVatResumes($vatResumes);
         $bill = null;
         $products = collect();
         foreach ($contracts as $contract) {
             foreach ($contract->contract_product_detail as $product) {
-                $product->contract = $contract; // On garde le contrat pour accès dans la vue
+                $product->contract = $contract;
                 $products->push($product);
             }
         }
@@ -183,10 +184,9 @@ class ContractController extends Controller
     }
 
 
-    public function getVatResumesFromContracts($contracts)
+    public function getVatResumesFromContracts($contracts, $date = null)
     {
         $vatResumes = [];
-
         foreach ($contracts as $contract) {
             foreach ($contract->contract_product_detail as $detail) {
                 $vat = $detail->type_product->type_vat ?? null;
@@ -194,8 +194,8 @@ class ContractController extends Controller
 
                 $key = $vat->code_vat;
 
-                $ht = $detail->monthly_unit_price_without_taxe * $detail->quantity;
-                $tva = $ht * ($vat->percent / 100);
+                $ht = $detail->proratedBase($date);
+                $tva = $detail->proratedWithVat($date) - $ht;
 
                 if (!isset($vatResumes[$key])) {
                     $vatResumes[$key] = [
@@ -211,7 +211,6 @@ class ContractController extends Controller
             }
         }
 
-        // Formate proprement
         return collect($vatResumes)->map(function ($item) {
             return [
                 'code' => $item['code'],

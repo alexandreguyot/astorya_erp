@@ -70,8 +70,8 @@ class ProcessBills implements ShouldQueue
                 $bill->generated_at = now()->format(config('project.date_format'));
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
-                $bill->amount = str_replace(',', '.', $contract->total_price);
-                $bill->amount_vat_included = str_replace(',', '.', $contract->total_price_with_vat);
+                $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice($this->startedAt));
+                $bill->amount_vat_included = str_replace(',', '.', $contract->calculateTotalPriceWithVat($this->startedAt));
                 $bill->type_period_id = $contract->type_period_id;
                 $bill->contract_id = $contract->id;
 

@@ -29,7 +29,7 @@
                         </td>
                         <td class="width-10 center-align">{{ $product->quantity }}</td>
                         <td class="width-10 center-align">{{ $product->formatted_monthly_unit_price_without_taxe }}</td>
-                        <td class="width-10 center-align">{{ $product->total_price }}</td>
+                        <td class="width-10 center-align">{{ $product->proratedBaseFormatted(Carbon\Carbon::createFromFormat(config('project.date_format'), $dateStart)) }}</td>
                         <td class="width-10 center-align">{{ $product->type_product->type_vat->code_vat }}</td>
                     </tr>
                 @endforeach

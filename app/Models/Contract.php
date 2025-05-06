@@ -73,26 +73,60 @@ class Contract extends Model
         $today = Carbon::now();
     }
 
-    public function getTotalPriceAttribute()
+    public function isTerminationMonth($dateStart): bool
     {
-        return round($this->contract_product_detail->sum(function ($detail) {
-            return ($detail->monthly_unit_price_without_taxe * $detail->quantity);
-        }), 2);
+        return $this->terminated_at
+            && Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)->year === $dateStart->year
+            && Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)->month === $dateStart->month;
     }
 
-    public function getTotalPriceWithVatAttribute()
+    public function calculateBillingPeriod($dateStart)
     {
-        $total = $this->contract_product_detail->sum(function ($detail) {
-            $basePrice = $detail->monthly_unit_price_without_taxe * $detail->quantity;
+        if (! $this->type_period || ! $this->type_period->nb_month) {
+            return null;
+        }
 
-            $vat = $detail->type_product->type_vat->percent ?? 0;
+        $nbMonth   = $this->type_period->nb_month;
+        $setupDay  = Carbon::createFromFormat(config('project.date_format'), $this->setup_at)->day;
+        $baseDate  = Carbon::createFromFormat(config('project.date_format'), $dateStart);
 
-            $priceWithVat = $basePrice * (1 + ($vat / 100));
+        // début de période : même jour que le setup, limité aux jours du mois
+        $day = min($setupDay, $baseDate->daysInMonth);
+        $startBilling = $baseDate->copy()->day($day);
 
-            return $priceWithVat;
-        });
+        // si mois de terminaison, on termine à la date de fin réelle
+        if ($this->isTerminationMonth($baseDate)) {
+            $endBilling = Carbon::createFromFormat(config('project.date_format'),$this->terminated_at);
+        } else {
+            // sinon 1 mois * nbMonth moins 1 jour
+            $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
+        }
 
-        return number_format($total, 2, ',', '');
+        return $startBilling->format(config('project.date_format'))
+             . ' au '
+             . $endBilling->format(config('project.date_format'));
+    }
+
+    public function calculateTotalPrice(Carbon $dateStart)
+    {
+        return $total = $this->contract_product_detail
+            ->sum(fn($detail) => $detail->proratedBase($dateStart));
+    }
+
+    public function calculateTotalPriceFormatted(Carbon $dateStart)
+    {
+        $total = $this->contract_product_detail
+            ->sum(fn($detail) => $detail->proratedBase($dateStart));
+
+        return number_format($total, 2, ',', ' ');
+    }
+
+    public function calculateTotalPriceWithVat(Carbon $dateStart): string
+    {
+        $total = $this->contract_product_detail
+            ->sum(fn($detail) => $detail->proratedWithVat($dateStart));
+
+        return number_format($total, 2, ',', ' ');
     }
 
     public function company()
@@ -130,27 +164,23 @@ class Contract extends Model
             ->withTimestamps();
     }
 
-    public function calculateBillingPeriod($dateStart)
+    public function amountForPeriod($invoiceDate): float
     {
-        if (!$this->type_period || !$this->type_period->nb_month) {
-            return null;
+        $invoiceMonth = Carbon::parse($invoiceDate)->startOfMonth();
+        $setup        = Carbon::parse($this->setup_at);
+
+        $monthlyTotal = $this->monthly_unit_price_without_taxe * $this->quantity;
+
+        if ($setup->greaterThan($invoiceMonth)) {
+            $daysInMonth = $invoiceMonth->daysInMonth;
+            $daysUsed    = $daysInMonth - $setup->day + 1;
+
+            return round($monthlyTotal * $daysUsed / $daysInMonth, 2);
         }
 
-        $nbMonth = $this->type_period->nb_month;
-
-        $setupDay = Carbon::createFromFormat('d/m/Y', $this->setup_at)->day;
-        $baseDate = Carbon::createFromFormat('d/m/Y', $dateStart);
-
-        // Ajuster le jour : si le jour dépasse le nombre de jours dans le mois
-        $day = min($setupDay, $baseDate->daysInMonth);
-        $startBilling = $baseDate->copy()->day($day);
-
-        // Calcul de la date de fin de facturation
-        $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
-
-        return $startBilling->format('d/m/Y') . ' au ' . $endBilling->format('d/m/Y');
+        // Sinon c’est un mois complet
+        return round($monthlyTotal, 2);
     }
-
 
     public function contract_product_detail()
     {

@@ -47,9 +47,9 @@
                                 </td>
                                 <td>
                                     @if (!$contract->isActive())
-                                        <button class="btn btn-sm btn-success mr-2" wire:click="confirm('delete', {{ $contract->id }})">
+                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
                                             Modifier
-                                        </button>
+                                        </a>
                                     @else
                                         Contrat en cours - pas d'action possible
                                     @endif

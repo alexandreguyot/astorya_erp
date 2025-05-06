@@ -125,37 +125,60 @@ class Index extends Component
 
     private function getGroupedContracts()
     {
-        $dateStart = Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfMonth();
+        $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
+        $endOfMonth = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->endOfMonth();
+        $dateStartView = Carbon::createFromFormat('m/Y', $this->dateStartView)->startOfMonth();
+        // dd($dateStart, $dateStartView);
 
         $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
             ->whereNotNull('setup_at')
             ->where(function ($query) use ($dateStart) {
                 $query->whereNull('terminated_at')
-                      ->orWhere('terminated_at', '>=', $dateStart);
+                      ->orWhereDate('terminated_at', '>=', $dateStart);
             })
             ->when($this->search, function ($query) {
                 $query->whereHas('company', function ($q) {
                     $q->where('companies.name', 'like', '%' . $this->search . '%');
                 });
             })
-            ->whereHas('type_period', function ($query) use ($dateStart) {
-                $query->whereRaw('(TIMESTAMPDIFF(MONTH, terminated_at, ?) % nb_month) = 0', [
-                    $dateStart
-                ]);
+            ->where(function($q) use ($dateStart) {
+                $q->whereDoesntHave('bills', function($q2) use ($dateStart) {
+                    $q2->whereMonth('generated_at', $dateStart->month)
+                       ->whereYear('generated_at',  $dateStart->year);
+                })
+                ->orWhere(function($q3) use ($dateStart) {
+                    $q3->whereYear('terminated_at', $dateStart->year)
+                       ->whereMonth('terminated_at', $dateStart->month)
+                       ->whereDate('terminated_at', '>=', $dateStart->copy()->startOfMonth());
+                });
             })
-            ->whereDoesntHave('bills', function ($query) use ($dateStart) {
-                $query->whereMonth('generated_at', $dateStart->month)
-                  ->whereYear('generated_at',  $dateStart->year);
-            })
-            ->whereHas('contract_product_detail', function ($query) use ($dateStart) {
+            ->whereHas('contract_product_detail', function ($query) use ($dateStart, $endOfMonth) {
                 $query->where('monthly_unit_price_without_taxe', '>', 0)
-                      ->where(function ($q) use ($dateStart) {
+                      ->where(function ($q) use ($dateStart, $endOfMonth) {
                           $q->whereNull('billing_terminated_at')
                             ->orWhereDate('billing_terminated_at', '0001-01-01')
-                            ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+                            ->orWhereDate('billing_terminated_at', '>=', $endOfMonth);
                       });
             })
             ->get()
+            ->filter(function($contract) use ($dateStart) {
+                $current    = $dateStart->copy()->startOfMonth();
+                $setup      = Carbon::createFromFormat(config('project.date_format'), $contract->setup_at)
+                                    ->startOfMonth();
+                $monthsDiff = $setup->diffInMonths($current);
+
+                // 1) C’est un mois « ordinaire » aligné sur nb_month
+                $isOnCycle = $current->gte($setup) && $monthsDiff % $contract->type_period->nb_month === 0;
+
+                // 2) OU c’est le mois de terminaison (prorata)
+                $isTerminationMonth = false;
+                if ($contract->terminated_at) {
+                    $term = Carbon::createFromFormat(config('project.date_format'), $contract->terminated_at);
+                    $isTerminationMonth = $term->year === $current->year && $term->month === $current->month;
+                }
+
+                return $isOnCycle || $isTerminationMonth;
+            })
             ->each(function ($contract) {
                 $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
             })

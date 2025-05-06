@@ -5,11 +5,9 @@ namespace App\Http\Livewire\Company;
 use Livewire\Component;
 use App\Models\Company;
 use Illuminate\Support\Carbon;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Contracts extends Component
 {
-    use LivewireAlert;
     public Company $company;
     public $contracts;
     public $bills;

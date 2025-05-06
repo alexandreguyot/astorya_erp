@@ -63,8 +63,14 @@
                             @php
                                 $contractIds = $contracts->pluck('id')->toArray();
                                 $groupKey = md5($companyName . $date . implode('-', $contracts->pluck('id')->toArray()));
+                                $total = $contracts->sum(fn($contract) =>
+                                    $contract->calculateTotalPrice(
+                                        Carbon\Carbon::createFromFormat(config('project.date_format'), $dateStart)
+                                    )
+                                );
+                                var_dump($total);
                             @endphp
-                            <tr wire:poll.5s="isProcessingRow('{{ $groupKey }}')" class="hover:bg-gray-200">
+                            <tr wire:poll.10s="isProcessingRow('{{ $groupKey }}')" class="hover:bg-gray-200">
                                 <td>
                                     <input type="checkbox" wire:model="selectedContracts" value="{{ json_encode([
                                         'company' => $companyName,
@@ -91,7 +97,7 @@
                                     @endforeach
                                 </td>
                                 <td class="text-red-600 font-semibold">
-                                    {{ number_format($contracts->sum(fn($contract) => floatval($contract->total_price)), 2, ',', ' ') }} €
+                                    {{ number_format($total, 2, ',', '') }} €
                                 </td>
                                 <td class="w-1/4">
                                     <div class="flex justify-end">
