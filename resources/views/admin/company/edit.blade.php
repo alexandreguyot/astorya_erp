@@ -40,31 +40,27 @@
     </div>
 </div>
 @endsection
-
 @push('scripts')
-<script>
-    // Initialiser le premier onglet comme actif
-    document.getElementById("tab1").classList.remove('hidden');
-    document.getElementById("tab1Btn").classList.add('bg-member');
+    <script>
+        document.getElementById("tab1").classList.remove('hidden');
+        document.getElementById("tab1Btn").classList.add('bg-red-300');
 
-    function openTab(tabName) {
-        var tabcontent, tablinks;
+        function openTab(tabName) {
+            var tabcontent, tablinks;
 
-        // Cacher tous les contenus d'onglet
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].classList.add('hidden');
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (var i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.add('hidden');
+            }
+
+            tablinks = document.getElementsByClassName("tablink");
+            for (var i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove('bg-red-300');
+            }
+
+            document.getElementById(tabName).classList.remove('hidden');
+            document.getElementById(tabName + 'Btn').classList.add('bg-red-300');
         }
-
-        // Supprimer la classe active de tous les boutons d'onglet
-        tablinks = document.getElementsByClassName("tablink");
-        for (var i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove('bg-member');
-        }
-
-        // Afficher le contenu de l'onglet sélectionné et mettre à jour le bouton d'onglet actif
-        document.getElementById(tabName).classList.remove('hidden');
-    }
-</script>
+    </script>
 @endpush
 

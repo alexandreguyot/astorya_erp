@@ -24,11 +24,6 @@ class Contracts extends Component
         $this->contracts = $this->company->contracts()
         ->with(['bills', 'lastBill'])
         ->get()
-        ->sortByDesc(function ($contract) {
-            return optional($contract->lastBill)->billed_at
-                ? Carbon::createFromFormat('d/m/Y', $contract->lastBill->billed_at)
-                : now()->subYears(100); // place les contrats sans facture à la fin
-        })
         ->values();
 
         return view('livewire.company.contracts');

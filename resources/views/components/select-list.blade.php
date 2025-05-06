@@ -1,5 +1,5 @@
 <div>
-    <div wire:ignore class="w-full">
+    <div class="w-full">
         @if(isset($attributes['multiple']))
             <div id="{{ $attributes['id'] }}-btn-container" class="mb-3">
                 <button type="button" class="btn btn-info btn-sm select-all-button">{{ trans('global.select_all') }}</button>

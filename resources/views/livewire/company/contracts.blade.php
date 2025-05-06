@@ -42,7 +42,7 @@
                                 </td>
                                 <td>
                                     <div class="badge badge-purple">
-                                        {{ $contract->bills->last()->last_bill_period ?? '' }}
+                                        {{ $contract->bills->last()->last_bill_period ?? 'Pas encore facturé' }}
                                     </div>
                                 </td>
                                 <td>

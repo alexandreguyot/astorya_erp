@@ -50,6 +50,7 @@
             {{ trans('cruds.contract.fields.terminated_at_helper') }}
         </div>
     </div>
+
     @if($selectedTypeContractId)
         <h4 class="text-lg font-semibold mb-2 col-span-full">Article lié au contrat</h4>
 

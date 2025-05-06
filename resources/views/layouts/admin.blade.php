@@ -47,6 +47,31 @@
 
     @yield('scripts')
     @stack('scripts')
+    <script>
+        function initDatePickers() {
+          $('.datepicker-container input').each(function(){
+            // si déjà instancié, on skip
+            if ($(this).data('datepicker')) return;
+
+            $(this).datepicker({
+              dateFormat: "dd/mm/yy",
+              changeMonth: true,
+              changeYear: true,
+              onSelect(dateText) {
+                $(this).trigger('change');
+              }
+            });
+          });
+        }
+
+        document.addEventListener('livewire:load', () => {
+          initDatePickers();
+        });
+
+        Livewire.hook('message.processed', (message, component) => {
+          initDatePickers();
+        });
+      </script>
 </body>
 
 </html>

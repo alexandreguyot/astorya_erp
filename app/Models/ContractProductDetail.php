@@ -13,6 +13,7 @@ class ContractProductDetail extends Model
     protected $table = 'contract_product_details';
 
     protected $fillable = [
+        'id',
         'designation',
         'quantity',
         'capacity',

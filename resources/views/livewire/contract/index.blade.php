@@ -79,7 +79,7 @@
                                     ]) }}">
                                 </td>
                                 <td class="text-blue-500 font-medium">
-                                    {{ $companyName }}
+                                    <a href="{{ route('admin.companies.edit', $contracts->first()->company_id )}}">{{ $companyName }}</a>
                                 </td>
                                 <td class="text-green-500 font-semibold">
                                     {{ $date }}

@@ -47,9 +47,13 @@ class Create extends Component
 
     public function updatedSelectedTypeContractId($value)
     {
-        $this->filteredProducts = TypeProduct::where('type_contract_id', $value)
-            ->pluck('designation_short', 'id')
-            ->toArray();
+        if ($value) {
+            $this->filteredProducts = TypeProduct::where('type_contract_id', $value)
+                ->pluck('designation_short', 'id')
+                ->toArray();
+        } else {
+            $this->filteredProducts = [];
+        }
 
         $this->resetSelectedProduct();
     }

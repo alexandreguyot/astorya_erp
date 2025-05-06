@@ -153,6 +153,7 @@ class Contract extends Model
     {
         return $this->belongsToMany(TypeProduct::class, 'contract_product_details')
             ->withPivot([
+                'id',
                 'designation',
                 'quantity',
                 'capacity',
