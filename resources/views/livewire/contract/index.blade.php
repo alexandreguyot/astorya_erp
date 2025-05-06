@@ -68,7 +68,6 @@
                                         Carbon\Carbon::createFromFormat(config('project.date_format'), $dateStart)
                                     )
                                 );
-                                var_dump($total);
                             @endphp
                             <tr wire:poll.10s="isProcessingRow('{{ $groupKey }}')" class="hover:bg-gray-200">
                                 <td>
