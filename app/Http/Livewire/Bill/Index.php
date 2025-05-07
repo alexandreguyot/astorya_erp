@@ -109,7 +109,6 @@ class Index extends Component
             })
             ->orderBy($this->sortBy, $this->sortDirection);
 
-        dd($query->ddRawSql());
         $bills = $query->get();
 
         $groupedBills = $bills->groupBy('no_bill');
