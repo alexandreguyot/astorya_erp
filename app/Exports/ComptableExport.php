@@ -31,6 +31,11 @@ class ComptableExport implements FromCollection, WithHeadings, WithMapping, Shou
     public function collection()
     {
         dd($this->start, $this->end);
+        $result = AccountingHisto::query()
+        ->whereBetween('date', [$this->start, $this->end])
+        ->orderByRaw("CAST(SUBSTRING_INDEX(no_bill, '-', -1) AS UNSIGNED) ASC")
+        ->ddRawSql();
+        dd($result);
         return AccountingHisto::query()
             ->whereBetween('date', [$this->start, $this->end])
             ->orderByRaw("CAST(SUBSTRING_INDEX(no_bill, '-', -1) AS UNSIGNED) ASC")
