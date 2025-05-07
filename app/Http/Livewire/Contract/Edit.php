@@ -208,7 +208,7 @@ class Edit extends Component
     protected function initListsForFields(): void
     {
         $this->listsForFields['company'] = Company::where('id', $this->company->id)->pluck('name', 'id')->toArray();
-        $this->listsForFields['type_contracts'] = TypeContract::where('id', $this->contract->id)->pluck('title', 'id')->toArray();
+        $this->listsForFields['type_contracts'] = TypeContract::where('id', $this->selectedTypeContractId)->pluck('title', 'id')->toArray();
         $this->listsForFields['type_periods'] = TypePeriod::pluck('title', 'id')->toArray();
         $this->listsForFields['products'] = TypeProduct::all(); // Pour récupérer les infos complètes
     }
