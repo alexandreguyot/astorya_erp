@@ -46,13 +46,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    @if (!$contract->isActive())
-                                        <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
-                                            Modifier
-                                        </a>
-                                    @else
-                                        Contrat en cours - pas d'action possible
-                                    @endif
+                                    <a class="btn btn-sm btn-success mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                        Modifier
+                                    </a>
                                 </td>
                             </tr>
                         @empty

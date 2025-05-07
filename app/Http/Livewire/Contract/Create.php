@@ -127,10 +127,12 @@ class Create extends Component
                 'nullable',
             ],
             'contract.setup_at' => [
+                'required',
                 'nullable',
                 'date_format:' . config('project.date_format'),
             ],
             'contract.terminated_at' => [
+                'required',
                 'nullable',
                 'date_format:' . config('project.date_format'),
             ],
