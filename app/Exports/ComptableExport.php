@@ -20,7 +20,6 @@ class ComptableExport implements FromCollection, WithHeadings, WithMapping, Shou
      */
     public function __construct(string $dateStart, string $dateEnd)
     {
-        // On convertit en Y-m-d pour la requête DB
         $this->start = Carbon::createFromFormat('d/m/Y', $dateStart)
                               ->startOfDay()
                               ->format('Y-m-d');
@@ -29,11 +28,9 @@ class ComptableExport implements FromCollection, WithHeadings, WithMapping, Shou
                               ->format('Y-m-d');
     }
 
-    /**
-     * Récupère toutes les écritures du mois donné, triées par date.
-     */
     public function collection()
     {
+        dd($this->start, $this->end);
         return AccountingHisto::query()
             ->whereBetween('date', [$this->start, $this->end])
             ->orderByRaw("CAST(SUBSTRING_INDEX(no_bill, '-', -1) AS UNSIGNED) ASC")
@@ -73,7 +70,6 @@ class ComptableExport implements FromCollection, WithHeadings, WithMapping, Shou
             $row->no_bill,
             $row->account_number,
             $row->label,
-            // on formate à la française
             number_format($row->debit_amount, 2, ',', ''),
             number_format($row->credit_amount, 2, ',', ''),
             Carbon::parse($rawDeadline)->format('d/m/Y'),
