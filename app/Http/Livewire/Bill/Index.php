@@ -85,10 +85,10 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Bill())->orderable;
         $this->filterable         = (new Bill())->filterable;
-        $this->dateStartView = Carbon::now()->subMonth(1)->startOfMonth()->format('m/Y');
-        $this->dateStart = Carbon::now()->subMonth(1)->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = Carbon::now()->subMonth(1)->endOfMonth()->format('m/Y');
-        $this->dateEnd = Carbon::now()->subMonth(1)->endOfMonth()->format('d/m/Y');
+        $this->dateStartView = Carbon::now()->startOfMonth()->format('m/Y');
+        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
+        $this->dateEndView = Carbon::now()->endOfMonth()->format('m/Y');
+        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
     }
 
     public function render() {
