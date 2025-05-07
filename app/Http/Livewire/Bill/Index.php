@@ -153,24 +153,19 @@ class Index extends Component
 
     private function convertDateFormat($date, $type)
     {
-       // Vérifier le format fourni
         if (preg_match('/^\d{4}$/', $date)) {
-            // Format YYYY -> Année complète
             return $type === 'start' ? "$date-01-01 00:00:00" : "$date-12-31 23:59:59";
         }
 
         if (preg_match('/^\d{2}\/\d{4}$/', $date)) {
-            // Format MM/YYYY -> Mois complet
             [$month, $year] = explode('/', $date);
 
-            // Trouver le dernier jour du mois
             $lastDay = date('t', strtotime("$year-$month-01"));
 
             return $type === 'start' ? "$year-$month-01 00:00:00" : "$year-$month-$lastDay 23:59:59";
         }
 
         if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $date)) {
-            // Format DD/MM/YYYY -> Un seul jour
             [$day, $month, $year] = explode('/', $date);
             return $type === 'start' ? "$year-$month-$day 00:00:00" : "$year-$month-$day 23:59:59";
         }
@@ -271,7 +266,7 @@ class Index extends Component
     public function sendSelectedBills()
     {
         if (empty($this->selectedBills)) {
-            $this->alert('warning', "Aucune facture sélectionnée.");
+            $this->alert('error', "Aucune facture sélectionnée.");
             return;
         }
 
@@ -279,6 +274,8 @@ class Index extends Component
                     ->whereNull('sent_at')
                     ->pluck('no_bill')
                     ->toArray();
+
+        dd($toSend, count($toSend));
 
         if (empty($toSend)) {
             $this->alert('info', "Toutes les factures sélectionnées ont déjà été envoyées.");
