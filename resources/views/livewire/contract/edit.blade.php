@@ -41,8 +41,8 @@
         </div>
     </div>
     <div class="form-group {{ $errors->has('contract.terminated_at') ? 'invalid' : '' }}">
-        <label class="form-label" for="terminated_at">{{ trans('cruds.contract.fields.terminated_at') }}</label>
-        <x-date-picker class="form-control" wire:model="contract.terminated_at" id="terminated_at" name="terminated_at" picker="date"  />
+        <label class="form-label required" for="terminated_at">{{ trans('cruds.contract.fields.terminated_at') }}</label>
+        <x-date-picker class="form-control" required wire:model="contract.terminated_at" id="terminated_at" name="terminated_at" picker="date"  />
         <div class="validation-message">
             {{ $errors->first('contract.terminated_at') }}
         </div>
