@@ -72,7 +72,7 @@ class ProcessBills implements ShouldQueue
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
                 $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice(Carbon::createFromFormat(config('project.date_format'), $this->startedAt)));
-                $bill->amount_vat_included = str_replace(',', '.', Carbon::createFromFormat(config('project.date_format'), $this->startedAt)));
+                $bill->amount_vat_included = str_replace(',', '.', $contract->calculateTotalPriceWithVat(Carbon::createFromFormat(config('project.date_format'), $this->startedAt)));
                 $bill->type_period_id = $contract->type_period_id;
                 $bill->contract_id = $contract->id;
 
