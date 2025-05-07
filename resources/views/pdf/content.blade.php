@@ -66,14 +66,16 @@
     @if($page['type'] === 'min_with_footer')
         <div class="resume-table margin-bot-20">
             <table class="rounded no-interline main-table-min">
-                <tr>
-                    <th class="width-10">Référence</th>
-                    <th>Désignation</th>
-                    <th class="width-10">Qté</th>
-                    <th class="width-10">P.U. HT</th>
-                    <th class="width-10">Montant HT</th>
-                    <th class="width-10">TVA</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th class="width-10">Référence</th>
+                        <th>Désignation</th>
+                        <th class="width-10">Qté</th>
+                        <th class="width-10">P.U. HT</th>
+                        <th class="width-10">Montant HT</th>
+                        <th class="width-10">TVA</th>
+                    </tr>
+                </thead>
                 <tbody>
                     @foreach($page['items'] as $product)
                     @php $contract = $product->contract; @endphp

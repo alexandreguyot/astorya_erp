@@ -101,7 +101,9 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     ])->name('bills.export_order_prlv');
     Route::get('factures/{bill}', [BillController::class, 'show'])->name('bills.show');
     Route::get('factures/{bill}/edit', [BillController::class, 'edit'])->name('bills.edit');
-    Route::get('factures/{bill}/pdf', [BillController::class, 'pdf'])->name('bills.pdf');
+    Route::get('factures/{bill}/pdf/{dateStart}', [BillController::class, 'pdf'])->where([
+        'dateStart' => '\d{4}-\d{2}-\d{2}',
+    ])->name('bills.pdf');
 
     // Contracts
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');

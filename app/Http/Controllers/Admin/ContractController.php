@@ -61,7 +61,6 @@ class ContractController extends Controller
                 $products->push($product);
             }
         }
-        $css = null;
 
         $pdf = Pdf::loadView('pdf.bills', compact(
             'contract',
@@ -71,21 +70,25 @@ class ContractController extends Controller
             'owner',
             'vatResumes',
             'totals',
-            'bill',
-            'css'
+            'bill'
             ))
             ->setOption('enable-local-file-access', true)
             ->setOption('margin-top', 10)
-            ->setOption('margin-right', 10)
-            ->setOption('margin-left', 10)
-            ->setOption('margin-bottom', '15mm')
-            ->setOption('footer-left',   'ASTORYA S.G.I')
-            ->setOption('footer-center', 'Page [page] / [toPage]')
-            ->setOption('footer-line',   true);
+            ->setOption('margin-right', 8)
+            ->setOption('margin-left', 8)
+            ->setOption('margin-bottom', 5);
 
         Storage::put($path, $pdf->output());
 
-        return response()->file(storage_path("app/{$path}"));
+        $fullPath = storage_path("app/{$path}");
+
+        $response = response()->file($fullPath, [
+            'Content-Type' => 'application/pdf',
+        ]);
+
+        $response->setContentDisposition('inline', $filename);
+
+        return $response;
     }
 
     public function getVatResumesFromContracts($contracts, $date = null)
