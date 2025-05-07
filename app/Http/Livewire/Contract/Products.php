@@ -18,6 +18,7 @@ class Products extends Component
 
     public Contract $contract;
     public Company $company;
+    public int $type_contract_id;
 
     public array $listsForFields = [];
 
@@ -51,6 +52,7 @@ class Products extends Component
     {
         $this->contract = $contract;
         $this->company  = $company;
+        $this->type_contract_id = $this->contract->contract_product_detail()->first()->type_product()->first()->type_contract_id;
 
         $this->loadProducts();
         $this->initListsForFields();
@@ -59,7 +61,7 @@ class Products extends Component
     protected function loadProducts(): void
     {
         $this->existingProducts = ContractProductDetail::with('type_product')
-            ->where('contract_id', $this->contract->id)
+            ->where('contract_id', $this->type_contract_id)
             ->get();
     }
 
@@ -162,6 +164,6 @@ class Products extends Component
         $this->listsForFields['company'] = Company::where('id', $this->company->id)->pluck('name', 'id')->toArray();
         $this->listsForFields['type_contracts'] = TypeContract::where('id', $this->contract->id)->pluck('title', 'id')->toArray();
         $this->listsForFields['type_periods'] = TypePeriod::pluck('title', 'id')->toArray();
-        $this->listsForFields['products'] = TypeProduct::where('type_contract_id', $this->contract->id)->pluck('designation_short', 'id')->toArray();
+        $this->listsForFields['products'] = TypeProduct::where('type_contract_id', $this->type_contract_id)->pluck('designation_short', 'id')->toArray();
     }
 }
