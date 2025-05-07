@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
 use Illuminate\Support\Facades\Log;
+use Swift_Plugins_LoggerPlugin;
+use Swift_Plugins_Loggers_ArrayLogger;
+
 
 class SendBillEmail implements ShouldQueue
 {
@@ -41,10 +44,10 @@ class SendBillEmail implements ShouldQueue
             $toName  = $company->name;
         }
 
+
         Mail::to($toEmail, $toName)
             ->send(new \App\Mail\BillSent($this->bill));
 
-        // mise à jour du modèle
         $this->bill->update(['sent_at' => Carbon::now()->format('d/m/Y')]);
 
         // suppression du flag
