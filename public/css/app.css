@@ -2950,6 +2950,9 @@ select {
 .disabled\:opacity-50:disabled {
 	opacity: 0.5;
 }
+.disabled\:opacity-60:disabled {
+	opacity: 0.6;
+}
 @media (prefers-reduced-motion: no-preference) {
 
 	.motion-safe\:hover\:scale-\[1\.01\]:hover {

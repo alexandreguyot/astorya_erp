@@ -55,18 +55,20 @@
                             @endphp
 
                             <button
-                                class="btn btn-sm btn-info mr-2"
+                                class="btn btn-sm btn-info mr-2 disabled:opacity-60"
                                 wire:loading.attr="disabled"
                                 wire:click="sendSelectedBills"
+                                {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
                             Envoyer les mails des factures sélectionnées
                             </button>
 
                             <button
-                                class="btn btn-sm btn-info mr-2"
+                                class="btn btn-sm btn-info mr-2 disabled:opacity-60"
                                 wire:loading.attr="disabled"
                                 wire:click="sendAllBills"
+                                {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
                             Envoyer tous les mails des factures
