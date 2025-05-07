@@ -290,18 +290,42 @@ class Index extends Component
 
     public function sendAllBills()
     {
-        $toSend = Bill::whereIn('no_bill', $this->billGroups->pluck('no_bill')->toArray())
-                    ->whereNull('sent_at')
-                    ->pluck('no_bill')
-                    ->toArray();
+        $query = Bill::with(['company', 'type_period'])
+            ->whereNotNull('no_bill')
+            ->where('no_bill', 'like', 'FACT-%')
+            ->when($this->dateStart && $this->dateEnd, function($q) {
+                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
+                $dateEnd   = $this->convertDateFormat($this->dateEnd,   'end');
+                $q->whereBetween('generated_at', [$dateStart, $dateEnd]);
+            })
+            ->when($this->search, function ($q) {
+                $q->whereHas('company', fn($q2) =>
+                        $q2->where('companies.name', 'like', '%'.$this->search.'%')
+                    )
+                ->orWhere('no_bill', 'like', '%'.$this->search.'%');
+            })
+            ->orderBy($this->sortBy, $this->sortDirection);
+
+        $bills = $query->get();
+        $noBillsOnPage = $bills->pluck('no_bill')->unique()->toArray();
+
+        $toSend = Bill::query()
+            ->select('no_bill')
+            ->whereIn('no_bill', $noBillsOnPage)
+            ->whereNull('sent_at')
+            ->distinct()
+            ->pluck('no_bill')
+            ->toArray();
 
         if (empty($toSend)) {
-            $this->alert('info', "Toutes les factures de cette page ont déjà été envoyées.");
-        } else {
-            foreach ($toSend as $noBill) {
-                $this->sendInvoice($noBill);
-            }
-            $this->alert('success', "Envoi lancé pour toutes les factures non envoyées.");
+            $this->alert('info', "Toutes les factures ont déjà été envoyées.");
+            return;
         }
+
+        foreach ($toSend as $noBill) {
+            $this->sendInvoice($noBill);
+        }
+
+        $this->alert('success', "Envoi lancé pour " . count($toSend) . " facture(s) sur cette page.");
     }
 }
