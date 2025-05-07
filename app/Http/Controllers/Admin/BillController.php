@@ -145,181 +145,244 @@ class BillController extends Controller
     }
 
     public function export_order_prlv(string $dateStart, string $dateEnd)
-    {
-        $bills = Bill::with('company.bank_account')
-            ->where('no_bill', 'like', 'FACT-%')
-            ->whereHas('company', fn($q) => $q->where('bill_payment_method', 0))
-            ->whereBetween('generated_at', [$dateStart, $dateEnd])
-            ->get()
-            ->filter(fn($b) =>
-                $b->company->bank_account
-                && $b->company->bank_account->no_rum
-            );
+{
+    $today      = Carbon::now();
+    $dateString = $today->format('Y-m-d');
 
-        $groups = $bills->groupBy(fn($bill) => $bill->company->bank_account->no_rum);
-
-        $today      = Carbon::now();
-        $dateString = $today->format('Y-m-d');
-        $timestamp  = $today->toIso8601String();
-
-        $nbOfTxs = $bills->groupBy('no_bill')->count();
-        $ctrlSum = number_format(
-            $groups->sum(fn($group) => $group->sum('amount_vat_included')),
-            2,
-            '.',
-            ''
+    // 1) Récupérer les factures à prélever
+    $bills = Bill::with('company.bank_account')
+        ->where('no_bill', 'like', 'FACT-%')
+        ->whereHas('company', fn($q) => $q->where('bill_payment_method', 0))
+        ->whereBetween('generated_at', [$dateStart, $dateEnd])
+        ->get()
+        ->filter(fn($b) =>
+            $b->company->bank_account
+            && $b->company->bank_account->no_rum
         );
 
-        // 4) Création du document XML
-        $dom = new \DOMDocument('1.0', 'UTF-8');
-        $dom->formatOutput = true;
-        $ns   = 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.02';
-        $root = $dom->createElementNS($ns, 'Document');
-        $dom->appendChild($root);
-        $cstmr = $dom->createElement('CstmrDrctDbtInitn');
-        $root->appendChild($cstmr);
+    // 2) Grouper par numéro de facture
+    $groups = $bills->groupBy('no_bill');
 
-        // 4a) Group Header
-        $grpHdr = $dom->createElement('GrpHdr');
-        $cstmr->appendChild($grpHdr);
-        foreach ([
-            'MsgId'   => "ASTORYA-PRLV-{$dateString}",
-            'CreDtTm' => $timestamp,
-            'NbOfTxs' => (string) $nbOfTxs,
-            'CtrlSum' => $ctrlSum,
-        ] as $tag => $val) {
-            $el = $dom->createElement($tag, $val);
-            $grpHdr->appendChild($el);
-        }
-        $initgPty = $dom->createElement('InitgPty');
-        $nm       = $dom->createElement('Nm', 'ASTORYA S.G.I.');
-        $initgPty->appendChild($nm);
-        $grpHdr->appendChild($initgPty);
+    // 3) Calcul des totaux
+    $nbOfTxs = $groups->count();
+    $ctrlSum = number_format(
+        $groups->sum(fn($g) => $g->sum('amount_vat_included')),
+        2, '.', ''
+    );
 
-        // 4b) Payment Information block
-        $pmtInf = $dom->createElement('PmtInf');
-        $cstmr->appendChild($pmtInf);
-        foreach ([
-            'PmtInfId'  => "INF-PRLV-{$dateString}",
-            'PmtMtd'    => 'DD',
-            'BtchBookg' => 'true',
-            'NbOfTxs'   => (string) $nbOfTxs,
-            'CtrlSum'   => $ctrlSum,
-        ] as $tag => $val) {
-            $el = $dom->createElement($tag, $val);
-            $pmtInf->appendChild($el);
-        }
-        // Type d'instruction de paiement
-        $pmtTpInf = $dom->createElement('PmtTpInf');
-        $svcLvl   = $dom->createElement('SvcLvl');
-        $svcLvl->appendChild($dom->createElement('Cd', 'SEPA'));
-        $pmtTpInf->appendChild($svcLvl);
-        $lcl = $dom->createElement('LclInstrm');
-        $lcl->appendChild($dom->createElement('Cd', 'CORE'));
-        $pmtTpInf->appendChild($lcl);
-        $pmtTpInf->appendChild($dom->createElement('SeqTp', 'RCUR'));
-        $pmtInf->appendChild($pmtTpInf);
+    // 4) Création du DOM
+    $dom = new \DOMDocument('1.0', 'utf-8');
+    $dom->formatOutput = true;
+    $ns   = 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.02';
+    $root = $dom->createElementNS($ns, 'Document');
+    // ajouter les namespaces xsi et xsd
+    $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+    $root->setAttribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
+    $dom->appendChild($root);
 
-        // Date de prélèvement
-        $pmtInf->appendChild($dom->createElement('ReqdColltnDt', $dateString));
-        // Créancier
-        $cdtr = $dom->createElement('Cdtr');
-        $cdtr->appendChild($dom->createElement('Nm', 'ASTORYA S.G.I.'));
-        $pmtInf->appendChild($cdtr);
-        // Compte créancier
-        $cdtrAcct = $dom->createElement('CdtrAcct');
-        $idIban   = $dom->createElement('Id');
-        $idIban->appendChild($dom->createElement('IBAN', 'FR7630004018540001003802740'));
-        $cdtrAcct->appendChild($idIban);
-        $pmtInf->appendChild($cdtrAcct);
-        // Agent créancier
-        $cdtrAgt = $dom->createElement('CdtrAgt');
-        $finInst = $dom->createElement('FinInstnId');
-        $finInst->appendChild($dom->createElement('BIC', 'BNPAFRPPNAN'));
-        $cdtrAgt->appendChild($finInst);
-        $pmtInf->appendChild($cdtrAgt);
-        // Frais
-        $pmtInf->appendChild($dom->createElement('ChrgBr', 'SLEV'));
-        // Scheme Identification
-        $cdtrSch = $dom->createElement('CdtrSchmeId');
-        $id2     = $dom->createElement('Id');
-        $prvt    = $dom->createElement('PrvtId');
-        $othr    = $dom->createElement('Othr');
-        $othr->appendChild($dom->createElement('Id', 'FR85ZZZ597358'));
-        $schmeNm = $dom->createElement('SchmeNm');
-        $schmeNm->appendChild($dom->createElement('Prtry', 'SEPA'));
-        $othr->appendChild($schmeNm);
-        $prvt->appendChild($othr);
-        $id2->appendChild($prvt);
-        $cdtrSch->appendChild($id2);
-        $pmtInf->appendChild($cdtrSch);
+    $cstmr = $dom->createElement('CstmrDrctDbtInitn');
+    $root->appendChild($cstmr);
 
-        // 5) Pour chaque mandat, on crée une transaction agrégée
-        foreach ($groups as $mandateId => $group) {
-            $ba      = $group->first()->company->bank_account;
-            $amountT = number_format($group->sum('amount_vat_included'), 2, '.', '');
-
-            $txInf = $dom->createElement('DrctDbtTxInf');
-
-            // Identifiants de paiement
-            $pmtIdEl = $dom->createElement('PmtId');
-            $pmtIdEl->appendChild($dom->createElement('InstrId', "PRLV-{$mandateId}"));
-            $pmtIdEl->appendChild($dom->createElement('EndToEndId', $mandateId));
-            $txInf->appendChild($pmtIdEl);
-
-            // Montant
-            $instdAmt = $dom->createElement('InstdAmt', $amountT);
-            $instdAmt->setAttribute('Ccy', 'EUR');
-            $txInf->appendChild($instdAmt);
-
-            // Mandat
-            $dr = $dom->createElement('DrctDbtTx');
-            $mri = $dom->createElement('MndtRltdInf');
-            $mri->appendChild($dom->createElement('MndtId', $mandateId));
-            $mri->appendChild($dom->createElement('DtOfSgntr', Carbon::parse($ba->effective_starting_date)->format('Y-m-d')));
-            $mri->appendChild($dom->createElement('AmdmntInd', 'false'));
-            $dr->appendChild($mri);
-            $txInf->appendChild($dr);
-
-            // Agent de débit
-            $dbtrAgt = $dom->createElement('DbtrAgt');
-            $fin2    = $dom->createElement('FinInstnId');
-            $fin2->appendChild($dom->createElement('BIC', $ba->bic));
-            $dbtrAgt->appendChild($fin2);
-            $txInf->appendChild($dbtrAgt);
-
-            // Débiteur
-            $dbtr = $dom->createElement('Dbtr');
-            $dbtrName = $dom->createElement('Nm');
-            $dbtrName->appendChild(
-                $dom->createTextNode($group->first()->company->name)
-            );
-            $dbtr->appendChild($dbtrName);
-            $txInf->appendChild($dbtr);
-
-            // Compte débiteur
-            $dba  = $dom->createElement('DbtrAcct');
-            $idb  = $dom->createElement('Id');
-            $idb->appendChild($dom->createElement('IBAN', $ba->iban));
-            $dba->appendChild($idb);
-            $txInf->appendChild($dba);
-
-            // Informations de motif (on peut concaténer les no_bill si besoin)
-            $rmt = $dom->createElement('RmtInf');
-            $ustrd = $dom->createElement('Ustrd',
-                "Prélèvement mandat {$mandateId} – total factures : ".count($group)
-            );
-            $rmt->appendChild($ustrd);
-            $txInf->appendChild($rmt);
-
-            $pmtInf->appendChild($txInf);
-        }
-
-        // 6) Enregistrement et envoi du fichier
-        $xmlString = $dom->saveXML();
-        $filename  = "OrdresPrlv.xml";
-        Storage::disk('local')->put("exports/{$filename}", $xmlString);
-
-        return response()->download(storage_path("app/exports/{$filename}"));
+    // 4a) Group Header
+    $grpHdr = $dom->createElement('GrpHdr');
+    $cstmr->appendChild($grpHdr);
+    foreach ([
+        'MsgId'   => "ASTORYA S.G.I. {$dateString}",
+        'CreDtTm' => $dateString . 'T' . $today->format('H:i:s'),
+        'NbOfTxs' => (string) $nbOfTxs,
+        'CtrlSum' => $ctrlSum,
+    ] as $tag => $val) {
+        $el = $dom->createElement($tag);
+        $el->appendChild($dom->createTextNode($val));
+        $grpHdr->appendChild($el);
     }
+    // InitgPty + bloc Id/OrgId/BICOrBEI
+    $initg = $dom->createElement('InitgPty');
+    $nm1   = $dom->createElement('Nm');
+    $nm1->appendChild($dom->createTextNode('ASTORYA S.G.I.'));
+    $initg->appendChild($nm1);
+    $id    = $dom->createElement('Id');
+    $orgId = $dom->createElement('OrgId');
+    $bicBE = $dom->createElement('BICOrBEI');
+    $bicBE->appendChild($dom->createTextNode('CMCIFR2A'));
+    $orgId->appendChild($bicBE);
+    $id->appendChild($orgId);
+    $initg->appendChild($id);
+    $grpHdr->appendChild($initg);
+
+    // 4b) PmtInf
+    $pmtInf = $dom->createElement('PmtInf');
+    $cstmr->appendChild($pmtInf);
+    foreach ([
+        'PmtInfId'  => "ASTORYA S.G.I. {$dateString}",
+        'PmtMtd'    => 'DD',
+        'BtchBookg' => 'true',
+        'NbOfTxs'   => (string) $nbOfTxs,
+        'CtrlSum'   => $ctrlSum,
+    ] as $tag => $val) {
+        $el = $dom->createElement($tag);
+        $el->appendChild($dom->createTextNode($val));
+        $pmtInf->appendChild($el);
+    }
+    // PmtTpInf
+    $tp = $dom->createElement('PmtTpInf');
+    $svc = $dom->createElement('SvcLvl');
+    $cd  = $dom->createElement('Cd');
+    $cd->appendChild($dom->createTextNode('SEPA'));
+    $svc->appendChild($cd);
+    $tp->appendChild($svc);
+    $lcl = $dom->createElement('LclInstrm');
+    $cd2 = $dom->createElement('Cd');
+    $cd2->appendChild($dom->createTextNode('CORE'));
+    $lcl->appendChild($cd2);
+    $tp->appendChild($lcl);
+    $seq = $dom->createElement('SeqTp');
+    $seq->appendChild($dom->createTextNode('RCUR'));
+    $tp->appendChild($seq);
+    $pmtInf->appendChild($tp);
+
+    // ReqdColltnDt
+    $req = $dom->createElement('ReqdColltnDt');
+    $req->appendChild($dom->createTextNode($dateString));
+    $pmtInf->appendChild($req);
+
+    // Cdtr
+    $cdtr = $dom->createElement('Cdtr');
+    $nm2  = $dom->createElement('Nm');
+    $nm2->appendChild($dom->createTextNode('ASTORYA S.G.I.'));
+    $cdtr->appendChild($nm2);
+    $pmtInf->appendChild($cdtr);
+
+    // CdtrAcct
+    $ca   = $dom->createElement('CdtrAcct');
+    $idI  = $dom->createElement('Id');
+    $iban = $dom->createElement('IBAN');
+    $iban->appendChild($dom->createTextNode('FR7630004018540001003802740'));
+    $idI->appendChild($iban);
+    $ca->appendChild($idI);
+    $pmtInf->appendChild($ca);
+
+    // CdtrAgt
+    $cda  = $dom->createElement('CdtrAgt');
+    $fi   = $dom->createElement('FinInstnId');
+    $bic  = $dom->createElement('BIC');
+    $bic->appendChild($dom->createTextNode('BNPAFRPPNAN'));
+    $fi->appendChild($bic);
+    $cda->appendChild($fi);
+    $pmtInf->appendChild($cda);
+
+    // ChrgBr
+    $cb   = $dom->createElement('ChrgBr');
+    $cb->appendChild($dom->createTextNode('SLEV'));
+    $pmtInf->appendChild($cb);
+
+    // CdtrSchmeId
+    $cs  = $dom->createElement('CdtrSchmeId');
+    $i2  = $dom->createElement('Id');
+    $pr  = $dom->createElement('PrvtId');
+    $ot  = $dom->createElement('Othr');
+    $iOt = $dom->createElement('Id');
+    $iOt->appendChild($dom->createTextNode('FR85ZZZ597358'));
+    $ot->appendChild($iOt);
+    $sm  = $dom->createElement('SchmeNm');
+    $pr2 = $dom->createElement('Prtry');
+    $pr2->appendChild($dom->createTextNode('SEPA'));
+    $sm->appendChild($pr2);
+    $ot->appendChild($sm);
+    $pr->appendChild($ot);
+    $i2->appendChild($pr);
+    $cs->appendChild($i2);
+    $pmtInf->appendChild($cs);
+
+    // 5) Un DrctDbtTxInf par facture
+    foreach ($groups as $noBill => $group) {
+        $bill      = $group->first();
+        $ba        = $bill->company->bank_account;
+        $amount    = number_format(
+            $group->sum('amount_vat_included'),
+            2, '.', ''
+        );
+
+        $tx = $dom->createElement('DrctDbtTxInf');
+
+        // PmtId
+        $pid = $dom->createElement('PmtId');
+        $in  = $dom->createElement('InstrId');
+        $in->appendChild($dom->createTextNode('Prlv ASTORYA S.G.I.'));
+        $et  = $dom->createElement('EndToEndId');
+        $et->appendChild($dom->createTextNode("Mandat {$ba->no_rum}"));
+        $pid->appendChild($in);
+        $pid->appendChild($et);
+        $tx->appendChild($pid);
+
+        // InstdAmt
+        $amt = $dom->createElement('InstdAmt');
+        $amt->setAttribute('Ccy', 'EUR');
+        $amt->appendChild($dom->createTextNode($amount));
+        $tx->appendChild($amt);
+
+        // Mandate info
+        $dr   = $dom->createElement('DrctDbtTx');
+        $mri  = $dom->createElement('MndtRltdInf');
+        $mid  = $dom->createElement('MndtId');
+        $mid->appendChild($dom->createTextNode($ba->no_rum));
+        $dos  = $dom->createElement('DtOfSgntr');
+        $dos->appendChild($dom->createTextNode(
+            Carbon::parse($ba->effective_starting_date)->format('Y-m-d')
+        ));
+        $amd  = $dom->createElement('AmdmntInd');
+        $amd->appendChild($dom->createTextNode('false'));
+        $mri->appendChild($mid);
+        $mri->appendChild($dos);
+        $mri->appendChild($amd);
+        $dr->appendChild($mri);
+        $tx->appendChild($dr);
+
+        // DbtrAgt
+        $dba  = $dom->createElement('DbtrAgt');
+        $fi2  = $dom->createElement('FinInstnId');
+        $b2   = $dom->createElement('BIC');
+        $b2->appendChild($dom->createTextNode($ba->bic));
+        $fi2->appendChild($b2);
+        $dba->appendChild($fi2);
+        $tx->appendChild($dba);
+
+        // Debtor
+        $db   = $dom->createElement('Dbtr');
+        $nmd  = $dom->createElement('Nm');
+        $nmd->appendChild($dom->createTextNode($bill->company->name));
+        $db->appendChild($nmd);
+        $tx->appendChild($db);
+
+        // Debtor account
+        $dac  = $dom->createElement('DbtrAcct');
+        $idc  = $dom->createElement('Id');
+        $ib2  = $dom->createElement('IBAN');
+        $ib2->appendChild($dom->createTextNode($ba->iban));
+        $idc->appendChild($ib2);
+        $dac->appendChild($idc);
+        $tx->appendChild($dac);
+
+        // Remittance
+        $rm   = $dom->createElement('RmtInf');
+        $us   = $dom->createElement('Ustrd');
+        $us->appendChild($dom->createTextNode(
+            "Astorya {$noBill} {$bill->company->name}"
+        ));
+        $rm->appendChild($us);
+        $tx->appendChild($rm);
+
+        $pmtInf->appendChild($tx);
+    }
+
+    // 6) Enregistrement & download
+    $xml  = $dom->saveXML();
+    $file = "OrdresPrlv.xml";
+    Storage::disk('local')->put("exports/{$file}", $xml);
+
+    return response()->download(
+        storage_path("app/exports/{$file}")
+    );
+}
+
 }
