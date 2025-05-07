@@ -1,4 +1,4 @@
-<div wire:ignore>
+<div>
     <div class="datepicker-container datepicker-{{ $attributes['id'] }} relative">
         <a class="input-button" title="toggle" data-toggle>
             <i class="icon-calendar"></i>
@@ -70,7 +70,7 @@
         }
 
         input.datepicker({
-            dateFormat: 'mm/yy',
+            dateFormat: 'dd/mm/yy',
             changeMonth: true,
             changeYear: true,
             showButtonPanel: true,
@@ -85,6 +85,8 @@
                 $(input).datepicker('widget').addClass('month-year-picker');
             }
         });
+        let initVal = @this.get('{{ $attributes["wire:model"] }}') || '';
+        $('.datepicker-{{ $attributes["id"] }} input').val(initVal);
     });
 </script>
 @endpush

@@ -34,9 +34,12 @@ class Index extends Component
     public array $paginationOptions;
 
     public ?string $dateStartView = null; // Date de début
-    public ?string $dateStart = null; // Date de début
-    public ?string $dateEnd = null;   // Date de fin
     public ?string $dateEndView = null;   // Date de fin
+    public ?string $dateStartMonth = null;  // format HTML5: "YYYY-MM"
+    public ?string $dateEndMonth   = null;
+
+    public ?string $dateStart = null; // format "d/m/Y"
+    public ?string $dateEnd   = null;
 
     protected $queryString = [
         'search' => [
@@ -56,6 +59,21 @@ class Index extends Component
         ],
 
     ];
+
+    public function updatedDateStartMonth(string $value)
+    {
+        // $value === "2025-03"
+        [$year, $month] = explode('-', $value);
+        // début du mois
+        $this->dateStart = Carbon::create($year, $month)->startOfMonth()->format('d/m/Y');
+    }
+
+    public function updatedDateEndMonth(string $value)
+    {
+        [$year, $month] = explode('-', $value);
+        // dernier jour du mois
+        $this->dateEnd = Carbon::create($year, $month)->endOfMonth()->format('d/m/Y');
+    }
 
     public function getSelectedCountProperty()
     {
@@ -85,10 +103,12 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Bill())->orderable;
         $this->filterable         = (new Bill())->filterable;
-        $this->dateStartView = Carbon::now()->startOfMonth()->format('m/Y');
         $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = Carbon::now()->endOfMonth()->format('m/Y');
         $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
+        $this->dateStartMonth = Carbon::now()->startOfMonth()->format('Y-m');
+        $this->dateEndMonth   = Carbon::now()->endOfMonth()->format('Y-m');
+        $this->updatedDateStartMonth($this->dateStartMonth);
+        $this->updatedDateEndMonth($this->dateEndMonth);
     }
 
     public function render() {
@@ -139,16 +159,6 @@ class Index extends Component
         return view('livewire.bill.index', [
             'billGroups' => $paginatedGroups,
         ]);
-    }
-
-    public function updatedDateStartView($value)
-    {
-        $this->dateStart = Carbon::createFromFormat('m/Y', $value)->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = $value;
-    }
-    public function updatedDateEndView($value)
-    {
-        $this->dateEnd = Carbon::createFromFormat('m/Y', $value)->endOfMonth()->format('d/m/Y');
     }
 
     private function convertDateFormat($date, $type)
