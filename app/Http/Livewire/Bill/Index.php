@@ -272,10 +272,9 @@ class Index extends Component
 
         $toSend = Bill::whereIn('no_bill', $this->selectedBills)
                     ->whereNull('sent_at')
+                    ->groupBy('no_bill')
                     ->pluck('no_bill')
                     ->toArray();
-
-        dd($toSend, count($toSend));
 
         if (empty($toSend)) {
             $this->alert('info', "Toutes les factures sélectionnées ont déjà été envoyées.");
