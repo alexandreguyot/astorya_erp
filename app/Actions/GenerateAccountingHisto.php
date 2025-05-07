@@ -26,6 +26,7 @@ class GenerateAccountingHisto
             $deadline = Carbon::createFromFormat('d/m/Y', $bill->generated_at)
                                 ->addDays(7)
                                 ->format(config('project.date_format'));
+            $dateStart = Carbon::createFromFormat('d/m/Y', $bill->generated_at)->startOfMonth();
 
             foreach ($bill->contract->contract_product_detail as $detail) {
                 $prod   = $detail->type_product;
@@ -50,7 +51,7 @@ class GenerateAccountingHisto
 
             $vatResumes = app()
                 ->call('App\Http\Controllers\Admin\BillController@getVatResumesFromContracts', [
-                    'contracts' => collect([$bill->contract])
+                    'contracts' => collect([$bill->contract]), 'date' => $dateStart
                 ]);
             foreach ($vatResumes as $vat) {
                 $entries->push(AccountingHisto::create([
