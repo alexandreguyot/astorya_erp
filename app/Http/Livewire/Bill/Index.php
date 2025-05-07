@@ -30,7 +30,6 @@ class Index extends Component
     public array $selected = [];
     public array $selectedBills = [];
     public array $sending = [];
-    public array $allBils = [];
 
     public array $paginationOptions;
 
@@ -113,8 +112,6 @@ class Index extends Component
         $bills = $query->get();
 
         $groupedBills = $bills->groupBy('no_bill');
-
-        $this->allBils = $bills->groupBy('no_bill')->toArray();
 
         $billGroups = $groupedBills->map(function ($group, $noBill) {
             return [
@@ -293,7 +290,7 @@ class Index extends Component
 
     public function sendAllBills()
     {
-        $toSend = Bill::whereIn('no_bill', $this->allBils)
+        $toSend = Bill::whereIn('no_bill', $this->billGroups->pluck('no_bill')->toArray())
                     ->whereNull('sent_at')
                     ->pluck('no_bill')
                     ->toArray();
