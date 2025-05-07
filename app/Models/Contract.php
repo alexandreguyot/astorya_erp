@@ -109,7 +109,7 @@ class Contract extends Model
 
     public function calculateTotalPrice(Carbon $dateStart)
     {
-        return $total = $this->contract_product_detail
+        return $this->contract_product_detail
             ->sum(fn($detail) => $detail->proratedBase($dateStart));
     }
 
@@ -122,6 +122,12 @@ class Contract extends Model
     }
 
     public function calculateTotalPriceWithVat(Carbon $dateStart): string
+    {
+        return $this->contract_product_detail
+            ->sum(fn($detail) => $detail->proratedWithVat($dateStart));
+    }
+
+    public function calculateTotalPriceWithVatFormatted(Carbon $dateStart): string
     {
         $total = $this->contract_product_detail
             ->sum(fn($detail) => $detail->proratedWithVat($dateStart));
