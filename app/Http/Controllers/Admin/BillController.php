@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Barryvdh\Snappy\Facades\SnappyPdf as Pdf;
 
-
 class BillController extends Controller
 {
     public function index()

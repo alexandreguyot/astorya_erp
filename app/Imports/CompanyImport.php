@@ -11,9 +11,8 @@ class CompanyImport implements ToModel, WithHeadingRow, WithValidation
 {
     public function model(array $row)
     {
-        // Créer ou mettre à jour un produit
         return Company::updateOrCreate(
-            ['ciel_reference' => $row['Code']],  // Recherche par le code produit
+            ['ciel_reference' => $row['Code']],
             [
                 'name' => $row['Nom'],
                 'accounting' => $row['Compte Comptable'],

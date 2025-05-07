@@ -12,19 +12,14 @@ class ProductImport implements ToModel, WithHeadingRow, WithValidation
 {
     public function model(array $row)
     {
-        // Rechercher le code TVA dans la table type_vats
         $typeVat = TypeVat::where('code_vat', $row['code_tva'])->first();
 
-
-        // Si le code TVA n'existe pas, on ne peut pas créer de produit. On pourrait aussi lancer une exception si tu veux stopper l'import
         if (!$typeVat) {
-            return null;  // Ou gérer autrement comme une erreur
+            return null;
         }
 
-
-        // Créer ou mettre à jour un produit
         return TypeProduct::updateOrCreate(
-            ['code' => $row['Code']],  // Recherche par le code produit
+            ['code' => $row['Code']],
             [
                 'designation_short' => $row['dzsignation_courte'],
                 'designation_long' => $row['dzsignation_longue'],

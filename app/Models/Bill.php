@@ -12,15 +12,10 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Traits\HasPriceCast;
 
-class Bill extends Model implements HasMedia
-{
+class Bill extends Model {
     use HasFactory, HasAdvancedFilter, SoftDeletes, InteractsWithMedia, HasPriceCast;
 
     public $table = 'bills';
-
-    protected $appends = [
-        'file_path',
-    ];
 
     protected $casts = [
         'one_bill_per_period' => 'boolean',
@@ -40,6 +35,7 @@ class Bill extends Model implements HasMedia
     protected $fillable = [
         'no_bill',
         'amount',
+        'file_path',
         'amount_vat_included',
         'one_bill_per_period',
         'started_at',
@@ -206,16 +202,6 @@ class Bill extends Model implements HasMedia
     public function setRecordedAtAttribute($value)
     {
         $this->attributes['recorded_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
-    }
-
-    public function getFilePathAttribute()
-    {
-        return $this->getMedia('bill_file_path')->map(function ($item) {
-            $media        = $item->toArray();
-            $media['url'] = $item->getUrl();
-
-            return $media;
-        });
     }
 
     public function getCreatedAtAttribute($value)
