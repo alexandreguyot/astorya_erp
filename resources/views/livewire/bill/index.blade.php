@@ -52,7 +52,6 @@
                         <th class="flex flex-col space-y-2 justify-end">
                             @php
                                 $unsentCount = $billGroups->filter(fn($b) => is_null($b['sent_at']))->count();
-                                dd($unsentCount);
                             @endphp
 
                             <button
