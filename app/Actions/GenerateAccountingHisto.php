@@ -6,6 +6,7 @@ use App\Models\Bill;
 use App\Models\AccountingHisto;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class GenerateAccountingHisto
 {
@@ -47,6 +48,16 @@ class GenerateAccountingHisto
                     'credit_amount'    => $this->normalizeDecimal($amount),
                 ]));
             }
+
+            Log::info("date: {$$dateStart}, deadline: {$deadline}");
+            Log::info("bill: {$bill->no_bill}, amount: {$amount}");
+            Log::info("company: {$bill->company->name}, accounting: {$bill->company->accounting}");
+            Log::info("product: {$prod->code}, designation: {$prod->short_designation}");
+            Log::info("accounting: {$prod->accounting}");
+            Log::info("accounting: {$bill->company->accounting}");
+            Log::info("amount: {$amount}");
+            Log::info("amount: {$this->normalizeDecimal($amount)}");
+            Log::info("amount: {$this->normalizeDecimal($bill->amount_vat_included)}"); 
 
             $vatResumes = $this->getVatResumesFromContracts($bill->contract, $dateStart);
 
