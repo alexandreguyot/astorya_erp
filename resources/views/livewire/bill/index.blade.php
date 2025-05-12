@@ -93,15 +93,15 @@
                                 <input type="checkbox" wire:model="selectedBills" value="{{ $bill['no_bill'] }}" class="form-checkbox" />
                             </td>
                             <td>
-                                <span class="badge badge-relationship">{{ $bill['company'] ?? '' }}</span>
+                                <a href="{{ route('admin.companies.edit', $bill['company_id'] )}}" class="">{{ $bill['company'] ?? '' }}</a>
                             </td>
                             <td>
-                                <div class="badge badge-red">
+                                <div class="">
                                     {{ $bill['no_bill'] ?? '' }}
                                 </div>
                             </td>
                             <td>
-                                <div class="badge badge-red">
+                                <div class="">
                                     {{ number_format((float)$bill['total_ht'], 2, ',', ''); }} €
                                 </div>
                             </td>

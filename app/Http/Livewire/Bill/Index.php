@@ -132,6 +132,7 @@ class Index extends Component
             return [
                 'no_bill' => $noBill,
                 'company' => $group->first()->company->name,
+                'company_id' => $group->first()->company->id,
                 'generated_at' => $group->first()->generated_at,
                 'sent_at' => $group->first()->sent_at,
                 'bills' => $group,

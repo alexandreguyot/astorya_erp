@@ -89,24 +89,24 @@
                                         'groupKey' => $groupKey,
                                     ]) }}">
                                 </td>
-                                <td class="text-blue-500 font-medium">
+                                <td class="">
                                     <a href="{{ route('admin.companies.edit', $contracts->first()->company_id )}}">{{ $companyName }}</a>
                                 </td>
-                                <td class="text-green-500 font-semibold">
+                                <td class="">
                                     {{ $date }}
                                 </td>
                                 <td>
                                     @foreach($contracts as $contract)
                                         @foreach($contract->contract_product_detail as $key => $detail)
                                             @if($detail->type_product && $key == 0)
-                                                <span class="badge badge-red mr-1">
+                                                <span class="">
                                                     {{ $detail->type_product->type_contract->title ?? '' }}
                                                 </span>
                                             @endif
                                         @endforeach
                                     @endforeach
                                 </td>
-                                <td class="text-red-600 font-semibold">
+                                <td class="">
                                     {{ number_format($total, 2, ',', '') }} €
                                 </td>
                                 <td class="w-1/4">
