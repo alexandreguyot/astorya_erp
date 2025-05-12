@@ -90,7 +90,9 @@ class HomeController
             ['id', 'no_bill', 'amount', 'one_bill_per_period', 'started_at', 'billed_at', 'generated_at', 'validated_at', 'sent_at', 'file_path', 'created_at', 'updated_at', 'amount_vat_included', 'company_id', 'type_period_id', 'contract_id']
         );
 
-        Bill::where('no_bill', null)->delete();
+        Bill::where('no_bill', '')
+        ->orWhere('no_bill', 'like', 'BRO-%')
+        ->delete();
 
         echo "Migration terminée!";
     }

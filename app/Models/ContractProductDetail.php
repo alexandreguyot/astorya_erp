@@ -47,7 +47,7 @@ class ContractProductDetail extends Model
         return $this->belongsTo(TypeProduct::class);
     }
 
-        /**
+    /**
      * Montant de base HT, proratisé si on est dans le mois de terminaison.
      */
     public function proratedBase(Carbon $date): float

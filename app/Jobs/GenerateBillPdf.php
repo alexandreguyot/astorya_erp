@@ -50,6 +50,9 @@ class GenerateBillPdf implements ShouldQueue
         $contracts = collect();
         foreach ($bills as $bill) {
             $contracts->push($bill->contract);
+
+            $bill->update(['file_path' => $path]);
+            $bill->save();
         }
 
         $contract = $bills->first()->contract;
@@ -81,5 +84,6 @@ class GenerateBillPdf implements ShouldQueue
         ->setOption('margin-left', 10);
 
         Storage::put($path, $pdf->output());
+
     }
 }

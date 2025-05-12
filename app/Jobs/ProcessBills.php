@@ -53,15 +53,22 @@ class ProcessBills implements ShouldQueue
         }
         $noBill = Bill::getBillNumber();
 
-        DB::transaction(function () use ($contracts, $noBill) {
-            foreach ($contracts as $contract) {
 
+        DB::transaction(function () use ($contracts, $noBill) {
+            $dateStarted = Carbon::createFromFormat(config('project.date_format'), $this->startedAt);
+            foreach ($contracts as $contract) {
                 $exists = Bill::where('contract_id', $contract->id)
-                          ->where('started_at', Carbon::createFromFormat(config('project.date_format'), $this->startedAt)->format('Y-m-d'))
+                            ->whereNot('no_bill', 'like', 'BRO-%')
+                          ->where('started_at', $dateStarted->format('Y-m-d'))
                           ->exists();
+
+                Log::debug("ProcessBills[{$noBill}] checking contract {$contract->id} for {$this->startedAt}");
                 if ($exists) {
+                    Log::info("ProcessBills[{$noBill}] skipping already billed contract {$contract->id}");
                     continue;
                 }
+
+                Log::info("ProcessBills[{$noBill}] creating bill for contract {$contract->id}");
 
                 $bill = new Bill();
                 $bill->company_id = $contracts->first()->company_id;
@@ -70,8 +77,8 @@ class ProcessBills implements ShouldQueue
                 $bill->validated_at = now()->format(config('project.date_format'));
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
-                $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice(Carbon::createFromFormat(config('project.date_format'), $this->startedAt)));
-                $bill->amount_vat_included = str_replace(',', '.', $contract->calculateTotalPriceWithVat(Carbon::createFromFormat(config('project.date_format'), $this->startedAt)));
+                $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice($dateStarted));
+                $bill->amount_vat_included = str_replace(',', '.', $contract->calculateTotalPriceWithVat($dateStarted));
                 $bill->type_period_id = $contract->type_period_id;
                 $bill->contract_id = $contract->id;
 
@@ -79,6 +86,7 @@ class ProcessBills implements ShouldQueue
                     $contract->billed_at = now()->format(config('project.date_format'));
                     $contract->save();
                 }
+                Log::info("ProcessBills[{$noBill}] bill created, id={$bill->id}");
             }
         });
 
