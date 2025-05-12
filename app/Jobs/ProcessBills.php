@@ -53,9 +53,9 @@ class ProcessBills implements ShouldQueue
         }
         $noBill = Bill::getBillNumber();
 
+        $dateStarted = Carbon::createFromFormat(config('project.date_format'), $this->startedAt);
 
-        DB::transaction(function () use ($contracts, $noBill) {
-            $dateStarted = Carbon::createFromFormat(config('project.date_format'), $this->startedAt);
+        DB::transaction(function () use ($contracts, $noBill, $dateStarted) {
             foreach ($contracts as $contract) {
                 $exists = Bill::where('contract_id', $contract->id)
                             ->whereNot('no_bill', 'like', 'BRO-%')
@@ -95,7 +95,7 @@ class ProcessBills implements ShouldQueue
                     ->get();
 
         app(GenerateAccountingHisto::class)
-            ->handleCollection($bills);
+            ->handleCollection($bills, $dateStarted);
 
         dispatch(new GenerateBillPdf($noBill));
 

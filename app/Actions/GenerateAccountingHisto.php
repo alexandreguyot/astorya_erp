@@ -15,7 +15,7 @@ class GenerateAccountingHisto
      * @param  Collection<Bill>  $bills
      * @return Collection<AccountingHisto>
      */
-    public function handleCollection(Collection $bills): Collection
+    public function handleCollection(Collection $bills, $dateStart): Collection
     {
         $entries = collect();
 
@@ -26,7 +26,6 @@ class GenerateAccountingHisto
             $deadline = Carbon::createFromFormat('d/m/Y', $bill->generated_at)
                                 ->addDays(7)
                                 ->format(config('project.date_format'));
-            $dateStart = Carbon::createFromFormat('d/m/Y', $bill->generated_at)->startOfMonth();
 
             foreach ($bill->contract->contract_product_detail as $detail) {
                 $prod   = $detail->type_product;
@@ -49,10 +48,8 @@ class GenerateAccountingHisto
                 ]));
             }
 
-            $vatResumes = app()
-                ->call('App\Http\Controllers\Admin\BillController@getVatResumesFromContracts', [
-                    'contracts' => collect([$bill->contract]), 'date' => $dateStart
-                ]);
+            $vatResumes = $this->getVatResumesFromContracts($bill->contract, $dateStart);
+
             foreach ($vatResumes as $vat) {
                 $entries->push(AccountingHisto::create([
                     'journal'        => 'VT',
@@ -89,5 +86,63 @@ class GenerateAccountingHisto
         $value = str_replace(',', '.', $value);
         // Retourne un float, 0.0 si $value était null ou non numérique
         return (float) $value;
+    }
+
+    protected function getVatResumesFromContracts($contracts, $date = null)
+    {
+        $vatResumes = [];
+        foreach ($contracts as $contract) {
+            foreach ($contract->contract_product_detail as $detail) {
+                $vat = $detail->type_product->type_vat ?? null;
+                if (!$vat) continue;
+
+                $key = $vat->code_vat;
+
+                $ht = $detail->proratedBase($date);
+                $tva = $detail->proratedWithVat($date) - $ht;
+
+                if (!isset($vatResumes[$key])) {
+                    $vatResumes[$key] = [
+                        'code' => $vat->code_vat,
+                        'account' => $vat->account_vat,
+                        'percent' => $vat->percent,
+                        'amount_ht' => 0,
+                        'amount_tva' => 0,
+                    ];
+                }
+
+                $vatResumes[$key]['amount_ht'] += $ht;
+                $vatResumes[$key]['amount_tva'] += $tva;
+            }
+        }
+
+        return collect($vatResumes)->map(function ($item) {
+            return [
+                'code' => $item['code'],
+                'account' => $item['account'],
+                'percent' => number_format($item['percent'], 2, ',', ' '),
+                'amount_ht' => number_format($item['amount_ht'], 2, ',', ' '),
+                'amount_tva' => number_format($item['amount_tva'], 2, ',', ' '),
+            ];
+        });
+    }
+
+    protected function getTotalsFromVatResumes($vatResumes)
+    {
+        $totalHt = 0;
+        $totalTva = 0;
+
+        foreach ($vatResumes as $item) {
+            $ht = (float) str_replace([' ', ','], ['', '.'], $item['amount_ht']);
+            $tva = (float) str_replace([' ', ','], ['', '.'], $item['amount_tva']);
+            $totalHt += $ht;
+            $totalTva += $tva;
+        }
+
+        return [
+            'total_ht' => number_format($totalHt, 2, ',', ' '),
+            'total_tva' => number_format($totalTva, 2, ',', ' '),
+            'total_ttc' => number_format($totalHt + $totalTva, 2, ',', ' '),
+        ];
     }
 }
