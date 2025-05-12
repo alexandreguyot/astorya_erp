@@ -14,6 +14,7 @@ class GenerateAccountingHisto
      * Génère et persiste les écritures comptables pour une collection de factures.
      *
      * @param  Collection<Bill>  $bills
+     * @param string|Carbon $dateStart date de début de prorata
      * @return Collection<AccountingHisto>
      */
     public function handleCollection(Collection $bills, $dateStart): Collection
@@ -49,17 +50,7 @@ class GenerateAccountingHisto
                 ]));
             }
 
-            Log::info("date: {$$dateStart}, deadline: {$deadline}");
-            Log::info("bill: {$bill->no_bill}, amount: {$amount}");
-            Log::info("company: {$bill->company->name}, accounting: {$bill->company->accounting}");
-            Log::info("product: {$prod->code}, designation: {$prod->short_designation}");
-            Log::info("accounting: {$prod->accounting}");
-            Log::info("accounting: {$bill->company->accounting}");
-            Log::info("amount: {$amount}");
-            Log::info("amount: {$this->normalizeDecimal($amount)}");
-            Log::info("amount: {$this->normalizeDecimal($bill->amount_vat_included)}"); 
-
-            $vatResumes = $this->getVatResumesFromContracts($bill->contract, $dateStart);
+            $vatResumes = $this->getVatResumesFromContracts(collect([$bill->contract]), $dateStart);
 
             foreach ($vatResumes as $vat) {
                 $entries->push(AccountingHisto::create([
