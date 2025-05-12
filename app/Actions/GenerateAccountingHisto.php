@@ -40,7 +40,7 @@ class GenerateAccountingHisto
                     'label'            => $label,
                     'deadline'         => $deadline,
                     'product_code'     => $prod->code,
-                    'product_short_description' => $prod->short_designation,
+                    'product_designation_short' => $prod->short_designation,
                     'company_name'     => $bill->company->name,
                     'company_accounting'       => $bill->company->accounting,
                     'company_ciel_reference'   => $bill->company->ciel_reference,
