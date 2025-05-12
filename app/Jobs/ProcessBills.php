@@ -51,7 +51,6 @@ class ProcessBills implements ShouldQueue
         if ($contracts->isEmpty()) {
             return;
         }
-
         $noBill = Bill::getBillNumber();
 
         DB::transaction(function () use ($contracts, $noBill) {

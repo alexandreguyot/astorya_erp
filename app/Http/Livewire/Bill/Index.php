@@ -33,13 +33,10 @@ class Index extends Component
 
     public array $paginationOptions;
 
-    public ?string $dateStartView = null; // Date de début
-    public ?string $dateEndView = null;   // Date de fin
-    public ?string $dateStartMonth = null;  // format HTML5: "YYYY-MM"
-    public ?string $dateEndMonth   = null;
-
-    public ?string $dateStart = null; // format "d/m/Y"
+    public ?string $dateStart = null;
     public ?string $dateEnd   = null;
+    public ?string $dateStartMonth = null;
+    public ?string $dateEndMonth   = null;
 
     protected $queryString = [
         'search' => [
@@ -62,16 +59,14 @@ class Index extends Component
 
     public function updatedDateStartMonth(string $value)
     {
-        // $value === "2025-03"
         [$year, $month] = explode('-', $value);
-        // début du mois
         $this->dateStart = Carbon::create($year, $month)->startOfMonth()->format('d/m/Y');
+        $this->dateEndMonth = $value;
     }
 
     public function updatedDateEndMonth(string $value)
     {
         [$year, $month] = explode('-', $value);
-        // dernier jour du mois
         $this->dateEnd = Carbon::create($year, $month)->endOfMonth()->format('d/m/Y');
     }
 
@@ -185,7 +180,7 @@ class Index extends Component
 
     public function downloadZipFile()
     {
-        $monthFolder = Carbon::createFromFormat('m/Y', $this->dateStartView)
+        $monthFolder = Carbon::createFromFormat('d/m/Y', $this->dateStart)
             ->startOfMonth()
             ->format('m-Y');
         $pdfPath  = "private/factures/{$monthFolder}";

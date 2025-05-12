@@ -43,6 +43,7 @@ class GenerateBillPdf implements ShouldQueue
         $filename = $bills->first()->no_bill . '.pdf';
         $period_bills = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('m-Y');
         $dateStart = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('d/m/Y');
+        $date = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->startOfMonth();
 
         $path = "private/factures/{$period_bills}/{$filename}";
 
@@ -53,7 +54,7 @@ class GenerateBillPdf implements ShouldQueue
 
         $contract = $bills->first()->contract;
         $owner = Owner::first();
-        $vatResumes = app()->call('App\Http\Controllers\Admin\BillController@getVatResumesFromContracts', ['contracts' => $contracts]);
+        $vatResumes = app()->call('App\Http\Controllers\Admin\BillController@getVatResumesFromContracts', ['contracts' => $contracts, 'date' => $date]);
         $totals = app()->call('App\Http\Controllers\Admin\BillController@getTotalsFromVatResumes', ['vatResumes' => $vatResumes]);
 
         $products = collect();

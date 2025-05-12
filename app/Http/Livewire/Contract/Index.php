@@ -28,10 +28,11 @@ class Index extends Component
 
     public array $paginationOptions;
 
-    public ?string $dateStartView = null; // Date de début
-    public ?string $dateStart = null; // Date de début
-    public ?string $dateEnd = null;   // Date de fin
-    public ?string $dateEndView = null;   // Date de fin
+    public ?string $dateStart = null;
+    public ?string $dateEnd   = null;
+    public ?string $dateStartMonth = null;
+    public ?string $dateEndMonth   = null;
+
     public array $processingRows = [];
 
     protected $listeners = ['refreshComponent' => '$refresh'];
@@ -82,10 +83,25 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Contract())->orderable;
         $this->filterable         = (new Contract())->filterable;
-        $this->dateStartView = Carbon::now()->startOfMonth()->format('m/Y');
         $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = Carbon::now()->endOfMonth()->format('m/Y');
         $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
+        $this->dateStartMonth = Carbon::now()->startOfMonth()->format('Y-m');
+        $this->dateEndMonth   = Carbon::now()->endOfMonth()->format('Y-m');
+        $this->updatedDateStartMonth($this->dateStartMonth);
+        $this->updatedDateEndMonth($this->dateEndMonth);
+    }
+
+    public function updatedDateStartMonth(string $value)
+    {
+        [$year, $month] = explode('-', $value);
+        $this->dateStart = Carbon::create($year, $month)->startOfMonth()->format('d/m/Y');
+        $this->dateEndMonth = $value;
+    }
+
+    public function updatedDateEndMonth(string $value)
+    {
+        [$year, $month] = explode('-', $value);
+        $this->dateEnd = Carbon::create($year, $month)->endOfMonth()->format('d/m/Y');
     }
 
     public function render()
@@ -108,16 +124,6 @@ class Index extends Component
         ]);
     }
 
-    public function updatedDateStartView($value)
-    {
-        $this->dateStart = Carbon::createFromFormat('m/Y', $value)->startOfMonth()->format('d/m/Y');
-        $this->dateEndView = $value;
-    }
-    public function updatedDateEndView($value)
-    {
-        $this->dateEnd = Carbon::createFromFormat('m/Y', $value)->endOfMonth()->format('d/m/Y');
-    }
-
     public function isProcessingRow($groupKey)
     {
         return Cache::has("processing.{$groupKey}");
@@ -127,8 +133,6 @@ class Index extends Component
     {
         $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
         $endOfMonth = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->endOfMonth();
-        $dateStartView = Carbon::createFromFormat('m/Y', $this->dateStartView)->startOfMonth();
-        // dd($dateStart, $dateStartView);
 
         $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
             ->whereNotNull('setup_at')

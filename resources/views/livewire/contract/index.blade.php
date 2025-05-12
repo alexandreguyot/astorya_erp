@@ -5,13 +5,24 @@
                 Recherche:
                 <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
             </div>
+
             <div>
-                Date de début :
-                <x-month-picker wire:model="dateStartView" id="dateStartView" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de début"/>
+                <label for="dateStart" class="block font-semibold">Date de début :</label>
+                <input
+                    id="dateStart"
+                    type="month"
+                    wire:model="dateStartMonth"
+                    class="form-control"
+                />
             </div>
             <div>
-                Date de fin :
-                <x-month-picker wire:model="dateEndView" id="dateEndView" class="border rounded shadow-2xl px-2 py-1" placeholder="Date de fin"/>
+                <label for="dateEnd" class="block font-semibold">Date de fin :</label>
+                <input
+                    id="dateEnd"
+                    type="month"
+                    wire:model="dateEndMonth"
+                    class="form-control"
+                />
             </div>
         </div>
         <div class="font-semibold flex justify-end">

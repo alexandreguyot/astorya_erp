@@ -107,6 +107,7 @@ class ContractController extends Controller
                 if (!isset($vatResumes[$key])) {
                     $vatResumes[$key] = [
                         'code' => $vat->code_vat,
+                        'account' => $vat->account_vat,
                         'percent' => $vat->percent,
                         'amount_ht' => 0,
                         'amount_tva' => 0,
@@ -121,6 +122,7 @@ class ContractController extends Controller
         return collect($vatResumes)->map(function ($item) {
             return [
                 'code' => $item['code'],
+                'account' => $item['account'],
                 'percent' => number_format($item['percent'], 2, ',', ' '),
                 'amount_ht' => number_format($item['amount_ht'], 2, ',', ' '),
                 'amount_tva' => number_format($item['amount_tva'], 2, ',', ' '),
