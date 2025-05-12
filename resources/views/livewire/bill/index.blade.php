@@ -117,7 +117,7 @@
                             </td>
                             <td>
                                 <div class="flex justify-end" wire:poll.5s="isSending('{{ $bill['no_bill'] }}')">
-                                    <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', ['bill' => $bill['no_bill'], 'dateStart' => Carbon\Carbon::createFromFormat('d/m/Y', $dateStart)->format('Y-m-d')]) }}" target="_blank">
+                                    <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', $bill['no_bill']) }}" target="_blank">
                                         Télécharger la facture
                                     </a>
                                     @if($this->isSending($bill['no_bill']))

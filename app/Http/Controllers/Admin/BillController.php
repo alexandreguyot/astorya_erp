@@ -18,73 +18,19 @@ class BillController extends Controller
 
     function parseDate(string $date): \Carbon\Carbon
     {
-        // Si on trouve des slash, on considère d/m/Y
         if (strpos($date, '/') !== false) {
             return Carbon::createFromFormat('d/m/Y', $date);
         }
-        // sinon on tente Y-m-d
         return Carbon::createFromFormat('Y-m-d', $date);
     }
 
-    public function pdf($no_bill, $dateStart)
+    public function pdf($no_bill)
     {
-        $bills = Bill::with([
-            'contract',
-            'contract.type_period',
-            'type_period',
-            'company.city',
-            'contract.contract_product_detail.type_product.type_contract'
-        ])
-        ->where('no_bill', $no_bill)
-        ->get();
+        $bill = Bill::where('no_bill', $no_bill)->first();
 
-        $filename = $bills->first()->no_bill . '.pdf';
-        $dt = $this->parseDate($dateStart);
-        $dateStart = $dt->format('d/m/Y');
+        $path = $bill->file_path;
 
-        $period_bills = $dt->format('m-Y');
-        $date        = $dt;
-
-        $path = "private/factures/{$period_bills}/{$filename}";
-
-        $contracts = collect();
-        foreach ($bills as $bill) {
-            $contracts->push($bill->contract);
-        }
-
-        $contract = $bills->first()->contract;
-        $owner = Owner::first();
-        $vatResumes = $this->getVatResumesFromContracts($contracts, $date);
-        $totals = $this->getTotalsFromVatResumes($vatResumes);
-        $products = collect();
-        foreach ($contracts as $contract) {
-            foreach ($contract->contract_product_detail as $product) {
-                $products->push($product);
-            }
-        }
-
-        $pdf = Pdf::loadView('pdf.bills', compact(
-            'contract',
-            'contracts',
-            'products',
-            'dateStart',
-            'owner',
-            'vatResumes',
-            'totals',
-            'bill',
-            ))
-            ->setOption('enable-local-file-access', true)
-            ->setOption('margin-top', 10)
-            ->setOption('margin-right', 8)
-            ->setOption('margin-bottom', 5)
-            ->setOption('margin-left', 8);
-
-        Storage::put($path, $pdf->output());
-
-        return response()->download(
-            storage_path("app/{$path}"),
-            $filename
-        );
+        return response()->download(storage_path("app/{$path}"));
     }
 
     public function getVatResumesFromContracts($contracts, $date = null)
@@ -150,7 +96,6 @@ class BillController extends Controller
     $today      = Carbon::now();
     $dateString = $today->format('Y-m-d');
 
-    // 1) Récupérer les factures à prélever
     $bills = Bill::with('company.bank_account')
         ->where('no_bill', 'like', 'FACT-%')
         ->whereHas('company', fn($q) => $q->where('bill_payment_method', 0))
@@ -161,22 +106,18 @@ class BillController extends Controller
             && $b->company->bank_account->no_rum
         );
 
-    // 2) Grouper par numéro de facture
     $groups = $bills->groupBy('no_bill');
 
-    // 3) Calcul des totaux
     $nbOfTxs = $groups->count();
     $ctrlSum = number_format(
         $groups->sum(fn($g) => $g->sum('amount_vat_included')),
         2, '.', ''
     );
 
-    // 4) Création du DOM
     $dom = new \DOMDocument('1.0', 'utf-8');
     $dom->formatOutput = true;
     $ns   = 'urn:iso:std:iso:20022:tech:xsd:pain.008.001.02';
     $root = $dom->createElementNS($ns, 'Document');
-    // ajouter les namespaces xsi et xsd
     $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
     $root->setAttribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
     $dom->appendChild($root);
@@ -184,7 +125,6 @@ class BillController extends Controller
     $cstmr = $dom->createElement('CstmrDrctDbtInitn');
     $root->appendChild($cstmr);
 
-    // 4a) Group Header
     $grpHdr = $dom->createElement('GrpHdr');
     $cstmr->appendChild($grpHdr);
     foreach ([
@@ -197,7 +137,6 @@ class BillController extends Controller
         $el->appendChild($dom->createTextNode($val));
         $grpHdr->appendChild($el);
     }
-    // InitgPty + bloc Id/OrgId/BICOrBEI
     $initg = $dom->createElement('InitgPty');
     $nm1   = $dom->createElement('Nm');
     $nm1->appendChild($dom->createTextNode('ASTORYA S.G.I.'));
@@ -211,7 +150,6 @@ class BillController extends Controller
     $initg->appendChild($id);
     $grpHdr->appendChild($initg);
 
-    // 4b) PmtInf
     $pmtInf = $dom->createElement('PmtInf');
     $cstmr->appendChild($pmtInf);
     foreach ([
@@ -225,7 +163,6 @@ class BillController extends Controller
         $el->appendChild($dom->createTextNode($val));
         $pmtInf->appendChild($el);
     }
-    // PmtTpInf
     $tp = $dom->createElement('PmtTpInf');
     $svc = $dom->createElement('SvcLvl');
     $cd  = $dom->createElement('Cd');
@@ -242,19 +179,16 @@ class BillController extends Controller
     $tp->appendChild($seq);
     $pmtInf->appendChild($tp);
 
-    // ReqdColltnDt
     $req = $dom->createElement('ReqdColltnDt');
     $req->appendChild($dom->createTextNode($dateString));
     $pmtInf->appendChild($req);
 
-    // Cdtr
     $cdtr = $dom->createElement('Cdtr');
     $nm2  = $dom->createElement('Nm');
     $nm2->appendChild($dom->createTextNode('ASTORYA S.G.I.'));
     $cdtr->appendChild($nm2);
     $pmtInf->appendChild($cdtr);
 
-    // CdtrAcct
     $ca   = $dom->createElement('CdtrAcct');
     $idI  = $dom->createElement('Id');
     $iban = $dom->createElement('IBAN');
@@ -263,7 +197,6 @@ class BillController extends Controller
     $ca->appendChild($idI);
     $pmtInf->appendChild($ca);
 
-    // CdtrAgt
     $cda  = $dom->createElement('CdtrAgt');
     $fi   = $dom->createElement('FinInstnId');
     $bic  = $dom->createElement('BIC');
@@ -272,12 +205,10 @@ class BillController extends Controller
     $cda->appendChild($fi);
     $pmtInf->appendChild($cda);
 
-    // ChrgBr
     $cb   = $dom->createElement('ChrgBr');
     $cb->appendChild($dom->createTextNode('SLEV'));
     $pmtInf->appendChild($cb);
 
-    // CdtrSchmeId
     $cs  = $dom->createElement('CdtrSchmeId');
     $i2  = $dom->createElement('Id');
     $pr  = $dom->createElement('PrvtId');
@@ -295,7 +226,6 @@ class BillController extends Controller
     $cs->appendChild($i2);
     $pmtInf->appendChild($cs);
 
-    // 5) Un DrctDbtTxInf par facture
     foreach ($groups as $noBill => $group) {
         $bill      = $group->first();
         $ba        = $bill->company->bank_account;
@@ -306,7 +236,6 @@ class BillController extends Controller
 
         $tx = $dom->createElement('DrctDbtTxInf');
 
-        // PmtId
         $pid = $dom->createElement('PmtId');
         $in  = $dom->createElement('InstrId');
         $in->appendChild($dom->createTextNode('Prlv ASTORYA S.G.I.'));
@@ -316,13 +245,11 @@ class BillController extends Controller
         $pid->appendChild($et);
         $tx->appendChild($pid);
 
-        // InstdAmt
         $amt = $dom->createElement('InstdAmt');
         $amt->setAttribute('Ccy', 'EUR');
         $amt->appendChild($dom->createTextNode($amount));
         $tx->appendChild($amt);
 
-        // Mandate info
         $dr   = $dom->createElement('DrctDbtTx');
         $mri  = $dom->createElement('MndtRltdInf');
         $mid  = $dom->createElement('MndtId');
@@ -339,7 +266,6 @@ class BillController extends Controller
         $dr->appendChild($mri);
         $tx->appendChild($dr);
 
-        // DbtrAgt
         $dba  = $dom->createElement('DbtrAgt');
         $fi2  = $dom->createElement('FinInstnId');
         $b2   = $dom->createElement('BIC');
@@ -348,14 +274,12 @@ class BillController extends Controller
         $dba->appendChild($fi2);
         $tx->appendChild($dba);
 
-        // Debtor
         $db   = $dom->createElement('Dbtr');
         $nmd  = $dom->createElement('Nm');
         $nmd->appendChild($dom->createTextNode($bill->company->name));
         $db->appendChild($nmd);
         $tx->appendChild($db);
 
-        // Debtor account
         $dac  = $dom->createElement('DbtrAcct');
         $idc  = $dom->createElement('Id');
         $ib2  = $dom->createElement('IBAN');
@@ -364,7 +288,6 @@ class BillController extends Controller
         $dac->appendChild($idc);
         $tx->appendChild($dac);
 
-        // Remittance
         $rm   = $dom->createElement('RmtInf');
         $us   = $dom->createElement('Ustrd');
         $us->appendChild($dom->createTextNode(
@@ -376,7 +299,6 @@ class BillController extends Controller
         $pmtInf->appendChild($tx);
     }
 
-    // 6) Enregistrement & download
     $xml  = $dom->saveXML();
     $file = "OrdresPrlv.xml";
     Storage::disk('local')->put("exports/{$file}", $xml);
