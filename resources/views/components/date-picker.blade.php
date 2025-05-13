@@ -1,4 +1,4 @@
-<div wire:ignore>
+<div>
     <div class="datepicker-container datepicker-{{ $attributes['id'] }} relative">
         <a class="input-button" title="toggle" data-toggle>
             <i class="icon-calendar"></i>
@@ -79,7 +79,7 @@
             } else if (el !== null) {
                 el.classList.remove('invisible');
             }
-
+            console.log('value');
             @this.set('{{ $attributes['wire:model'] }}', value);
         }
         @if($attributes['picker'] === 'date')
@@ -88,6 +88,7 @@
                 changeMonth: true,
                 changeYear: true,
                 onSelect: function(dateText) {
+                    console.log(dateText);
                     update(dateText);
                 },
                 onClose: function() {

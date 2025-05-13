@@ -96,7 +96,11 @@ class Create extends Component
 
     public function submit()
     {
-        $this->validate();
+        try {
+            $this->validate();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors());
+        }
 
         $this->contract->save();
 
@@ -108,7 +112,7 @@ class Create extends Component
                 'designation' => $this->selectedProduct['designation'],
                 'quantity' => $this->selectedProduct['quantity'],
                 'capacity' => $this->selectedProduct['capacity'],
-                'monthly_unit_price_without_taxe' => $this->selectedProduct['monthly_unit_price_without_taxe'],
+                'monthly_unit_price_without_taxe' => str_replace(',','.',$this->selectedProduct['monthly_unit_price_without_taxe']),
                 'billing_started_at' => $this->selectedProduct['billing_started_at'] ?? null,
                 'billing_terminated_at' => $this->selectedProduct['billing_terminated_at'] ?? null,
             ]
@@ -128,7 +132,6 @@ class Create extends Component
             ],
             'contract.setup_at' => [
                 'required',
-                'nullable',
                 'date_format:' . config('project.date_format'),
             ],
             'contract.terminated_at' => [
@@ -150,7 +153,7 @@ class Create extends Component
             'selectedProduct.designation' => ['nullable', 'string'],
             'selectedProduct.quantity' => ['required', 'integer', 'min:1'],
             'selectedProduct.capacity' => ['nullable', 'string'],
-            'selectedProduct.monthly_unit_price_without_taxe' => ['required', 'numeric'],
+            'selectedProduct.monthly_unit_price_without_taxe' => ['required'],
             'selectedTypeContractId' => ['required', 'exists:type_contracts,id'],
         ];
     }

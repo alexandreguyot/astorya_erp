@@ -171,6 +171,11 @@ class Contract extends Model
             ->withTimestamps();
     }
 
+    public function getTypeContractAttribute()
+    {
+        return $this->products()->first()->type_contract ?? null;
+    }
+
     public function amountForPeriod($invoiceDate): float
     {
         $invoiceMonth = Carbon::parse($invoiceDate)->startOfMonth();

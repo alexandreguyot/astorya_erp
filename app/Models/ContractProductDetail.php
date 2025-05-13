@@ -26,8 +26,6 @@ class ContractProductDetail extends Model
     ];
 
     protected $casts = [
-        'billing_started_at' => 'date',
-        'billing_terminated_at' => 'date',
         'last_billed_at' => 'date',
     ];
 
@@ -140,4 +138,16 @@ class ContractProductDetail extends Model
             ' '
         );
     }
+
+    public function getBillingStartedAtAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
+    }
+
+
+    public function getBillingTerminatedAtAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
+    }
+
 }

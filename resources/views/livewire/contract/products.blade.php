@@ -24,12 +24,10 @@
                   <td class="px-4 py-3">{{ $detail->designation }}</td>
                   <td class="px-4 py-3">{{ $detail->type_product->code }}</td>
                   <td class="px-4 py-3 text-center">
-                    {{ optional($detail->billing_started_at)
-                           ->format(config('project.date_format')) }}
+                    {{ $detail->billing_started_at }}
                   </td>
                   <td class="px-4 py-3 text-center">
-                    {{ optional($detail->billing_terminated_at)
-                           ->format(config('project.date_format')) }}
+                    {{ $detail->billing_terminated_at }}
                   </td>
                   <td class="px-4 py-3 text-center">
                     {{ optional($detail->last_billed_at)
@@ -81,11 +79,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm">Début facturation</label>
-                        <x-date-picker picker="date" wire:model.defer="editDetailData.billing_started_at" id="billing_started_at" name="billing_started_at" class="form-control"/>
+                        <input type="date" wire:model.defer="editDetailData.billing_started_at" id="billing_started_at" name="billing_started_at" class="form-control"/>
                     </div>
                     <div>
                         <label class="block text-sm">Fin facturation</label>
-                        <x-date-picker picker="date" wire:model.defer="editDetailData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" class="form-control"/>
+                        <input type="date" wire:model.defer="editDetailData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" class="form-control"/>
                     </div>
                 </div>
 
@@ -131,12 +129,12 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm">Début facturation</label>
-                        <x-date-picker picker="date" wire:model.defer="newProductData.billing_started_at" id="billing_started_at" name="billing_started_at" class="form-control"/>
+                        <input type="date" wire:model.defer="newProductData.billing_started_at" id="billing_started_at" name="billing_started_at" class="form-control"/>
                         @error('newProductData.billing_started_at')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                     <div>
                         <label class="block text-sm">Fin facturation</label>
-                        <x-date-picker picker="date" wire:model.defer="newProductData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" class="form-control"/>
+                        <input type="date" wire:model.defer="newProductData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" class="form-control"/>
                         @error('newProductData.billing_terminated_at')<span class="text-red-500">{{ $message }}</span>@enderror
                     </div>
                 </div>

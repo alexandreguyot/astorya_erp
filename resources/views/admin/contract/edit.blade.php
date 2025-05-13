@@ -5,7 +5,7 @@
         <div class="card-header">
             <div class="card-header-container">
                 <h6 class="card-title">
-                    Modifier l'abonnement {{ $contract->id }} pour {{ $contract->company->name }}
+                    Modifier l'abonnement {{ $contract->type_contract->title }} pour {{ $contract->company->name }}
                 </h6>
             </div>
         </div>

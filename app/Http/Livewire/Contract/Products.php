@@ -11,6 +11,7 @@ use App\Models\TypeProduct;
 use App\Models\TypeVat;
 use App\Models\ContractProductDetail;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Carbon\Carbon;
 
 class Products extends Component
 {
@@ -52,7 +53,7 @@ class Products extends Component
     {
         $this->contract = $contract;
         $this->company  = $company;
-        $this->type_contract_id = $this->contract->contract_product_detail()->first()->type_product()->first()->type_contract_id;
+        $this->type_contract_id = $this->contract->type_contract->id;
 
         $this->loadProducts();
         $this->initListsForFields();
@@ -61,7 +62,7 @@ class Products extends Component
     protected function loadProducts(): void
     {
         $this->existingProducts = ContractProductDetail::with('type_product')
-            ->where('contract_id', $this->type_contract_id)
+            ->where('contract_id', $this->contract->id)
             ->get();
     }
 
@@ -80,8 +81,8 @@ class Products extends Component
             'designation'                => $detail->designation,
             'quantity'                   => $detail->quantity,
             'monthly_unit_price_without_taxe' => $detail->monthly_unit_price_without_taxe,
-            'billing_started_at'         => $detail->billing_started_at?->format(config('project.date_format')),
-            'billing_terminated_at'      => $detail->billing_terminated_at?->format(config('project.date_format')),
+            'billing_started_at'         => Carbon::createFromFormat(config('project.date_format'), $detail->billing_started_at)->format('Y-m-d'),
+            'billing_terminated_at'      => Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at)->format('Y-m-d'),
             'last_billed_at'             => $detail->last_billed_at?->format(config('project.date_format')),
             'pivot_id'                   => $detail->id,
         ];
@@ -91,20 +92,24 @@ class Products extends Component
 
     public function updateDetail()
     {
-        $this->validate([
-            'editDetailData.designation' => 'required|string',
-            'editDetailData.quantity'    => 'required|integer|min:1',
-            'editDetailData.monthly_unit_price_without_taxe' => 'required|numeric',
-            'editDetailData.billing_started_at'    => 'nullable|date_format:'.config('project.date_format'),
-            'editDetailData.billing_terminated_at' => 'nullable|date_format:'.config('project.date_format'),
-        ]);
+        try {
+            $this->validate([
+                'editDetailData.designation' => 'required|string',
+                'editDetailData.quantity'    => 'required|integer|min:1',
+                'editDetailData.monthly_unit_price_without_taxe' => 'required',
+                'editDetailData.billing_started_at'    => 'nullable|date',
+                'editDetailData.billing_terminated_at' => 'nullable|date',
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->errors());
+        }
 
         $detail = ContractProductDetail::findOrFail($this->editDetailData['pivot_id']);
 
         $detail->update([
             'designation'                => $this->editDetailData['designation'],
             'quantity'                   => $this->editDetailData['quantity'],
-            'monthly_unit_price_without_taxe' => $this->editDetailData['monthly_unit_price_without_taxe'],
+            'monthly_unit_price_without_taxe' => str_replace(',','.', $this->editDetailData['monthly_unit_price_without_taxe']),
             'billing_started_at'         => $this->editDetailData['billing_started_at'],
             'billing_terminated_at'      => $this->editDetailData['billing_terminated_at'],
         ]);
@@ -130,9 +135,9 @@ class Products extends Component
             'newProductData.type_product_id'              => 'required|exists:type_products,id',
             'newProductData.designation'                  => 'required|string',
             'newProductData.quantity'                     => 'required|integer|min:1',
-            'newProductData.monthly_unit_price_without_taxe' => 'required|numeric',
-            'newProductData.billing_started_at'           => 'nullable|date_format:'.config('project.date_format'),
-            'newProductData.billing_terminated_at'        => 'nullable|date_format:'.config('project.date_format'),
+            'newProductData.monthly_unit_price_without_taxe' => 'required',
+            'newProductData.billing_started_at'           => 'nullable|date',
+            'newProductData.billing_terminated_at'        => 'nullable|date',
         ]);
 
         ContractProductDetail::create([
@@ -141,7 +146,7 @@ class Products extends Component
             'designation'                    => $this->newProductData['designation'],
             'quantity'                       => $this->newProductData['quantity'],
             'capacity'                       => $this->newProductData['capacity'],
-            'monthly_unit_price_without_taxe'=> $this->newProductData['monthly_unit_price_without_taxe'],
+            'monthly_unit_price_without_taxe'=> str_replace(',','.', $this->newProductData['monthly_unit_price_without_taxe']),
             'billing_started_at'             => $this->newProductData['billing_started_at'],
             'billing_terminated_at'          => $this->newProductData['billing_terminated_at'],
         ]);
