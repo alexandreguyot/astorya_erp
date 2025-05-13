@@ -92,6 +92,7 @@ class HomeController
 
         Bill::where('no_bill', '')
         ->orWhere('no_bill', 'like', 'BRO-%')
+        ->orWhere('no_bill', 'IS', 'NULL')
         ->delete();
 
         echo "Migration terminée!";

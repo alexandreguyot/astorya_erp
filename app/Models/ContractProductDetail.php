@@ -144,7 +144,6 @@ class ContractProductDetail extends Model
         return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
-
     public function getBillingTerminatedAtAttribute($value)
     {
         return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;

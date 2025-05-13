@@ -96,6 +96,7 @@ class Index extends Component
         [$year, $month] = explode('-', $value);
         $this->dateStart = Carbon::create($year, $month)->startOfMonth()->format('d/m/Y');
         $this->dateEndMonth = $value;
+        $this->dateEnd = Carbon::create($year, $month)->endOfMonth()->format('d/m/Y');
     }
 
     public function updatedDateEndMonth(string $value)
