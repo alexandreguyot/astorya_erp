@@ -26,11 +26,12 @@ class ImportFacturesFiles extends Command
 
     public function handle()
     {
-        // Chemin du dossier contenant les fichiers à importer (à la racine du projet)
+        // 1. On considère que les fichiers d’origine sont dans storage/app/import_factures
+        //    (ou vous pouvez ajuster selon l’endroit où vous les placez réellement)
         $importDir = base_path('import_factures');
 
         if (! File::isDirectory($importDir)) {
-            $this->error("Le dossier import_factures n'existe pas à la racine du projet ({$importDir}).");
+            $this->error("Le dossier import_factures n'existe pas dans ({$importDir}).");
             return 1;
         }
 
@@ -45,7 +46,7 @@ class ImportFacturesFiles extends Command
             $filename      = $file->getFilename();
             $filenameNoExt = pathinfo($filename, PATHINFO_FILENAME);
 
-            // On cherche la facture correspondante en base selon le no_bill
+            // 2. On cherche la facture correspondante en base selon le no_bill (nom du fichier sans extension)
             $bill = Bill::where('no_bill', $filenameNoExt)->first();
 
             if (! $bill) {
@@ -54,7 +55,7 @@ class ImportFacturesFiles extends Command
                 continue;
             }
 
-            // On récupère la date de génération de la facture
+            // 3. On parse la date generated_at, en partant du format configuré dans project.date_format
             try {
                 $generatedAt = Carbon::createFromFormat(config('project.date_format'), $bill->generated_at);
             } catch (\Exception $e) {
@@ -63,24 +64,31 @@ class ImportFacturesFiles extends Command
                 continue;
             }
 
-            // Période "YYYY-MM" pour organiser le dossier
+            // 4. On détermine la période "YYYY-MM"
             $period = $generatedAt->format('Y-m');
 
-            // Chemin cible : storage/app/private/factures/{YYYY-MM}/{filename}
-            $destinationDir  = storage_path("app/private/factures/{$period}");
-            $destinationPath = "{$destinationDir}/{$filename}";
+            // 5. Construire le chemin relatif voulu : "private/factures/{YYYY-MM}/{filename}"
+            $relativeDir  = "private/factures/{$period}";
+            $relativePath = "{$relativeDir}/{$filename}";
 
-            // Création du dossier cible si nécessaire
+            // 6. Chemin physique complet dans storage/app :
+            //    ex. /var/www/html/storage/app/private/factures/2024-01/FACT-2024-150.pdf
+            $destinationDir  = storage_path("app/{$relativeDir}");
+            $destinationPath = storage_path("app/{$relativePath}");
+
+            // 7. Création du dossier destination s’il n’existe pas
             if (! File::isDirectory($destinationDir)) {
                 File::makeDirectory($destinationDir, 0755, true);
             }
 
-            // Déplacement du fichier
+            // 8. Déplacement du fichier depuis import_factures → storage/app/private/factures/…
             try {
                 File::move($file->getRealPath(), $destinationPath);
-                $this->info("Fichier {$filename} déplacé vers {$destinationPath} pour la facture {$bill->no_bill}.");
+                $this->info("Fichier {$filename} déplacé vers storage/app/{$relativePath} pour la facture {$bill->no_bill}.");
                 Log::info("ImportFacturesFiles : fichier {$filename} déplacé vers {$destinationPath}");
-                $bill->update(['file_path' => $destinationPath]);
+
+                // 9. On enregistre dans la base **uniquement** le chemin relatif
+                $bill->file_path = $relativePath;
                 $bill->save();
             } catch (\Exception $e) {
                 $this->error("Erreur lors du déplacement de {$filename} vers {$destinationPath} : {$e->getMessage()}");
