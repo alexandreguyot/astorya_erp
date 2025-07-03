@@ -47,6 +47,7 @@ class GenerateAccountingHisto
                     'company_ciel_reference'   => $bill->company->ciel_reference,
                     'debit_amount'     => 0,
                     'credit_amount'    => $this->normalizeDecimal($amount),
+                    'payment_code'    => $bill->company->bill_payment_method ? '': 'PRLV',
                 ]));
             }
 
@@ -62,6 +63,7 @@ class GenerateAccountingHisto
                     'deadline'       => $deadline,
                     'debit_amount'   => 0,
                     'credit_amount'  => $this->normalizeDecimal($vat['amount_tva']),
+                    'payment_code'    => $bill->company->bill_payment_method ? '': 'PRLV',
                 ]));
             }
 
@@ -74,6 +76,7 @@ class GenerateAccountingHisto
                 'deadline'       => $deadline,
                 'debit_amount'   => $this->normalizeDecimal($bill->amount_vat_included),
                 'credit_amount'  => 0,
+                'payment_code'    => $bill->company->bill_payment_method ? '': 'PRLV',
             ]));
         }
 
