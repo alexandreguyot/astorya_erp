@@ -68,14 +68,15 @@ class Edit extends Component
             'designation'                => $detail->designation,
             'quantity'                   => $detail->quantity,
             'monthly_unit_price_without_taxe' => $detail->monthly_unit_price_without_taxe,
-            'billing_started_at'         => $detail->billing_started_at?->format(config('project.date_format')),
-            'billing_terminated_at'      => $detail->billing_terminated_at?->format(config('project.date_format')),
+            'billing_started_at'         => $detail->billing_started_at ? $detail->billing_started_at->format(config('project.date_format')) : null,
+            'billing_terminated_at'      => $detail->billing_terminated_at ? $detail->billing_terminated_at->format(config('project.date_format')) : null,
             'last_billed_at'             => $detail->last_billed_at?->format(config('project.date_format')),
             'pivot_id'                   => $detail->id,
         ];
 
         $this->showEditModal = true;
     }
+
     public function updateDetail()
     {
         $this->validate([

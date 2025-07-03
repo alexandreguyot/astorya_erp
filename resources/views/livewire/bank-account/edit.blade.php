@@ -12,7 +12,7 @@
     </div>
     <div class="form-group {{ $errors->has('bankAccount.effective_start_date') ? 'invalid' : '' }}">
         <label class="form-label" for="effective_start_date">{{ trans('cruds.bankAccount.fields.effective_start_date') }}</label>
-        <x-date-picker class="form-control" wire:model="bankAccount.effective_start_date" id="effective_start_date" name="effective_start_date" />
+        <x-date-picker class="form-control" wire:model="bankAccount.effective_start_date" id="effective_start_date" name="effective_start_date" picker="date" />
         <div class="validation-message">
             {{ $errors->first('bankAccount.effective_start_date') }}
         </div>
