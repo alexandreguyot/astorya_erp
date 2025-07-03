@@ -81,8 +81,8 @@ class Products extends Component
             'designation'                => $detail->designation,
             'quantity'                   => $detail->quantity,
             'monthly_unit_price_without_taxe' => $detail->monthly_unit_price_without_taxe,
-            'billing_started_at'         => Carbon::createFromFormat(config('project.date_format'), $detail->billing_started_at)->format('Y-m-d'),
-            'billing_terminated_at'      => Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at)->format('Y-m-d'),
+            'billing_started_at'         => $detail->billing_started_at ? Carbon::createFromFormat(config('project.date_format'), $detail->billing_started_at)->format('Y-m-d'): null,
+            'billing_terminated_at'      => $detail->billing_terminated_at ? Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at)->format('Y-m-d') : null,
             'last_billed_at'             => $detail->last_billed_at?->format(config('project.date_format')),
             'pivot_id'                   => $detail->id,
         ];
