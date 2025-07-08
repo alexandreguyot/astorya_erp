@@ -150,7 +150,7 @@
                                     {{ $bill['no_bill'] }}
                                 </a>
                                 {{-- Aperçu PDF qui apparaît au survol --}}
-                                <div class="invoice-preview absolute left-1/2 transform -translate-x-1/2 mt-2 hidden w-56 h-72 border bg-white shadow-lg z-50">
+                                {{-- <div class="invoice-preview absolute left-1/2 transform -translate-x-1/2 mt-2 hidden w-56 h-72 border bg-white shadow-lg z-50">
                                     <object
                                         data="{{ route('admin.bills.pdf', $bill['no_bill']) }}"
                                         type="application/pdf"
@@ -159,7 +159,7 @@
                                     >
                                         <p>Prévisualisation non disponible</p>
                                     </object>
-                                </div>
+                                </div> --}}
                             </td>
                             <td>
                                @if($bill['details']->isNotEmpty())
