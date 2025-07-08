@@ -141,27 +141,35 @@
                             <td>
                                 <a href="{{ route('admin.companies.edit', $bill['company_id'] )}}" class="">{{ $bill['company'] ?? '' }}</a>
                             </td>
-                            <td>
-                                <div class="">
-                                    {{ $bill['no_bill'] ?? '' }}
+                            <td class="relative">
+                                <a
+                                    href="{{ route('admin.bills.pdf', $bill['no_bill']) }}"
+                                    target="_blank"
+                                    class="invoice-link font-medium text-blue-600 hover:underline"
+                                >
+                                    {{ $bill['no_bill'] }}
+                                </a>
+                                {{-- Aperçu PDF qui apparaît au survol --}}
+                                <div class="invoice-preview absolute left-1/2 transform -translate-x-1/2 mt-2 hidden w-56 h-72 border bg-white shadow-lg z-50">
+                                    <object
+                                        data="{{ route('admin.bills.pdf', $bill['no_bill']) }}"
+                                        type="application/pdf"
+                                        width="100%"
+                                        height="100%"
+                                    >
+                                        <p>Prévisualisation non disponible</p>
+                                    </object>
                                 </div>
                             </td>
                             <td>
-                               @if(is_iterable($bill['contract']))
-                                    @foreach($bill['contract'] as $contract)
-                                        @if(is_object($contract) && method_exists($contract, 'contract_product_detail'))
-                                            @php
-                                                $firstDetail = $contract->contract_product_detail->first(fn($d) => $d->type_product);
-                                            @endphp
-                                            @if($firstDetail && $firstDetail->type_product && $firstDetail->type_product->type_contract)
-                                                <span class="block">
-                                                    {{ $firstDetail->type_product->type_contract->title ?? '' }}
-                                                </span>
-                                            @endif
+                               @if($bill['details']->isNotEmpty())
+                                    @foreach($bill['details'] as $detail)
+                                        @if($detail->type_product && $detail->type_product->type_contract)
+                                            <span>{{ $detail->type_product->type_contract->title }}</span>
                                         @endif
                                     @endforeach
                                 @else
-                                    <span class="text-red-600">[Erreur relation]</span>
+                                    <span class="text-red-600">[Pas de détails de produit]</span>
                                 @endif
                             </td>
                             <td>

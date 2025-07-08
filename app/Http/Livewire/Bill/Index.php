@@ -160,6 +160,7 @@ class Index extends Component
         $groupedBills = $bills->groupBy('no_bill');
 
         $billGroups = $groupedBills->map(function ($group, $noBill) {
+            $contract = $group->first()->contract;
             return [
                 'no_bill' => $noBill,
                 'company' => $group->first()->company->name,
@@ -168,7 +169,8 @@ class Index extends Component
                 'sent_at' => $group->first()->sent_at,
                 'bills' => $group,
                 'total_ht' => $group->sum('amount'),
-                'contract' => $group->first()->contract,
+                'contract' => $contract,
+                'details'  => $contract->contract_product_detail,
             ];
         });
 

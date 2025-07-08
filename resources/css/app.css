@@ -11,3 +11,13 @@
 .company-text {
     @apply text-blue-500 font-medium;
 }
+/* Masque l’aperçu par défaut */
+.invoice-preview {
+  display: none;
+}
+
+/* Au survol du lien parent, affiche l’aperçu */
+.invoice-link:hover + .invoice-preview,
+.invoice-preview:hover {
+  display: block;
+}
