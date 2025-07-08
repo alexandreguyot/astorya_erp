@@ -57,6 +57,35 @@ class Index extends Component
 
     ];
 
+    public function decrementBothMonths()
+    {
+        // Parse les deux mois actuels
+        $start = Carbon::createFromFormat('Y-m', $this->dateStartMonth)->subMonth();
+        $end   = Carbon::createFromFormat('Y-m', $this->dateEndMonth)->subMonth();
+
+        // Recalcule dateStart / dateEnd en d/m/Y et stocke les YYYY-MM
+        $this->dateStartMonth = $start->format('Y-m');
+        $this->dateStart      = $start->startOfMonth()->format('d/m/Y');
+
+        $this->dateEndMonth   = $end->format('Y-m');
+        $this->dateEnd        = $end->endOfMonth()->format('d/m/Y');
+    }
+
+    /**
+     * Décale à la fois dateStartMonth et dateEndMonth d’un mois en avant.
+     */
+    public function incrementBothMonths()
+    {
+        $start = Carbon::createFromFormat('Y-m', $this->dateStartMonth)->addMonth();
+        $end   = Carbon::createFromFormat('Y-m', $this->dateEndMonth)->addMonth();
+
+        $this->dateStartMonth = $start->format('Y-m');
+        $this->dateStart      = $start->startOfMonth()->format('d/m/Y');
+
+        $this->dateEndMonth   = $end->format('Y-m');
+        $this->dateEnd        = $end->endOfMonth()->format('d/m/Y');
+    }
+
     public function updatedDateStartMonth(string $value)
     {
         [$year, $month] = explode('-', $value);
@@ -108,7 +137,8 @@ class Index extends Component
     }
 
     public function render() {
-        $query = Bill::with(['company', 'type_period'])
+        $query = Bill::with(['company', 'type_period', 'contract.contract_product_detail.type_product.type_contract',
+            'contract.contract_product_detail.type_product.type_vat'])
             ->whereNotNull('no_bill')
             ->where('no_bill', 'like', 'FACT-%')
 
@@ -138,6 +168,7 @@ class Index extends Component
                 'sent_at' => $group->first()->sent_at,
                 'bills' => $group,
                 'total_ht' => $group->sum('amount'),
+                'contract' => $group->first()->contract,
             ];
         });
 
@@ -152,6 +183,7 @@ class Index extends Component
             $currentPage,
             ['path' => request()->url(), 'query' => request()->query()]
         );
+
 
         return view('livewire.bill.index', [
             'billGroups' => $paginatedGroups,

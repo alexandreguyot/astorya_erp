@@ -11,6 +11,7 @@ use App\Models\TypeProduct;
 use App\Models\TypeVat;
 use App\Models\ContractProductDetail;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Carbon\Carbon;
 class Edit extends Component
 {
     use LivewireAlert;
@@ -149,60 +150,56 @@ class Edit extends Component
 
     public function submit()
     {
-        $this->validate();
+        try {
+            $validated = $this->validate($this->rulesForContract());
+             // 2) Si vous mettez à jour le contrat lui-même :
+            if (isset($validated['contract'])) {
+                $this->contract->update($validated['contract']);
+            }
 
-        $this->contract->save();
+            $this->alert('success', 'Contrat mis à jour avec succès');
 
-        $this->contract->products()->attach(
-            $this->selectedProduct['type_product_id'],
-            [
-                'contract_id' => $this->contract->id,
-                'type_product_id' => $this->selectedProduct['type_product_id'],
-                'designation' => $this->selectedProduct['designation'],
-                'quantity' => $this->selectedProduct['quantity'],
-                'capacity' => $this->selectedProduct['capacity'],
-                'monthly_unit_price_without_taxe' => $this->selectedProduct['monthly_unit_price_without_taxe'],
-                'billing_started_at' => $this->selectedProduct['billing_started_at'] ?? null,
-                'billing_terminated_at' => $this->selectedProduct['billing_terminated_at'] ?? null,
-            ]
-        );
-
-        return redirect()->route('admin.companies.edit', $this->company->id)
-            ->with('success', 'Contrat créé avec succès');
+            return redirect()->route('admin.companies.edit', $this->company->id)
+                ->with('success', 'Contrat créé avec succès');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Ceci dump la liste des messages d'erreur
+            dd($e->validator->errors()->toArray());
+        }
     }
 
     protected function rules(): array
     {
+        return array_merge(
+            $this->rulesForContract(),
+            $this->rulesForProduct()
+        );
+    }
+
+    protected function rulesForContract(): array
+    {
+        $dateFormat = config('project.date_format');
         return [
-            'contract.company_id' => [
-                'integer',
-                'exists:companies,id',
-                'nullable',
-            ],
-            'contract.setup_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
-            'contract.terminated_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
-            'contract.billed_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
-            'contract.validated_at' => [
-                'nullable',
-                'date_format:' . config('project.date_format'),
-            ],
-            'contract.company_id' => ['integer', 'exists:companies,id', 'nullable'],
-            'contract.type_period_id' => ['required', 'exists:type_periods,id'],
-            'selectedProduct.type_product_id' => ['required', 'integer', 'exists:type_products,id'],
-            'selectedProduct.designation' => ['nullable', 'string'],
-            'selectedProduct.quantity' => ['required', 'integer', 'min:1'],
-            'selectedProduct.capacity' => ['nullable', 'string'],
-            'selectedProduct.monthly_unit_price_without_taxe' => ['required', 'numeric'],
-            'selectedTypeContractId' => ['required', 'exists:type_contracts,id'],
+            'contract.company_id'        => 'nullable|integer|exists:companies,id',
+            'contract.setup_at'          => 'nullable|date_format:' . $dateFormat,
+            'contract.terminated_at'     => 'nullable|date_format:' . $dateFormat,
+            'contract.billed_at'         => 'nullable|date_format:' . $dateFormat,
+            'contract.validated_at'      => 'nullable|date_format:' . $dateFormat,
+            'contract.type_period_id'    => 'required|exists:type_periods,id',
+        ];
+    }
+
+    // Règles pour l’ajout d’un produit
+    protected function rulesForProduct(): array
+    {
+        $dateFormat = config('project.date_format');
+        return [
+            'selectedProduct.type_product_id'              => 'required|integer|exists:type_products,id',
+            'selectedProduct.designation'                  => 'nullable|string',
+            'selectedProduct.quantity'                     => 'required|integer|min:1',
+            'selectedProduct.capacity'                     => 'nullable|string',
+            'selectedProduct.monthly_unit_price_without_taxe' => 'required|numeric',
+            'selectedProduct.billing_started_at'           => 'nullable|date_format:' . $dateFormat,
+            'selectedProduct.billing_terminated_at'        => 'nullable|date_format:' . $dateFormat,
         ];
     }
 

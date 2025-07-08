@@ -53,7 +53,7 @@
                             Période de facturation
                         </th>
                         <th>
-                            Type de contract
+                            Type de contrat
                         </th>
                         <th>
                             Montant HT

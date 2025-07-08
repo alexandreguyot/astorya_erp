@@ -3,7 +3,13 @@
         <a class="input-button" title="toggle" data-toggle>
             <i class="icon-calendar"></i>
         </a>
-        <input type="text" class="form-control" {{ $attributes }} autocomplete="off">
+        <input
+            id="{{ $attributes['id'] }}"
+            type="text"
+            class="form-control"
+            autocomplete="off"
+            wire:model.lazy="{{ $attributes['wire:model'] }}"
+        />
     </div>
 </div>
 
@@ -70,18 +76,16 @@
     document.addEventListener("livewire:load", () => {
         function update(value) {
             let el = document.getElementById('clear-{{ $attributes['id'] }}');
-
-            if (value === '' || (Array.isArray(value) && value.length === 0)) {
-                value = '';
-                if (el !== null) {
-                    el.classList.add('invisible');
-                }
-            } else if (el !== null) {
-                el.classList.remove('invisible');
+            if (!value) {
+                el?.classList.add('invisible');
+            } else {
+                el?.classList.remove('invisible');
             }
-            console.log('value');
-            @this.set('{{ $attributes['wire:model'] }}', value);
+
+            const $input = $('.datepicker-{{ $attributes['id'] }} input');
+            $input.val(value).trigger('change');
         }
+
         @if($attributes['picker'] === 'date')
             $('.datepicker-{{ $attributes['id'] }} input').datepicker({
                 dateFormat: "dd/mm/yy",
@@ -96,7 +100,6 @@
                 },
                 onChangeMonthYear: function(year, month) {
                     let formattedDate = '01' + '/' +(month.toString().padStart(2, '0')) + '/' + year;
-                    $('.datepicker-{{ $attributes['id'] }} input').val(formattedDate);
                     update(formattedDate);
                 }
             });
@@ -110,7 +113,6 @@
                     let month = inst.selectedMonth + 1;
                     let year = inst.selectedYear;
                     let formattedDate = (month < 10 ? '0' + month : month) + '/' + year;
-                    $('.datepicker-{{ $attributes['id'] }} input').val(formattedDate);
                     update(formattedDate);
                 },
                 beforeShow: function(input, inst) {

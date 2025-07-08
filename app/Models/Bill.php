@@ -85,7 +85,8 @@ class Bill extends Model {
         return $this->belongsTo(Contract::class);
     }
 
-    public function type_period() {
+    public function type_period()
+    {
         return $this->belongsTo(TypePeriod::class);
     }
 

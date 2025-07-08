@@ -5,7 +5,50 @@
                 Recherche:
                 <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
             </div>
-            <div>
+              <div class="flex items-center space-x-4">
+
+                {{-- Flèche −1 --}}
+                <button
+                type="button"
+                wire:click="decrementBothMonths"
+                class="px-3 py-1 mt-8 bg-gray-200 rounded hover:bg-gray-300"
+                title="Mois précédent (pour début et fin)">
+                &laquo;
+                </button>
+
+                {{-- Date de début --}}
+                <div>
+                <label for="dateStart" class="block font-semibold mb-1">Date de début :</label>
+                <input
+                    id="dateStart"
+                    type="month"
+                    wire:model="dateStartMonth"
+                    class="form-control"
+                />
+                </div>
+
+                {{-- Date de fin --}}
+                <div>
+                <label for="dateEnd" class="block font-semibold mb-1">Date de fin :</label>
+                <input
+                    id="dateEnd"
+                    type="month"
+                    wire:model="dateEndMonth"
+                    class="form-control"
+                />
+                </div>
+
+                {{-- Flèche +1 --}}
+                <button
+                type="button"
+                wire:click="incrementBothMonths"
+                class="px-3 py-1 mt-8 bg-gray-200 rounded hover:bg-gray-300"
+                title="Mois suivant (pour début et fin)">
+                &raquo;
+                </button>
+
+            </div>
+            {{-- <div>
                 <label for="dateStart" class="block font-semibold">Date de début :</label>
                 <input
                     id="dateStart"
@@ -22,7 +65,7 @@
                     wire:model="dateEndMonth"
                     class="form-control"
                 />
-            </div>
+            </div> --}}
         </div>
         <div class="font-semibold flex justify-end">
             <div>
@@ -51,6 +94,9 @@
                             N° Facture
                         </th>
                         <th>
+                            Type de contrat
+                        </th>
+                        <th>
                             Montant HT
                         </th>
                         <th>
@@ -71,7 +117,7 @@
                                 {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
-                            Envoyer les mails des factures sélectionnées
+                                Envoyer les mails des factures sélectionnées
                             </button>
 
                             <button
@@ -81,7 +127,7 @@
                                 {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
-                            Envoyer tous les mails des factures
+                                Envoyer tous les mails des factures
                             </button>
                         </th>
                     </tr>
@@ -99,6 +145,24 @@
                                 <div class="">
                                     {{ $bill['no_bill'] ?? '' }}
                                 </div>
+                            </td>
+                            <td>
+                               @if(is_iterable($bill['contract']))
+                                    @foreach($bill['contract'] as $contract)
+                                        @if(is_object($contract) && method_exists($contract, 'contract_product_detail'))
+                                            @php
+                                                $firstDetail = $contract->contract_product_detail->first(fn($d) => $d->type_product);
+                                            @endphp
+                                            @if($firstDetail && $firstDetail->type_product && $firstDetail->type_product->type_contract)
+                                                <span class="block">
+                                                    {{ $firstDetail->type_product->type_contract->title ?? '' }}
+                                                </span>
+                                            @endif
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <span class="text-red-600">[Erreur relation]</span>
+                                @endif
                             </td>
                             <td>
                                 <div class="">
