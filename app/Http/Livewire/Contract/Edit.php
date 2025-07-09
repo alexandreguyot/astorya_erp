@@ -160,7 +160,7 @@ class Edit extends Component
             $this->alert('success', 'Contrat mis à jour avec succès');
 
             return redirect()->route('admin.companies.edit', $this->company->id)
-                ->with('success', 'Contrat créé avec succès');
+                ->with('success', 'Contrat mis à jour avec succès');
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Ceci dump la liste des messages d'erreur
             dd($e->validator->errors()->toArray());

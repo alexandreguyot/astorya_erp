@@ -9,6 +9,7 @@ use App\Models\TypeContract;
 use App\Models\TypePeriod;
 use App\Models\TypeProduct;
 use App\Models\TypeVat;
+use Carbon\Carbon;
 
 class Create extends Component
 {
@@ -43,6 +44,18 @@ class Create extends Component
     public function render()
     {
         return view('livewire.contract.create');
+    }
+
+    public function updatedContractSetupAt($value)
+    {
+        $d = Carbon::createFromFormat(
+            config('project.date_format'),
+            $value
+        );
+        $this->contract->terminated_at = $d
+            ->copy()
+            ->addYears(100)
+            ->format(config('project.date_format'));
     }
 
     public function updatedSelectedTypeContractId($value)
@@ -96,11 +109,7 @@ class Create extends Component
 
     public function submit()
     {
-        try {
-            $this->validate();
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors());
-        }
+        $this->validate();
 
         $this->contract->save();
 

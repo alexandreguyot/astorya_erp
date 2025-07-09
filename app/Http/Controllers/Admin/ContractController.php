@@ -16,6 +16,10 @@ class ContractController extends Controller
         return view('admin.contract.index');
     }
 
+    public function annuals() {
+        return view('admin.contract.annual-index');
+    }
+
     public function create(Company $company) {
         return view('admin.contract.create', compact('company'));
     }

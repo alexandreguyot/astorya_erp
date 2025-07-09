@@ -67,24 +67,39 @@
         <div class="form-group">
             <label class="form-label required">Description produit</label>
             <input type="text" class="form-control" required wire:model="selectedProduct.designation">
+            <div class="validation-message">
+                {{ $errors->first('selectedProduct.designation') }}
+            </div>
         </div>
 
         <div class="form-group">
             <label class="form-label">Quantité</label>
             <input type="number" class="form-control" wire:model="selectedProduct.quantity">
+            <div class="validation-message">
+                {{ $errors->first('selectedProduct.quantity') }}
+            </div>
         </div>
         <div class="form-group">
             <label class="form-label">Observation</label>
             <input type="number" class="form-control" wire:model="selectedProduct.capacity">
+            <div class="validation-message">
+                {{ $errors->first('selectedProduct.capacity') }}
+            </div>
         </div>
 
         <div class="form-group">
             <label class="form-label">Prix unitaire HT</label>
             <input type="text" class="form-control" wire:model="selectedProduct.monthly_unit_price_without_taxe">
+            <div class="validation-message">
+                {{ $errors->first('selectedProduct.monthly_unit_price_without_taxe') }}
+            </div>
         </div>
         <div class="form-group">
             <label class="form-label">Prix unitaire TTC</label>
-            <input type="text" class="form-control" wire:model="selectedProduct.monthly_unit_price_with_taxe">
+            <input type="text" class="form-control" wire:model="selectedProduct.monthly_unit_price_with_taxe" disabled>
+            <div class="validation-message">
+                {{ $errors->first('selectedProduct.monthly_unit_price_with_taxe') }}
+            </div>
         </div>
     @endif
 

@@ -43,10 +43,19 @@
 
                 @can('contract_access')
                     <li class="items-center">
-                        <a class="{{ request()->is("contrats*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contracts.index") }}">
+                        <a class="{{ request()->is("contrats*") && !request()->is("contrats/annuels*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contracts.index") }}">
                             <i class="fa-fw c-sidebar-nav-icon fas fa-folder-open">
                             </i>
                             {{ trans('cruds.contract.title') }}
+                        </a>
+                    </li>
+                @endcan
+                @can('contract_annual_access')
+                    <li class="items-center">
+                        <a class="{{ request()->is("contrats/annuels*") ? "sidebar-nav-active" : "sidebar-nav" }}" href="{{ route("admin.contracts.annual-index") }}">
+                            <i class="fa-fw c-sidebar-nav-icon fas fa-folder-open">
+                            </i>
+                            {{ trans('cruds.contract.title') }} annuel
                         </a>
                     </li>
                 @endcan

@@ -14,13 +14,13 @@
             <a id="tab1Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab1')">
                 informations
             </a>
-            <a id="tab5Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab2')">
+            <a id="tab2Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab2')">
                 contrats
             </a>
-            <a id="tab5Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab3')">
+            <a id="tab3Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab3')">
                 contacts
             </a>
-            <a id="tab5Btn" class="w-1/3 py-[10px] tablink cursor-pointer text-red-800 hover:bg-red-300" onclick="openTab('tab4')">
+            <a id="tab4Btn" class="w-1/3 py-[10px] tablink cursor-pointer text-red-800 hover:bg-red-300" onclick="openTab('tab4')">
                 compte bancaire
             </a>
         </div>

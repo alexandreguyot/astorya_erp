@@ -91,6 +91,7 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('factures/{bill}/pdf', [BillController::class, 'pdf'])->name('bills.pdf');
 
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');
+    Route::get('contrats/annuels', [ContractController::class, 'annuals'])->name('contracts.annual-index');
     Route::get('contrats/creation/{company}', [ContractController::class, 'create'])->name('contracts.create');
     Route::get('contrats/{contract}/edition', [ContractController::class, 'edit'])->name('contracts.edit');
     Route::get('contrats/previsualisation-html/{company}/{period}/{contracts}', [ContractController::class, 'previewHtml'])->withoutMiddleware('auth')->name('contracts.pdf.calculate.preview');
