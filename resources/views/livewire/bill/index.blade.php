@@ -5,7 +5,7 @@
                 Recherche:
                 <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
             </div>
-              <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-4">
 
                 {{-- Flèche −1 --}}
                 <button
@@ -67,18 +67,15 @@
                 />
             </div> --}}
         </div>
-        <div class="font-semibold flex justify-end">
-            <div>
-                <label for="perPage" class="mr-2">Afficher :</label>
-                <select wire:model="perPage" id="perPage" class="border rounded px-2 py-1 w-16">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-                <span>éléments par page</span>
-            </div>
+        <div class="flex items-center">
+            <label class="mr-2">Afficher :</label>
+            <select wire:model="perPage" class="form-control w-20">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+            <span class="ml-2">par page</span>
         </div>
     </div>
     <div class="overflow-hidden">

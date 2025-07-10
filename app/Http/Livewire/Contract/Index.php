@@ -105,6 +105,30 @@ class Index extends Component
         $this->dateEnd = Carbon::create($year, $month)->endOfMonth()->format('d/m/Y');
     }
 
+    public function decrementBothMonths()
+    {
+        $start = Carbon::createFromFormat('Y-m', $this->dateStartMonth)->subMonth();
+        $end   = Carbon::createFromFormat('Y-m', $this->dateEndMonth)->subMonth();
+
+        $this->dateStartMonth = $start->format('Y-m');
+        $this->dateStart      = $start->startOfMonth()->format('d/m/Y');
+
+        $this->dateEndMonth   = $end->format('Y-m');
+        $this->dateEnd        = $end->endOfMonth()->format('d/m/Y');
+    }
+
+    public function incrementBothMonths()
+    {
+        $start = Carbon::createFromFormat('Y-m', $this->dateStartMonth)->addMonth();
+        $end   = Carbon::createFromFormat('Y-m', $this->dateEndMonth)->addMonth();
+
+        $this->dateStartMonth = $start->format('Y-m');
+        $this->dateStart      = $start->startOfMonth()->format('d/m/Y');
+
+        $this->dateEndMonth   = $end->format('Y-m');
+        $this->dateEnd        = $end->endOfMonth()->format('d/m/Y');
+    }
+
     public function render()
     {
         $contracts = $this->getGroupedContracts();

@@ -33,6 +33,9 @@ module.exports = {
         '2': 2,
         '3': 3
       },
+      overflow: {
+        'y-visible': 'visible',
+      },
       inset: {
         '-100': '-100%',
         '-225-px': '-225px',

@@ -5,38 +5,50 @@
                 Recherche:
                 <input type="text" wire:model.debounce.300ms="search" class="inline-block w-full form-control shadow-2xl" />
             </div>
-
-            <div>
-                <label for="dateStart" class="block font-semibold">Date de début :</label>
-                <input
-                    id="dateStart"
-                    type="month"
-                    wire:model="dateStartMonth"
-                    class="form-control"
-                />
-            </div>
-            <div>
-                <label for="dateEnd" class="block font-semibold">Date de fin :</label>
-                <input
-                    id="dateEnd"
-                    type="month"
-                    wire:model="dateEndMonth"
-                    class="form-control"
-                />
+            <div class="flex items-center -pt-6 space-x-4">
+                <button
+                    type="button"
+                    wire:click="decrementBothMonths"
+                    class="px-3 py-1 mt-8 bg-gray-200 rounded hover:bg-gray-300"
+                    title="Mois précédent (pour début et fin)">
+                    &laquo;
+                </button>
+                <div>
+                    <label for="dateStart" class="block font-semibold mb-1">Date de début :</label>
+                    <input
+                        id="dateStart"
+                        type="month"
+                        wire:model="dateStartMonth"
+                        class="form-control"
+                    />
+                </div>
+                <div>
+                    <label for="dateEnd" class="block font-semibold mb-1">Date de fin :</label>
+                    <input
+                        id="dateEnd"
+                        type="month"
+                        wire:model="dateEndMonth"
+                        class="form-control"
+                    />
+                </div>
+                <button
+                    type="button"
+                    wire:click="incrementBothMonths"
+                    class="px-3 py-1 mt-8 bg-gray-200 rounded hover:bg-gray-300"
+                    title="Mois suivant (pour début et fin)">
+                    &raquo;
+                </button>
             </div>
         </div>
-        <div class="font-semibold flex justify-end">
-            <div>
-                <label for="perPage" class="mr-2">Afficher :</label>
-                <select wire:model="perPage" id="perPage" class="border rounded px-2 py-1 w-16">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-                <span>éléments par page</span>
-            </div>
+         <div class="flex items-center">
+            <label class="mr-2">Afficher :</label>
+            <select wire:model="perPage" class="form-control w-20">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+            </select>
+            <span class="ml-2">par page</span>
         </div>
     </div>
     <div class="overflow-hidden">
@@ -89,17 +101,21 @@
                                         'groupKey' => $groupKey,
                                     ]) }}">
                                 </td>
-                                <td class="">
-                                    <a href="{{ route('admin.companies.edit', $contracts->first()->company_id )}}">{{ $companyName }}</a>
+                                <td>
+                                    <span class="badge badge-green">
+                                        <a href="{{ route('admin.companies.edit', $contracts->first()->company_id )}}">{{ $companyName }}</a>
+                                    </span>
                                 </td>
-                                <td class="">
-                                    {{ $date }}
+                                <td>
+                                    <span class="badge badge-red">
+                                        {{ $date }}
+                                    </span>
                                 </td>
                                 <td>
                                     @foreach($contracts as $contract)
                                         @foreach($contract->contract_product_detail as $key => $detail)
                                             @if($detail->type_product && $key == 0)
-                                                <span class="">
+                                                <span class="badge badge-blue">
                                                     {{ $detail->type_product->type_contract->title ?? '' }}
                                                 </span>
                                             @endif

@@ -22,7 +22,8 @@ class Contracts extends Component
     public function render()
     {
         $this->contracts = $this->company->contracts()
-        ->with(['bills', 'lastBill'])
+        ->with(['bills', 'lastBill', 'contract_product_detail.type_product.type_contract'])
+        ->whereHas('contract_product_detail.type_product.type_contract')
         ->get()
         ->values();
 

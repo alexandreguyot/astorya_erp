@@ -15,32 +15,24 @@ class AnnualIndex extends Component
 
     public int     $perPage         = 10;
     public string  $search          = '';
-    public ?string $dateStart       = null;  // dd/mm/YYYY
-    public ?string $dateEnd         = null;  // dd/mm/YYYY
-    public string  $dateStartMonth  = '';    // YYYY-MM
-    protected      $paginationTheme = 'tailwind';
+    public ?string $dateStart       = null;    // dd/mm/YYYY
+    public ?string $dateEnd         = null;    // dd/mm/YYYY
+    public string  $dateStartMonth  = '';      // YYYY-MM
+
+    protected $paginationTheme = 'tailwind';
 
     protected $queryString = [
-        'search'           => ['except' => ''],
-        'dateStart'        => ['except' => null],
-        'dateEnd'          => ['except' => null],
-        'dateStartMonth'   => ['except' => ''],
-        'perPage'          => ['except' => 10],
-        'page'             => ['except' => 1],
+        'search'          => ['except' => ''],
+        'dateStartMonth'  => ['except' => ''],
+        'page'            => ['except' => 1],
+        'perPage'         => ['except' => 10],
     ];
 
     public function mount()
     {
+        // Initialise sur le mois prochain
         $this->dateStartMonth = Carbon::now()->addMonth()->format('Y-m');
         $this->updatedDateStartMonth($this->dateStartMonth);
-    }
-
-    public function updatedDateStartMonth(string $value)
-    {
-        [$y, $m] = explode('-', $value);
-        $this->dateStart = Carbon::create($y, $m)->startOfMonth()->format('d/m/Y');
-        $this->dateEnd   = Carbon::create($y, $m)->endOfMonth()->format('d/m/Y');
-        $this->resetPage();
     }
 
     public function updatedSearch()
@@ -48,66 +40,101 @@ class AnnualIndex extends Component
         $this->resetPage();
     }
 
+    public function prevMonth(): void
+    {
+        [$y, $m] = explode('-', $this->dateStartMonth);
+        $prev = Carbon::create($y, $m)->subMonth();
+        $this->dateStartMonth = $prev->format('Y-m');
+    }
+
+    public function nextMonth(): void
+    {
+        [$y, $m] = explode('-', $this->dateStartMonth);
+        $next = Carbon::create($y, $m)->addMonth();
+        $this->dateStartMonth = $next->format('Y-m');
+    }
+
+    public function updatedDateStartMonth(string $value)
+    {
+        // Réinitialise la page
+        $this->resetPage();
+
+        [$y, $m] = explode('-', $value);
+        $this->dateStart = Carbon::create($y, $m)->startOfMonth()->format('d/m/Y');
+        $this->dateEnd   = Carbon::create($y, $m)->endOfMonth()->format('d/m/Y');
+    }
+
     public function render()
     {
-        // bornes
         $start = Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfDay();
         $end   = Carbon::createFromFormat('d/m/Y', $this->dateEnd)->endOfDay();
 
-        // requête de base
+        // 1) Récupère contrats annuels non facturés ce mois
         $contracts = Contract::with([
                 'company',
-                'type_period',
-                'contract_product_detail.type_product.type_contract'
+                'contract_product_detail.type_product.type_contract',
             ])
-            // **Seulement annuels**
-            ->whereHas('type_period', fn($q) => $q->where('nb_month', 12))
-            // actifs sur la période
-            ->where(function($q) use($start){
-                $q->whereNull('terminated_at')
-                  ->orWhereDate('terminated_at','>=',$start);
-            })
-            // pas déjà facturés ce mois
-            ->whereDoesntHave('bills', fn($q) =>
-                $q->whereBetween('generated_at', [
-                    $start->toDateTimeString(),
-                    $end->toDateTimeString()
-                ])
+            ->where('type_period_id', 1)
+            ->where(fn($q) => $q
+                ->whereNull('terminated_at')
+                ->orWhereDate('terminated_at', '>=', $start)
             )
-            // recherche société
+            ->whereDoesntHave('bills', fn($q) =>
+                $q->whereBetween('generated_at', [$start, $end])
+            )
             ->when($this->search, fn($q) =>
-                $q->whereHas('company', fn($q2)=>
-                    $q2->where('name','like',"%{$this->search}%")
+                $q->whereHas('company', fn($q2) =>
+                    $q2->where('name', 'like', "%{$this->search}%")
                 )
             )
-            ->orderBy('company_id')
+            ->whereHas('contract_product_detail.type_product.type_contract')
             ->get()
-            // calcul du billing_period
-            ->each(fn($c) => $c->billing_period = $start->format('d/m/Y').' au '.$end->format('d/m/Y'))
-            // groupBy société puis période
-            ->groupBy([
-                fn($c) => $c->company->name,
-                fn($c) => $c->billing_period
-            ]);
+            // Calcul du billing_period et filtrage cycle ou terminaison
+            ->each(fn($c) => $c->billing_period = $c->calculateBillingPeriod($this->dateStart))
+            ->filter(function($c) use($start) {
+                $current = $start->copy()->startOfMonth();
+                $setup   = Carbon::createFromFormat(
+                              config('project.date_format'),
+                              $c->setup_at
+                          )->startOfMonth();
+                $months  = $setup->diffInMonths($current);
 
-        // pagination manuelle
-        $page   = $this->page;
-        $slice  = $contracts->slice(($page-1)*$this->perPage, $this->perPage, true);
-        $paged  = new LengthAwarePaginator(
+                $onCycle = $current->gte($setup) && $months % 12 === 0;
+                $onTerm  = $c->terminated_at
+                         && Carbon::createFromFormat(config('project.date_format'), $c->terminated_at)
+                                  ->startOfMonth()->eq($current);
+
+                // On garde si cycle ou terminaison et total > 0
+                return ($onCycle || $onTerm)
+                    && $c->calculateTotalPrice(Carbon::createFromFormat(config('project.date_format'), $this->dateStart)) > 0;
+            });
+
+        // 2) Pagination manuelle
+        $page  = $this->page;
+        $slice = $contracts->slice(($page-1)*$this->perPage, $this->perPage, true);
+
+        $paged = new LengthAwarePaginator(
             $slice,
             $contracts->count(),
             $this->perPage,
             $page,
-            ['path'=>request()->url(),'query'=>request()->query()]
+            ['path' => request()->url(), 'query' => request()->query()]
         );
 
         return view('livewire.contract.annual-index', [
-            'groupedContracts' => $paged,
+            'dueContracts' => $paged,
         ]);
     }
 
-    public function isProcessingRow($groupKey)
+    public function validateGroup(string $company, string $id, string $period)
     {
-        return Cache::has("processing.{$groupKey}");
+        // marque ce contrat validé
+        Contract::where('id', $id)->update(['validated_at' => now()]);
+        session()->flash('success', "Contrat {$id} ({$company} - {$period}) validé.");
+    }
+
+    public function isProcessingRow($key)
+    {
+        return Cache::has("processing.{$key}");
     }
 }
