@@ -2,7 +2,7 @@
     <div class="card-controls sm:flex">
         <div class="w-full sm:w-1/2">
             Par page:
-            <select wire:model="perPage" class="form-select w-full sm:w-1/6">
+            <select wire:model="perPage" class="form-control w-full sm:w-1/6">
                 @foreach($paginationOptions as $value)
                     <option value="{{ $value }}">{{ $value }}</option>
                 @endforeach
@@ -22,7 +22,7 @@
         </div>
         <div class="w-full sm:w-1/2 sm:text-right">
             Recherche
-            <input type="text" wire:model.debounce.300ms="search" class="w-full sm:w-1/3 inline-block" />
+            <input type="text" wire:model.debounce.300ms="search" class="form-control w-full sm:w-1/3 inline-block" />
         </div>
     </div>
     <div wire:loading.delay>
