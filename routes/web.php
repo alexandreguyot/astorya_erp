@@ -89,6 +89,7 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('factures/{bill}', [BillController::class, 'show'])->name('bills.show');
     Route::get('factures/{bill}/edition', [BillController::class, 'edit'])->name('bills.edit');
     Route::get('factures/{bill}/pdf', [BillController::class, 'pdf'])->name('bills.pdf');
+    Route::get('factures/{bill}/pdf/previsualisation', [BillController::class, 'pdfStream'])->name('bills.pdf.stream');
 
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');
     Route::get('contrats/annuels', [ContractController::class, 'annuals'])->name('contracts.annual-index');

@@ -43,25 +43,36 @@ class AnnualIndex extends Component
     public function prevMonth(): void
     {
         [$y, $m] = explode('-', $this->dateStartMonth);
-        $prev = Carbon::create($y, $m)->subMonth();
+        $prev    = Carbon::create($y, $m)->subMonth();
+
+        // Met à jour le mois
         $this->dateStartMonth = $prev->format('Y-m');
+        // Recalcule immédiatement les bornes
+        $this->dateStart      = $prev->copy()->startOfMonth()->format('d/m/Y');
+        $this->dateEnd        = $prev->copy()->endOfMonth()  ->format('d/m/Y');
+
+        $this->resetPage();
     }
 
     public function nextMonth(): void
     {
         [$y, $m] = explode('-', $this->dateStartMonth);
-        $next = Carbon::create($y, $m)->addMonth();
+        $next    = Carbon::create($y, $m)->addMonth();
+
         $this->dateStartMonth = $next->format('Y-m');
+        $this->dateStart      = $next->copy()->startOfMonth()->format('d/m/Y');
+        $this->dateEnd        = $next->copy()->endOfMonth()  ->format('d/m/Y');
+
+        $this->resetPage();
     }
 
     public function updatedDateStartMonth(string $value)
     {
-        // Réinitialise la page
-        $this->resetPage();
-
         [$y, $m] = explode('-', $value);
-        $this->dateStart = Carbon::create($y, $m)->startOfMonth()->format('d/m/Y');
-        $this->dateEnd   = Carbon::create($y, $m)->endOfMonth()->format('d/m/Y');
+        $dt      = Carbon::create($y, $m);
+        $this->dateStart = $dt->startOfMonth()->format('d/m/Y');
+        $this->dateEnd   = $dt->endOfMonth()  ->format('d/m/Y');
+        $this->resetPage();
     }
 
     public function render()

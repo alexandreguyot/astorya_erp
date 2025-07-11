@@ -70,7 +70,7 @@
                         <th>
                             Montant HT
                         </th>
-                        <th class="flex justify-end">
+                        <th class="flex flex-col space-y-2 justify-end">
                             <button class="btn btn-sm btn-info mr-2" wire:click="generateSelectedBills">
                                 Générer les factures sélectionnées
                             </button>
@@ -123,10 +123,12 @@
                                     @endforeach
                                 </td>
                                 <td class="">
-                                    {{ number_format($total, 2, ',', '') }} €
+                                    <span class="badge badge-purple">
+                                        {{ number_format($total, 2, ',', '') }} €
+                                    </span>
                                 </td>
                                 <td class="w-1/4">
-                                    <div class="flex justify-end">
+                                    <div class="flex justify-end space-x-2">
 
                                         @if($this->isProcessingRow($groupKey))
                                             <svg class="animate-spin h-5 w-5 text-blue-600 text-left" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -134,7 +136,7 @@
                                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                                             </svg>
                                         @else
-                                            <a class="btn btn-sm btn-success mr-2"
+                                            <a class="btn btn-sm btn-info"
                                             href="{{ route('admin.contracts.pdf.preview', [
                                                     'company' => $companyName,
                                                     'period' => str_replace('/', '-', str_replace(' au ', '-', $date)),

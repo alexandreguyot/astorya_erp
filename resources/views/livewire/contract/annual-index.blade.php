@@ -1,26 +1,21 @@
 <div>
     <div class="card-controls justify-between sm:flex mb-4">
         <div class="flex space-x-4 font-semibold">
-            {{-- Recherche --}}
             <div>
                 Recherche :
-                <input
-                    type="text"
+                <input type="text"
                     wire:model.debounce.300ms="search"
                     placeholder="Recherche…"
                     class="inline-block w-full form-control shadow-2xl"
                 />
             </div>
 
-            {{-- Mois unique avec flèches --}}
             <div class="flex items-center space-x-4">
-                <button
-                    type="button"
+                <button type="button"
                     wire:click="prevMonth"
                     class="px-3 py-1 mt-6 bg-gray-200 rounded hover:bg-gray-300"
                     title="Mois précédent"
                 >&laquo;</button>
-
                 <div>
                     <label for="dateMonth" class="block font-semibold mb-1">Mois :</label>
                     <input
@@ -94,11 +89,16 @@
                                        value="{{ $id }}" />
                             </td>
                             <td>
-                                <a href="{{ route('admin.companies.edit', $contract->company_id) }}">
+                                <a class="badge badge-green" href="{{ route('admin.companies.edit', $contract->company_id) }}">
                                     {{ $company }}
                                 </a>
                             </td>
-                            <td>{{ $period }}</td>
+                            <td>
+                                <span class="badge badge-red">
+                                    {{ $period }}
+                                </span>
+                            </td>
+
                             <td class="relative overflow-visible">
                                 <span class="badge badge-blue">{{ $typeTitle }}</span>
                                 <span class="inline-block ml-1 group cursor-pointer">
@@ -113,7 +113,11 @@
                                     >{{ $tooltip }}</div>
                                 </span>
                             </td>
-                            <td>{{ number_format($total,2,',','') }} €</td>
+                            <td>
+                                <span class="badge badge-purple">
+                                    {{ number_format($total,2,',','') }} €
+                                </span>
+                            </td>
                             <td class="flex justify-end space-x-2">
                                 @if($this->isProcessingRow($key))
                                     <svg class="animate-spin h-5 w-5 text-blue-600 inline-block" viewBox="0 0 24 24">
@@ -123,14 +127,16 @@
                                             d="M4 12a8 8 0 018-8v8z"/>
                                     </svg>
                                 @else
-                                    <a class="btn btn-sm btn-success mr-2"
+                                    <a class="btn btn-sm btn-info"
                                        href="{{ route('admin.contracts.pdf.preview', [
                                            'company'   => $company,
                                            'period'    => str_replace('/', '-', $period),
                                            'contracts' => $id,
-                                       ]) }}"
-                                       target="_blank">
+                                       ]) }}" target="_blank">
                                         Prévisualiser
+                                    </a>
+                                    <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
+                                        Editer
                                     </a>
                                     {{-- <button class="btn btn-sm btn-success"
                                             wire:click="validateGroup('{{ $company }}','{{ $id }}','{{ $period }}')">

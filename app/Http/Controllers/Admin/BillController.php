@@ -33,6 +33,21 @@ class BillController extends Controller
         return response()->download(storage_path("app/{$path}"));
     }
 
+    public function pdfStream($no_bill)
+    {
+       $bill = Bill::where('no_bill', $no_bill)->firstOrFail();
+
+        $fullPath = storage_path("app/{$bill->file_path}");
+        $filename = basename($fullPath);
+
+        return response()->file(
+            $fullPath,
+            [
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => "inline; filename=\"{$filename}\"",
+            ]
+        );
+    }
 
     public function export_order_prlv(string $dateStart, string $dateEnd)
     {

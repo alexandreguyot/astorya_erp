@@ -136,43 +136,30 @@
                                 <input type="checkbox" wire:model="selectedBills" value="{{ $bill['no_bill'] }}" class="form-checkbox" />
                             </td>
                             <td>
-                                <a href="{{ route('admin.companies.edit', $bill['company_id'] )}}" class="">{{ $bill['company'] ?? '' }}</a>
+                                <a href="{{ route('admin.companies.edit', $bill['company_id'] )}}" class="badge badge-green">{{ $bill['company'] ?? '' }}</a>
                             </td>
                             <td class="relative">
-                                <a
-                                    href="{{ route('admin.bills.pdf', $bill['no_bill']) }}"
-                                    target="_blank"
-                                    class="invoice-link font-medium text-blue-600 hover:underline"
-                                >
+                                <a href="{{ route('admin.bills.pdf.stream', $bill['no_bill']) }}" target="_blank" class="badge badge-purple">
                                     {{ $bill['no_bill'] }}
                                 </a>
-                                {{-- Aperçu PDF qui apparaît au survol --}}
-                                {{-- <div class="invoice-preview absolute left-1/2 transform -translate-x-1/2 mt-2 hidden w-56 h-72 border bg-white shadow-lg z-50">
-                                    <object
-                                        data="{{ route('admin.bills.pdf', $bill['no_bill']) }}"
-                                        type="application/pdf"
-                                        width="100%"
-                                        height="100%"
-                                    >
-                                        <p>Prévisualisation non disponible</p>
-                                    </object>
-                                </div> --}}
                             </td>
                             <td>
                                @if($bill['details']->isNotEmpty())
-                                    @foreach($bill['details'] as $detail)
-                                        @if($detail->type_product && $detail->type_product->type_contract)
-                                            <span>{{ $detail->type_product->type_contract->title }}</span>
-                                        @endif
-                                    @endforeach
+                                    <div class="grid grid-cols-2 gap-2 col-span-2">
+                                        @foreach($bill['details'] as $detail)
+                                            @if($detail->type_product && $detail->type_product->type_contract)
+                                                <span class="badge badge-blue">{{ $detail->type_product->type_contract->title }}</span>
+                                            @endif
+                                        @endforeach
+                                    </div>
                                 @else
                                     <span class="text-red-600">[Pas de détails de produit]</span>
                                 @endif
                             </td>
                             <td>
-                                <div class="">
+                                <span class="badge badge-purple">
                                     {{ number_format((float)$bill['total_ht'], 2, ',', ''); }} €
-                                </div>
+                                </span>
                             </td>
                             <td>
                                 <div class="badge badge-purple">
