@@ -57,7 +57,15 @@
                         <th class="w-1/6">Période</th>
                         <th>Type de contrat</th>
                         <th>Montant HT</th>
-                        <th class="flex justify-end">Actions</th>
+                        <th class="flex items-center space-x-2">
+                            <button class="btn btn-sm btn-info" wire:click="validateSelected" type="button">
+                                Valider la selection {{ $selectedContracts ? '(' . count($selectedContracts) . ')' : '' }}
+                            </button>
+
+                            <button class="btn btn-sm btn-info" wire:click="validateAll" type="button">
+                                Tout valider {{ $allDueContractIds ? '(' . count($allDueContractIds) . ')' : '' }}
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -138,10 +146,10 @@
                                     <a class="btn btn-sm btn-info mr-2" href="{{ route('admin.contracts.edit', $contract) }}">
                                         Editer
                                     </a>
-                                    {{-- <button class="btn btn-sm btn-success"
+                                    <button class="btn btn-sm btn-success"
                                             wire:click="validateGroup('{{ $company }}','{{ $id }}','{{ $period }}')">
                                         Valider
-                                    </button> --}}
+                                    </button>
                                 @endif
                             </td>
                         </tr>

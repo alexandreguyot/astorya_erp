@@ -21,6 +21,10 @@ class AnnualIndex extends Component
 
     protected $paginationTheme = 'tailwind';
 
+    public array $selectedContracts = [];
+
+    public array $allDueContractIds;
+
     protected $queryString = [
         'search'          => ['except' => ''],
         'dateStartMonth'  => ['except' => ''],
@@ -80,6 +84,8 @@ class AnnualIndex extends Component
         $start = Carbon::createFromFormat('d/m/Y', $this->dateStart)->startOfDay();
         $end   = Carbon::createFromFormat('d/m/Y', $this->dateEnd)->endOfDay();
 
+        $year = $start->year;
+
         // 1) Récupère contrats annuels non facturés ce mois
         $contracts = Contract::with([
                 'company',
@@ -98,6 +104,10 @@ class AnnualIndex extends Component
                     $q2->where('name', 'like', "%{$this->search}%")
                 )
             )
+            ->where(function($q) use ($year) {
+                $q->whereNull('validated_at_for_one_year')
+                ->orWhereYear('validated_at_for_one_year', '<', $year);
+            })
             ->whereHas('contract_product_detail.type_product.type_contract')
             ->get()
             // Calcul du billing_period et filtrage cycle ou terminaison
@@ -119,6 +129,7 @@ class AnnualIndex extends Component
                 return ($onCycle || $onTerm)
                     && $c->calculateTotalPrice(Carbon::createFromFormat(config('project.date_format'), $this->dateStart)) > 0;
             });
+        $this->allDueContractIds = $contracts->pluck('id')->toArray();
 
         // 2) Pagination manuelle
         $page  = $this->page;
@@ -137,12 +148,55 @@ class AnnualIndex extends Component
         ]);
     }
 
-    public function validateGroup(string $company, string $id, string $period)
+   public function validateGroup(string $company, string $id, string $period)
     {
-        // marque ce contrat validé
-        Contract::where('id', $id)->update(['validated_at' => now()]);
-        session()->flash('success', "Contrat {$id} ({$company} - {$period}) validé.");
+        Contract::where('id', $id)
+            ->update(['validated_at_for_one_year' => now()]);
+
+        $this->resetPage();
+        session()->flash('success', "Contrat {$id} ({$company} - {$period}) validé pour un an.");
     }
+
+    public function validateSelected(): void
+    {
+        if (empty($this->selectedContracts)) {
+            $this->dispatchBrowserEvent('notify', [
+                'type'    => 'error',
+                'message' => 'Aucun contrat sélectionné.'
+            ]);
+            return;
+        }
+
+        Contract::whereIn('id', $this->selectedContracts)
+                ->update(['validated_at_for_one_year' => now()]);
+
+        // on revient en page 1 et vide la sélection
+        $this->resetPage();
+        $this->selectedContracts = [];
+
+        session()->flash('success', count($this->selectedContracts) . ' contrat(s) validés.');
+    }
+
+    public function validateAll(): void
+    {
+        if (empty($this->allDueContractIds)) {
+            $this->dispatchBrowserEvent('notify', [
+                'type'    => 'info',
+                'message' => 'Aucun contrat à valider.'
+            ]);
+            return;
+        }
+
+        Contract::whereIn('id', $this->allDueContractIds)
+                ->update(['validated_at_for_one_year' => now()]);
+
+        // on revient à la page 1 et on vide la sélection
+        $this->resetPage();
+        $this->selectedContracts = [];
+
+        session()->flash('success', count($this->allDueContractIds) . ' contrat(s) validés.');
+    }
+
 
     public function isProcessingRow($key)
     {

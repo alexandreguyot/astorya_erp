@@ -22,6 +22,7 @@ class Contract extends Model
         'terminated_at',
         'billed_at',
         'validated_at',
+        'validated_at_for_one_year',
     ];
 
     public $orderable = [
@@ -42,6 +43,7 @@ class Contract extends Model
         'created_at',
         'updated_at',
         'deleted_at',
+        'validated_at_for_one_year'
     ];
 
     public $filterable = [
@@ -217,6 +219,16 @@ class Contract extends Model
     public function setTerminatedAtAttribute($value)
     {
         $this->attributes['terminated_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function getValidatedAtForOneYearAttribute($value)
+    {
+        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
+    }
+
+    public function setValidatedAtForOneYearAttribute($value)
+    {
+        $this->attributes['validated_at_for_one_year'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
 
     public function getBilledAtAttribute($value)
