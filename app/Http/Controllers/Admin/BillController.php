@@ -102,7 +102,7 @@ class BillController extends Controller
         $id    = $dom->createElement('Id');
         $orgId = $dom->createElement('OrgId');
         $bicBE = $dom->createElement('BICOrBEI');
-        $bicBE->appendChild($dom->createTextNode('CMCIFR2A'));
+        $bicBE->appendChild($dom->createTextNode('BNPAFRPPNAN'));
         $orgId->appendChild($bicBE);
         $id->appendChild($orgId);
         $initg->appendChild($id);
