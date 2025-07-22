@@ -4,15 +4,15 @@
             <div class="p-2">
                 <a class="text-white btn bg-red-400" href="{{ route('admin.contracts.create', [$company])}}">Ajouter un contrat</a>
             </div>
-            <table class="min-w-full divide-y divide-gray-200 bg-white shadow rounded">
-                <thead class="bg-gray-50">
+            <table class="table w-full table-index">
+                <thead >
                     <tr>
-                        <th class="py-2"></th>
-                        <th class="py-2">Type</th>
-                        <th class="py-2">Périodicité</th>
-                        <th class="py-2">Date de fin</th>
-                        <th class="py-2">Dernière période facturée</th>
-                        <th class="py-2">Actions</th>
+                        <th></th>
+                        <th>Type</th>
+                        <th>Périodicité</th>
+                        <th>Date de fin</th>
+                        <th>Dernière période facturée</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -24,22 +24,22 @@
                     @endphp
 
                     <tr wire:click="toggle({{ $contract->id }})" class="hover:bg-gray-50 cursor-pointer {{ $openContractId === $contract->id ? 'bg-gray-100' : '' }}">
-                        <td class="px-4 py-3">
+                        <td>
                             {{-- <input type="checkbox" value="{{ $contract->id }}" /> --}}
                         </td>
-                        <td class="px-4 py-3">
+                        <td>
                             <span class="badge badge-blue">{{ $typeTitle }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td>
                             <span class="badge badge-rose">{{ $contract->type_period->title }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td>
                             <span class="badge badge-rose">{{ $contract->terminated_at }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td>
                             <span class="badge badge-purple">{{ $lastPeriod }}</span>
                         </td>
-                        <td class="px-4 py-3">
+                        <td>
                             <a href="{{ route('admin.contracts.edit', $contract) }}"
                                 class="btn btn-sm btn-success">
                                 Modifier
