@@ -4,19 +4,26 @@ namespace App\Http\Livewire\Company;
 
 use Livewire\Component;
 use App\Models\Company;
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
 
 class Contracts extends Component
 {
     public Company $company;
     public $contracts;
     public $bills;
+    public int|null $openContractId = null;
+
 
     public array $listsForFields = [];
 
     public function mount(Company $company)
     {
         $this->company = $company;
+    }
+
+    public function toggle(int $id): void
+    {
+        $this->openContractId = $this->openContractId === $id ? null : $id;
     }
 
     public function render()

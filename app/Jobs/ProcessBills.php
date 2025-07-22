@@ -103,7 +103,7 @@ class ProcessBills implements ShouldQueue
         app(GenerateAccountingHisto::class)
             ->handleCollection($bills, $dateStarted);
 
-        dispatch(new GenerateBillPdf($noBill));
+        dispatch(new GenerateBillPdf($noBill, $dateStarted));
 
         $user = User::find($this->userId);
         if ($user) {

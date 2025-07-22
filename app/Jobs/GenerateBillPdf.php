@@ -17,11 +17,13 @@ class GenerateBillPdf implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     public string $no_bill;
+    public $dateStarted;
     public string $previewUrl;
 
-    public function __construct(string $no_bill)
+    public function __construct(string $no_bill, $dateStarted)
     {
         $this->no_bill = $no_bill;
+        $this->dateStarted = $dateStarted;
     }
 
     public function handle(): void
@@ -34,6 +36,11 @@ class GenerateBillPdf implements ShouldQueue
             'type_period',
             'company.city',
             'company.bank_account',
+            'contract.contract_product_detail' => function ($q) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', $this->dateStarted);
+            },
             'contract.contract_product_detail.type_product.type_contract',
             'contract.contract_product_detail.type_product.type_vat',
         ])
@@ -61,7 +68,7 @@ class GenerateBillPdf implements ShouldQueue
 
         $contract = $bills->first()->contract;
         $owner = Owner::first();
-        
+
         $vatResumes = $this->getVatResumesFromContracts($contracts, $date);
         $totals = $this->getTotalsFromVatResumes($vatResumes);
 

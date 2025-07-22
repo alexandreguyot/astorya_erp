@@ -64,6 +64,22 @@ class ContractProductDetail extends Model
     {
         $base = $this->monthly_unit_price_without_taxe * $this->quantity;
 
+        $billingTerm = $this->billing_terminated_at ? Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)
+        : null;
+
+        if ($billingTerm && $billingTerm->year  === $date->year && $billingTerm->month === $date->month) {
+            $startOfMonth  = $date->copy()->startOfMonth();
+            $daysInMonth   = $startOfMonth->daysInMonth;
+            $startBilling  = $this->billing_started_at
+                ? Carbon::createFromFormat(config('project.date_format'), $this->billing_started_at)
+                : $startOfMonth;
+            $endBilling    = $billingTerm;
+            $daysUsed      = $startBilling->diffInDays($endBilling) + 1;
+            $base         *= ($daysUsed / $daysInMonth);
+
+            return round($base, 2);
+        }
+
         if ($this->contract->isTerminationMonth($date)) {
             $setupDay     = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->day;
             $day          = min($setupDay, $date->daysInMonth);
@@ -93,10 +109,16 @@ class ContractProductDetail extends Model
         return number_format($this->proratedWithVat($dateStart), 2, ',', ' ');
     }
 
+    public function isTerminationMonth($dateStart): bool
+    {
+        return $this->billing_terminated_at
+            && Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)->year === $dateStart->year
+            && Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)->month === $dateStart->month;
+    }
+
     public function calculateTotalPriceWithoutTaxe($date) {
         $base = $this->monthly_unit_price_without_taxe * $this->quantity;
-        $isTerm = $this->contract->isTerminationMonth($date);
-
+        $isTerm = $this->contract->isTerminationMonth($date) || $this->isTerminationMonth($date);
 
         if ($isTerm) {
             $setupDay  = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->day;
