@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\Company;
 use App\Models\Owner;
+use App\Models\ContractProductDetail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Barryvdh\Snappy\Facades\SnappyPdf as Pdf;
@@ -48,6 +49,11 @@ class ContractController extends Controller
         $contracts = Contract::with([
             'type_period',
             'company.city',
+            'contract_product_detail' => function ($q) use ($dateStart, $date) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', Carbon::createFromFormat(config('project.date_format'), $dateStart)->format('Y-m-d'));
+            },
             'contract_product_detail.type_product.type_contract'
         ])
         ->whereIn('id', $contractIds)
@@ -151,5 +157,12 @@ class ContractController extends Controller
             'total_tva' => number_format($totalTva, 2, ',', ' '),
             'total_ttc' => number_format($totalHt + $totalTva, 2, ',', ' '),
         ];
+    }
+
+    public function impacted2025()
+    {
+        $contract_product_details = ContractProductDetail::with('contract', 'contract.company', 'contract.type_period', 'type_product', 'type_product.type_contract')->whereYear('billing_terminated_at', 2025)->orWhereYear('billing_terminated_at', 2024)->orderBy('billing_terminated_at')->get();
+
+        return view('contracts.impacted2025', compact('contract_product_details'));
     }
 }

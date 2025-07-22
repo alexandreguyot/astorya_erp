@@ -23,7 +23,12 @@ Route::redirect('/', '/login');
 
 Auth::routes(['register' => false]);
 
+
 Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], function () {
+
+
+    Route::get('articles', [ContractController::class, 'impacted2025'])->name('contracts.impacted2025');
+
     Route::get('/tableau-de-bord', [HomeController::class, 'index'])->name('home');
 
     Route::resource('permissions', PermissionController::class, ['except' => ['store', 'update', 'destroy']]);
