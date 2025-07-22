@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class ContractProductDetail extends Model
 {
@@ -43,6 +44,17 @@ class ContractProductDetail extends Model
     public function type_product()
     {
         return $this->belongsTo(TypeProduct::class);
+    }
+
+    public function scopeActiveAt(Builder $query, Carbon $date): Builder
+    {
+        $cutoff = $date->copy()->startOfMonth()->format('Y-m-d');
+
+        return $query->where(function(Builder $q) use ($cutoff) {
+            $q->whereNull('billing_terminated_at')
+              ->orWhereDate('billing_terminated_at', '0001-01-01')
+              ->orWhereDate('billing_terminated_at', '>=', $cutoff);
+        });
     }
 
     /**

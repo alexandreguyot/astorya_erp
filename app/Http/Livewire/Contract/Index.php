@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class Index extends Component
 {
@@ -83,10 +84,10 @@ class Index extends Component
         $this->paginationOptions = config('project.pagination.options');
         $this->orderable         = (new Contract())->orderable;
         $this->filterable         = (new Contract())->filterable;
-        $this->dateStart = Carbon::now()->startOfMonth()->format('d/m/Y');
-        $this->dateEnd = Carbon::now()->endOfMonth()->format('d/m/Y');
-        $this->dateStartMonth = Carbon::now()->startOfMonth()->format('Y-m');
-        $this->dateEndMonth   = Carbon::now()->endOfMonth()->format('Y-m');
+        $this->dateStart = Carbon::now()->subMonth(2)->startOfMonth()->format('d/m/Y');
+        $this->dateEnd = Carbon::now()->subMonth(2)->endOfMonth()->format('d/m/Y');
+        $this->dateStartMonth = Carbon::now()->subMonth(2)->startOfMonth()->format('Y-m');
+        $this->dateEndMonth   = Carbon::now()->subMonth(2)->endOfMonth()->format('Y-m');
         $this->updatedDateStartMonth($this->dateStartMonth);
         $this->updatedDateEndMonth($this->dateEndMonth);
     }
@@ -159,7 +160,12 @@ class Index extends Component
         $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
         $endOfMonth = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->endOfMonth();
 
-        $contracts = Contract::with(['type_period', 'company', 'contract_product_detail.type_product.type_contract'])
+        $contracts = Contract::with(['type_period', 'company',
+            'contract_product_detail' => function ($q) use ($dateStart) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+        }, 'contract_product_detail.type_product.type_contract'])
             ->whereNotNull('setup_at')
             ->where(function ($query) use ($dateStart) {
                 $query->whereNull('terminated_at')
@@ -173,7 +179,10 @@ class Index extends Component
             ->where(function($q) use ($dateStart) {
                 $q->whereDoesntHave('bills', function($q2) use ($dateStart) {
                     $q2->whereMonth('generated_at', $dateStart->month)
-                       ->whereYear('generated_at',  $dateStart->year);
+                       ->whereYear('generated_at',  $dateStart->year)
+                       ->orWhere(function($q3) use ($dateStart) {
+                            $q3->whereDate('generated_at', '>=', $dateStart);
+                       });
                 })
                 ->orWhere(function($q3) use ($dateStart) {
                     $q3->whereYear('terminated_at', $dateStart->year)
@@ -181,25 +190,19 @@ class Index extends Component
                        ->whereDate('terminated_at', '>=', $dateStart->copy()->startOfMonth());
                 });
             })
-            ->whereHas('contract_product_detail', function ($query) use ($dateStart, $endOfMonth) {
-                $query->where('monthly_unit_price_without_taxe', '>', 0)
-                      ->where(function ($q) use ($dateStart, $endOfMonth) {
-                          $q->whereNull('billing_terminated_at')
-                            ->orWhereDate('billing_terminated_at', '0001-01-01')
-                            ->orWhereDate('billing_terminated_at', '>=', $endOfMonth);
-                      });
+            ->whereHas('contract_product_detail', function ($query) {
+                $query->where('monthly_unit_price_without_taxe', '>', 0);
             })
             ->get()
+            ->filter(fn($contract) => $contract->contract_product_detail->isNotEmpty())
             ->filter(function($contract) use ($dateStart) {
                 $current    = $dateStart->copy()->startOfMonth();
                 $setup      = Carbon::createFromFormat(config('project.date_format'), $contract->setup_at)
                                     ->startOfMonth();
                 $monthsDiff = $setup->diffInMonths($current);
 
-                // 1) C’est un mois « ordinaire » aligné sur nb_month
                 $isOnCycle = $current->gte($setup) && $monthsDiff % $contract->type_period->nb_month === 0;
 
-                // 2) OU c’est le mois de terminaison (prorata)
                 $isTerminationMonth = false;
                 if ($contract->terminated_at) {
                     $term = Carbon::createFromFormat(config('project.date_format'), $contract->terminated_at);
@@ -218,6 +221,15 @@ class Index extends Component
             ->sortKeys();
 
         return $contracts;
+    }
+
+    function interpolate(string $sql, array $bindings): string
+    {
+        // Laravel 8+ : Str::replaceArray
+        return Str::replaceArray('?', array_map(
+            fn($b) => is_numeric($b) ? $b : "'".addslashes($b)."'",
+            $bindings
+        ), $sql);
     }
 
     public function generateSelectedBills()
@@ -267,10 +279,17 @@ class Index extends Component
         $started_at = substr($date, 0, 10);
         $billed_at = substr($date, 14, 14);
 
+        $dateStart = Carbon::createFromFormat(config('project.date_format'), $started_at)->startOfMonth()->format('Y-m-d');
+
         $contracts = Contract::with([
             'type_period',
             'company.city',
             'company.bank_account',
+            'contract_product_detail' => function ($q) use ($dateStart) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+            },
             'contract_product_detail.type_product.type_contract',
             'contract_product_detail.type_product.type_vat',
         ])

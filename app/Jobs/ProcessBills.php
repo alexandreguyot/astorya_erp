@@ -41,9 +41,15 @@ class ProcessBills implements ShouldQueue
 
     public function handle()
     {
+        $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->startedAt)->startOfMonth();
         $contracts = Contract::with([
             'type_period',
             'company.city',
+            'contract_product_detail' => function ($q) use ($dateStart) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+            },
             'contract_product_detail.type_product.type_contract',
             'contract_product_detail.type_product.type_vat',
         ])->whereIn('id', $this->contractIds)->get();
