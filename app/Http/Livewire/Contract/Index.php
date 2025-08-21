@@ -215,7 +215,7 @@ class Index extends Component
                 $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
             })
             ->groupBy([
-                fn ($contract) => $contract->company->name,
+                fn ($contract) => optional($contract->company)->name ?? 'Sans société',
                 fn ($contract) => $contract->billing_period,
             ])
             ->sortKeys();
