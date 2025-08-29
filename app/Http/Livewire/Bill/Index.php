@@ -163,8 +163,8 @@ class Index extends Component
             $contract = $group->first()->contract;
             return [
                 'no_bill' => $noBill,
-                'company' => $group->first()->company->name,
-                'company_id' => $group->first()->company->id,
+                'company' => $group->first()->company->name ?? 'Sans société',
+                'company_id' => $group->first()->company->id ?? '999999999999',
                 'generated_at' => $group->first()->generated_at,
                 'sent_at' => $group->first()->sent_at,
                 'bills' => $group,
