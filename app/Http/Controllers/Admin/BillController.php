@@ -26,6 +26,7 @@ class BillController extends Controller
 
     public function pdf($no_bill)
     {
+        var_dump($no_bill);
         $bill = Bill::where('no_bill', $no_bill)->first();
 
         $path = $bill->file_path;

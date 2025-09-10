@@ -218,7 +218,7 @@ class Index extends Component
     {
         $monthFolder = Carbon::createFromFormat('d/m/Y', $this->dateStart)
             ->startOfMonth()
-            ->format('m-Y');
+            ->format('Y-m');
         $pdfPath  = "private/factures/{$monthFolder}";
         $fullPath = storage_path("app/{$pdfPath}");
 

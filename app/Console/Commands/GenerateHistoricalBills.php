@@ -33,7 +33,7 @@ class GenerateHistoricalBills extends Command
             }
             foreach ($bills as $no_bill) {
                 $this->info("Génération de la facture : $no_bill");
-                dispatch(new GenerateBillPdf($no_bill));
+                dispatch(new GenerateBillPdf($no_bill, $dateStart));
             }
             $this->info("Factures générées avec succès pour la période : $periodKey");
 

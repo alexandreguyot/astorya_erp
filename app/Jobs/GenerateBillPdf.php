@@ -50,7 +50,7 @@ class GenerateBillPdf implements ShouldQueue
         if ($bills->isEmpty()) return;
 
         $filename = $bills->first()->no_bill . '.pdf';
-        $period_bills = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('m-Y');
+        $period_bills = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('Y-m');
         $dateStart = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->format('d/m/Y');
         $date = Carbon::createFromFormat('d/m/Y', $bills->first()->started_at)->startOfMonth();
 

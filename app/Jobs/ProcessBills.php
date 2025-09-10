@@ -63,6 +63,17 @@ class ProcessBills implements ShouldQueue
 
         DB::transaction(function () use ($contracts, $noBill, $dateStarted) {
             foreach ($contracts as $contract) {
+
+                $alreadyExists = Bill::where('contract_id', $contract->id)
+                ->whereNot('no_bill', 'like', 'BRO-%')
+                ->where('started_at', $dateStarted->format('Y-m-d'))
+                ->exists();
+
+                if ($alreadyExists) {
+                    Log::info("ProcessBills[$noBill] skip (already billed) contract={$contract->id}");
+                    continue;
+                }
+
                 $exists = Bill::where('contract_id', $contract->id)
                             ->whereNot('no_bill', 'like', 'BRO-%')
                           ->where('started_at', $dateStarted->format('Y-m-d'))
@@ -74,17 +85,37 @@ class ProcessBills implements ShouldQueue
                     continue;
                 }
 
+                // ➜ Compte les détails actifs pour ce mois via le scope (source de vérité)
+                $activeCount = $contract->contract_product_detail()
+                    ->activeAt($dateStarted)
+                    ->count();
+
+                if ($activeCount === 0) {
+                    Log::warning("ProcessBills[$noBill] skip (no active details) contract={$contract->id} company={$contract->company->name}");
+                    continue;
+                }
+
+                // ➜ Calcule les montants sur la base des détails actifs
+                $amountHt  = $contract->calculateTotalPrice($dateStarted);
+                $amountTtc = $contract->calculateTotalPriceWithVat($dateStarted);
+
+
+                if ($amountHt <= 0) {
+                    Log::warning("ProcessBills[$noBill] skip (zero amount) contract={$contract->id} company={$contract->company->name}");
+                    continue;
+                }
+
                 Log::info("ProcessBills[{$noBill}] creating bill for contract {$contract->id}");
 
                 $bill = new Bill();
                 $bill->company_id = $contracts->first()->company_id;
                 $bill->no_bill = $noBill;
-                $bill->generated_at = now()->format(config('project.date_format'));
-                $bill->validated_at = now()->format(config('project.date_format'));
+                $bill->generated_at = '28/08/2025';
+                $bill->validated_at = '28/08/2025';
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
-                $bill->amount = str_replace(',', '.', $contract->calculateTotalPrice($dateStarted));
-                $bill->amount_vat_included = str_replace(',', '.', $contract->calculateTotalPriceWithVat($dateStarted));
+                $bill->amount               = $amountHt;          // on laisse en float, inutile de str_replace
+                $bill->amount_vat_included  = $amountTtc;
                 $bill->type_period_id = $contract->type_period_id;
                 $bill->contract_id = $contract->id;
 
@@ -96,9 +127,17 @@ class ProcessBills implements ShouldQueue
             }
         });
 
-        $bills = Bill::with('contract.contract_product_detail.type_product')
-                    ->where('no_bill', $noBill)
-                    ->get();
+       $bills = Bill::with([
+            'contract.company',
+            'contract.contract_product_detail' => function ($q) use ($dateStart) {
+                $q->whereNull('billing_terminated_at')
+                    ->orWhereDate('billing_terminated_at', '0001-01-01')
+                    ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+                },
+            'contract.contract_product_detail.type_product.type_vat',
+        ])
+        ->where('no_bill', $noBill)
+        ->get();
 
         app(GenerateAccountingHisto::class)
             ->handleCollection($bills, $dateStarted);

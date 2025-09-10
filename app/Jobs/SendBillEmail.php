@@ -12,13 +12,18 @@ use Throwable;
 use Illuminate\Support\Facades\Log;
 use Swift_Plugins_LoggerPlugin;
 use Swift_Plugins_Loggers_ArrayLogger;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
 
 class SendBillEmail implements ShouldQueue
 {
-    use Dispatchable, Queueable;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $bill;
+
+    public $tries = 3;
+    public $backoff = [60, 120, 300];
 
     public function __construct($bill)
     {

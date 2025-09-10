@@ -158,7 +158,6 @@ class Index extends Component
     private function getGroupedContracts()
     {
         $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
-        $endOfMonth = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->endOfMonth();
 
         $contracts = Contract::with(['type_period', 'company',
             'contract_product_detail' => function ($q) use ($dateStart) {
@@ -190,8 +189,13 @@ class Index extends Component
                        ->whereDate('terminated_at', '>=', $dateStart->copy()->startOfMonth());
                 });
             })
-            ->whereHas('contract_product_detail', function ($query) {
-                $query->where('monthly_unit_price_without_taxe', '>', 0);
+            ->whereHas('contract_product_detail', function ($query) use ($dateStart) {
+                $query->where('monthly_unit_price_without_taxe', '>', 0)
+                ->where(function($q2) use ($dateStart) {
+                    $q2->whereNull('billing_terminated_at')
+                        ->orWhereDate('billing_terminated_at', '0001-01-01')
+                        ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+                });
             })
             ->get()
             ->filter(fn($contract) => $contract->contract_product_detail->isNotEmpty())
@@ -310,7 +314,7 @@ class Index extends Component
         dispatch(new ProcessBills(
             $companyName,
             $contractIds,
-            $started_at,
+            '28/08/2025',
             $billed_at,
             auth()->user()->id,
             $groupKey
