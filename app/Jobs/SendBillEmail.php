@@ -14,6 +14,7 @@ use Swift_Plugins_LoggerPlugin;
 use Swift_Plugins_Loggers_ArrayLogger;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Models\Bill;
 
 
 class SendBillEmail implements ShouldQueue
@@ -53,7 +54,7 @@ class SendBillEmail implements ShouldQueue
         Mail::to($toEmail, $toName)
             ->send(new \App\Mail\BillSent($this->bill));
 
-        $this->bill->update(['sent_at' => Carbon::now()->format('d/m/Y')]);
+        Bill::whereNotNull('no_bill')->update(['sent_at' => now()]);
 
         // suppression du flag
         Cache::forget("sending.bill.{$this->bill->no_bill}");
