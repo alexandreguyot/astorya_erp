@@ -314,7 +314,7 @@ class Index extends Component
         dispatch(new ProcessBills(
             $companyName,
             $contractIds,
-            '28/08/2025',
+            $started_at,
             $billed_at,
             auth()->user()->id,
             $groupKey

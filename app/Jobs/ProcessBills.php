@@ -110,11 +110,11 @@ class ProcessBills implements ShouldQueue
                 $bill = new Bill();
                 $bill->company_id = $contracts->first()->company_id;
                 $bill->no_bill = $noBill;
-                $bill->generated_at = '28/08/2025';
-                $bill->validated_at = '28/08/2025';
+                $bill->generated_at = now()->format(config('project.date_format'));
+                $bill->validated_at = now()->format(config('project.date_format'));
                 $bill->started_at = $this->startedAt;
                 $bill->billed_at = $this->billedAt;
-                $bill->amount               = $amountHt;          // on laisse en float, inutile de str_replace
+                $bill->amount = $amountHt;
                 $bill->amount_vat_included  = $amountTtc;
                 $bill->type_period_id = $contract->type_period_id;
                 $bill->contract_id = $contract->id;
