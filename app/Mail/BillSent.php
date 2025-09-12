@@ -20,7 +20,7 @@ class BillSent extends Mailable
     public function build()
     {
         $pdfPath = storage_path("app/private/factures/"
-            . now()->createFromFormat('d/m/Y', $this->bill->generated_at)->format('m-Y')
+            . now()->createFromFormat('d/m/Y', $this->bill->generated_at)->format('Y-m')
             . "/{$this->bill->no_bill}.pdf"
         );
 
