@@ -54,7 +54,7 @@ class SendBillEmail implements ShouldQueue
         Mail::to($toEmail, $toName)
             ->send(new \App\Mail\BillSent($this->bill));
 
-        Bill::whereNotNull('no_bill')->update(['sent_at' => now()]);
+        Bill::where('no_bill', $this->bill->no_bill)->update(['sent_at' => now()]);
 
         // suppression du flag
         Cache::forget("sending.bill.{$this->bill->no_bill}");
