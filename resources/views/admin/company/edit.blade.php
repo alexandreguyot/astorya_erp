@@ -17,6 +17,9 @@
             <a id="tab2Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab2')">
                 contrats
             </a>
+            <a id="tab5Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab5')">
+                factures
+            </a>
             <a id="tab3Btn" class="w-1/3 py-[10px] tablink cursor-pointer border-r-2 border-red-400 text-red-800 hover:bg-red-300" onclick="openTab('tab3')">
                 contacts
             </a>
@@ -30,6 +33,9 @@
         </div>
         <div id="tab2" class="hidden tabcontent p-4 bg-blueGray-100">
             @livewire('company.contracts', [$company])
+        </div>
+        <div id="tab5" class="hidden tabcontent p-4 bg-blueGray-100">
+            @livewire('company.bills', [$company])
         </div>
         <div id="tab3" class="hidden tabcontent p-4 bg-blueGray-100">
             @livewire('company.contacts', [$company])

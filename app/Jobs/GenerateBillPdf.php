@@ -12,9 +12,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Bus\Dispatchable;
 class GenerateBillPdf implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
 
     public string $no_bill;
     public $dateStarted;
@@ -97,6 +99,7 @@ class GenerateBillPdf implements ShouldQueue
 
         Storage::put($path, $pdf->output());
 
+        Log::info('PDF Generated and saved for bill: ' . $this->no_bill);
     }
 
     protected function getVatResumesFromContracts($contracts, $date = null)
