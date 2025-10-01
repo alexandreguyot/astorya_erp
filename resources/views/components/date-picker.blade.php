@@ -24,6 +24,7 @@
 @pushOnce('scripts')
     <script>
         $(function() {
+            let currentYear = new Date().getFullYear();
             $.datepicker.regional['fr'] = {
                 closeText: 'Fermer',
                 prevText: 'Précédent',
@@ -43,7 +44,8 @@
                 firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: false,
-                yearSuffix: ''
+                yearSuffix: '',
+                yearRange: currentYear + ":" + (currentYear + 100),
             };
             $.datepicker.setDefaults($.datepicker.regional['fr']);
 

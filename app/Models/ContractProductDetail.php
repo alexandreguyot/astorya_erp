@@ -30,22 +30,22 @@ class ContractProductDetail extends Model
         'last_billed_at' => 'date',
     ];
 
-    /**
-     * Relation avec Contract
-     */
+    /* =========================
+     |  Relations
+     |=========================*/
     public function contract()
     {
         return $this->belongsTo(Contract::class);
     }
 
-    /**
-     * Relation avec Product
-     */
     public function type_product()
     {
         return $this->belongsTo(TypeProduct::class);
     }
 
+    /* =========================
+     |  Scope existant
+     |=========================*/
     public function scopeActiveAt(Builder $query, Carbon $date): Builder
     {
         $cutoff = $date->copy()->startOfMonth()->format('Y-m-d');
@@ -57,40 +57,138 @@ class ContractProductDetail extends Model
         });
     }
 
+    /* =========================
+     |  Helpers dates brutes
+     |=========================*/
+    protected function rawBillingEnd(): ?Carbon
+    {
+        // billing_terminated_at est stocké en Y-m-d (puis formaté par accessor)
+        $v = $this->getRawOriginal('billing_terminated_at');
+        if (!$v || $v === '0001-01-01') return null;
+        return Carbon::parse($v);
+    }
+
+    protected function rawContractEnd(): ?Carbon
+    {
+        // terminated_at du contrat (si présent)
+        $raw = optional($this->contract)->getRawOriginal('terminated_at');
+        $v = $raw ?? ($this->contract->terminated_at ?? null);
+        return $v ? Carbon::parse($v) : null;
+    }
+
     /**
-     * Montant de base HT, proratisé si on est dans le mois de terminaison.
+     * Renvoie la date de fin effective (la plus proche) si elle tombe dans [start; end] inclus.
+     * - Si les deux dates existent et sont dans la période => on prend la plus proche (la plus tôt).
+     * - Si une seule est dans la période => on prend celle-là.
+     * - Sinon => null (pas de prorata).
+     */
+    protected function terminationInPeriod(Carbon $periodStart, Carbon $periodEnd): ?Carbon
+    {
+        $lineEnd = $this->rawBillingEnd();
+        $contEnd = $this->rawContractEnd();
+
+        $candidates = [];
+        if ($lineEnd && $lineEnd->betweenIncluded($periodStart, $periodEnd)) {
+            $candidates[] = $lineEnd;
+        }
+        if ($contEnd && $contEnd->betweenIncluded($periodStart, $periodEnd)) {
+            $candidates[] = $contEnd;
+        }
+
+        if (empty($candidates)) {
+            return null;
+        }
+
+        usort($candidates, fn($a,$b) => $a->lessThan($b) ? -1 : ($a->equalTo($b) ? 0 : 1));
+        return $candidates[0]; // la plus tôt dans la période
+    }
+
+    /* =========================
+     |  Montants
+     |=========================*/
+
+    /**
+     * Montant HT sur une PÉRIODE quelconque.
+     * Règle :
+     *  - Sans date de fin dans la période => pas de prorata, 1 "monthly_base" par mois couvert.
+     *  - Si une date de fin (contrat OU ligne) est dans la période =>
+     *      * tous les mois AVANT le mois de fin : monthly_base plein
+     *      * mois de fin : prorata au jour -> (monthly_base / nb_jours_du_mois) * nb_jours_utilisés
+     */
+    public function amountForPeriod(Carbon $periodStart, Carbon $periodEnd): float
+    {
+        // base mensuelle (plein mois)
+        $monthlyBase = (float)$this->monthly_unit_price_without_taxe * (float)$this->quantity;
+
+        // Normalise la période sur des mois civils (on travaille mois par mois)
+        $cursor = $periodStart->copy()->startOfMonth();
+        $periodEndMonth = $periodEnd->copy()->endOfMonth();
+
+        // Cherche une date de fin dans la période
+        $term = $this->terminationInPeriod($periodStart->copy()->startOfDay(), $periodEnd->copy()->endOfDay());
+
+        $total = 0.0;
+
+        while ($cursor->lte($periodEndMonth)) {
+            $monthStart = $cursor->copy()->startOfMonth();
+            $monthEnd   = $cursor->copy()->endOfMonth();
+            $daysInMonth = $monthStart->daysInMonth;
+
+            // Si pas de fin dans la période -> tous les mois couverts sont facturés plein
+            if (!$term) {
+                // Mois couvert par la période ?
+                if ($monthEnd->lt($periodStart) || $monthStart->gt($periodEnd)) {
+                    // hors période
+                } else {
+                    $total += $monthlyBase;
+                }
+                $cursor->addMonth();
+                continue;
+            }
+
+            // Il y a une fin dans la période
+            if ($term->year === $monthStart->year && $term->month === $monthStart->month) {
+                // Mois de fin -> prorata sur les jours utilisés dans ce mois
+                // On part du 1er du mois (mois fiscal), sauf si la période commence après
+                $activeStart = $periodStart->greaterThan($monthStart) ? $periodStart->copy() : $monthStart->copy();
+                $activeEnd   = $term->lessThan($monthEnd) ? $term->copy() : $monthEnd->copy();
+
+                if ($activeEnd->gte($activeStart)) {
+                    $monthlyBase = (float)$this->monthly_unit_price_without_taxe;
+                    $daysUsed = $activeStart->diffInDays($activeEnd) + 1; // inclusif
+
+                    // Si ça couvre tout le mois (fin = dernier jour), on facture plein
+                    if ($activeStart->lte($monthStart) && $activeEnd->gte($monthEnd)) {
+                        $total += $monthlyBase;
+                    } else {
+                        $total += $monthlyBase * ($daysUsed / $daysInMonth);
+                    }
+                }
+            } elseif ($monthEnd->lt($term)) {
+                // Mois strictement avant le mois de fin => plein mois
+                // (à condition d'être dans la période demandée)
+                if (!($monthEnd->lt($periodStart) || $monthStart->gt($periodEnd))) {
+                    $total += $monthlyBase;
+                }
+            } else {
+                // Mois après le mois de fin => rien
+            }
+
+            $cursor->addMonth();
+        }
+
+        return round($total, 2);
+    }
+
+    /**
+     * Compat avec ton code existant :
+     * Calcule le montant pour le MOIS de $date (période = mois civil).
      */
     public function proratedBase(Carbon $date): float
     {
-        $base = $this->monthly_unit_price_without_taxe * $this->quantity;
-
-        $billingTerm = $this->billing_terminated_at ? Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)
-        : null;
-
-        if ($billingTerm && $billingTerm->year  === $date->year && $billingTerm->month === $date->month) {
-            $startOfMonth  = $date->copy()->startOfMonth();
-            $daysInMonth   = $startOfMonth->daysInMonth;
-            $startBilling  = $this->billing_started_at
-                ? Carbon::createFromFormat(config('project.date_format'), $this->billing_started_at)
-                : $startOfMonth;
-            $endBilling    = $billingTerm;
-            $daysUsed      = $startBilling->diffInDays($endBilling) + 1;
-            $base         *= ($daysUsed / $daysInMonth);
-
-            return round($base, 2);
-        }
-
-        if ($this->contract->isTerminationMonth($date)) {
-            $setupDay     = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->day;
-            $day          = min($setupDay, $date->daysInMonth);
-            $startBilling = $date->copy()->day($day);
-            $endBilling   = Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at);
-            $daysUsed     = $startBilling->diffInDays($endBilling) + 1;
-            $daysInMonth  = $startBilling->daysInMonth;
-            $base        *= $daysUsed / $daysInMonth;
-        }
-
-        return round($base, 2);
+        $start = $date->copy()->startOfMonth();
+        $end   = $date->copy()->endOfMonth();
+        return $this->amountForPeriod($start, $end);
     }
 
     public function proratedWithVat(Carbon $date): float
@@ -116,51 +214,22 @@ class ContractProductDetail extends Model
             && Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)->month === $dateStart->month;
     }
 
-    public function calculateTotalPriceWithoutTaxe($date) {
-        $base = $this->monthly_unit_price_without_taxe * $this->quantity;
-        $isTerm = $this->contract->isTerminationMonth($date) || $this->isTerminationMonth($date);
-
-        if ($isTerm) {
-            $setupDay  = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->day;
-            $day = min($setupDay, $date->daysInMonth);
-            $startBilling = $date->copy()->day($day);
-            $endBilling   = Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at);
-            $daysUsed     = $startBilling->diffInDays($endBilling) + 1;
-            $daysInMonth  = $startBilling->daysInMonth;
-            $base = $base * ($daysUsed / $daysInMonth);
-        }
-
-        return number_format(round($base, 2), 2, ',', ' ');
+    public function calculateTotalPriceWithoutTaxe($date)
+    {
+        // pour rester cohérent, on réutilise le calcul standard sur le mois de $date
+        return number_format($this->proratedBase(Carbon::parse($date)), 2, ',', ' ');
     }
 
     public function getTotalPriceAttribute()
     {
-        $base = $this->monthly_unit_price_without_taxe * $this->quantity;
-
-        // Proration si facturation terminée ce mois
-        if ($this->billing_terminated_at
-            && $this->billing_started_at->year === $this->billing_terminated_at->year
-            && $this->billing_started_at->month === $this->billing_terminated_at->month) {
-
-            $startOfMonth = $this->billing_started_at->copy()->startOfMonth();
-            $endDate      = $this->billing_terminated_at;
-            $daysUsed     = $startOfMonth->diffInDays($endDate) + 1;
-            $daysInMonth  = $startOfMonth->daysInMonth;
-
-            $base = $base * ($daysUsed / $daysInMonth);
-        }
-
+        // Ancien attribut : garde le plein mois
+        $base = (float)$this->monthly_unit_price_without_taxe * (float)$this->quantity;
         return round($base, 2);
     }
 
     public function getFormattedMonthlyUnitPriceWithoutTaxeAttribute()
     {
-        return number_format(
-            $this->monthly_unit_price_without_taxe,
-            2,
-            ',',
-            ' '
-        );
+        return number_format($this->monthly_unit_price_without_taxe, 2, ',', ' ');
     }
 
     public function getMonthlyUnitPriceWithTaxeAttribute()
@@ -183,4 +252,13 @@ class ContractProductDetail extends Model
         return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
     }
 
+    public function setBillingStartedAtAttribute($value)
+    {
+        $this->attributes['billing_started_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
+    }
+
+    public function setBillingTerminatedAtAttribute($value)
+    {
+        $this->attributes['billing_terminated_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
+    }
 }

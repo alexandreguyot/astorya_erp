@@ -81,8 +81,8 @@ class Products extends Component
             'designation'                => $detail->designation,
             'quantity'                   => $detail->quantity,
             'monthly_unit_price_without_taxe' => $detail->monthly_unit_price_without_taxe,
-            'billing_started_at'         => $detail->billing_started_at ? Carbon::createFromFormat(config('project.date_format'), $detail->billing_started_at)->format('Y-m-d'): null,
-            'billing_terminated_at'      => $detail->billing_terminated_at ? Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at)->format('Y-m-d') : null,
+            'billing_started_at'         => $detail->billing_started_at,
+            'billing_terminated_at'      => $detail->billing_terminated_at,
             'last_billed_at'             => $detail->last_billed_at?->format(config('project.date_format')),
             'pivot_id'                   => $detail->id,
         ];
@@ -92,13 +92,14 @@ class Products extends Component
 
     public function updateDetail()
     {
+        $dateFormat = config('project.date_format');
         try {
             $this->validate([
                 'editDetailData.designation' => 'required|string',
                 'editDetailData.quantity'    => 'required|integer|min:1',
                 'editDetailData.monthly_unit_price_without_taxe' => 'required',
-                'editDetailData.billing_started_at'    => 'nullable|date',
-                'editDetailData.billing_terminated_at' => 'nullable|date',
+                'editDetailData.billing_started_at'    => 'nullable|date_format:' . $dateFormat,
+                'editDetailData.billing_terminated_at' => 'nullable|date_format:' . $dateFormat,
             ]);
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->errors());
