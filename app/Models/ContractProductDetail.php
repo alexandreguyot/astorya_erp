@@ -261,4 +261,46 @@ class ContractProductDetail extends Model
     {
         $this->attributes['billing_terminated_at'] = $value ? Carbon::createFromFormat(config('project.date_format'), $value)->format('Y-m-d') : null;
     }
+
+    public function canGenerateForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    {
+        $start = $this->nextBillableStart($periodStart);
+        $end   = $this->lastBillableEnd($periodEnd);
+
+        // impossible si la période est inversée / ou déjà entièrement facturée
+        return $start->lte($end);
+    }
+
+    protected function nextBillableStart(Carbon $periodStart): Carbon
+    {
+        $start = $periodStart->copy()->startOfDay();
+
+        // optionnel : ne pas facturer avant la mise en place du contrat
+        if ($this->contract?->setup_at) {
+            $setup = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->startOfDay();
+            $start = $start->max($setup);
+        }
+
+        return $start;
+    }
+
+    /** Date de fin “facturable” (bornée par une éventuelle terminaison) */
+    protected function lastBillableEnd(Carbon $periodEnd): Carbon
+    {
+        $end = $periodEnd->copy()->endOfDay();
+
+        // si la ligne a une fin antérieure, on clippe
+        if ($this->billing_terminated_at) {
+            $lineEnd = Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at)->endOfDay();
+            $end = $end->min($lineEnd);
+        }
+
+        // si le contrat a une fin antérieure, on clippe
+        if ($this->contract?->terminated_at) {
+            $ctEnd = Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at)->endOfDay();
+            $end = $end->min($ctEnd);
+        }
+
+        return $end;
+    }
 }

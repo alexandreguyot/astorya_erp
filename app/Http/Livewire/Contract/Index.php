@@ -158,6 +158,7 @@ class Index extends Component
     private function getGroupedContracts()
     {
         $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
+        $periodEnd   = $dateStart->copy()->endOfMonth();
 
         $contracts = Contract::with(['type_period', 'company',
             'contract_product_detail' => function ($q) use ($dateStart) {
@@ -214,6 +215,16 @@ class Index extends Component
                 }
 
                 return $isOnCycle || $isTerminationMonth;
+            })
+            // 3) **Anti refacturation dans le passé** :
+        // On garde le contrat uniquement s’il a AU MOINS un détail facturable sur la période UI.
+            ->filter(function ($contract) use ($dateStart, $periodEnd) {
+                return $contract->contract_product_detail->contains(function ($detail) use ($dateStart, $periodEnd) {
+                    // utilise la méthode canGenerateForPeriod() ajoutée sur le modèle Detail
+                    return method_exists($detail, 'canGenerateForPeriod')
+                        ? !$detail->canGenerateForPeriod($dateStart, $periodEnd)
+                        : true; // fallback si jamais
+                });
             })
             ->each(function ($contract) {
                 $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
