@@ -54,9 +54,9 @@
         </div>
         <div class="auto-fill">
             Mode de paiement :
-            @if ($contract->company->payment_method == 0)
+            @if ($contract->company->bill_payment_method == 0)
                 Prélèvement
-            @elseif ($contract->company->payment_method == 1)
+            @elseif ($contract->company->bill_payment_method == 1)
                 Virement
             @else
 

@@ -108,7 +108,7 @@
                                 <div>:   {{ $bill->no_bill ?? 'A DEFINIR' }} </div>
                                 <div>:   {{ $totals['total_ttc'] }}</div>
                                 <div>:   @if ($bill) {{ \Carbon\Carbon::createFromFormat('d/m/Y', $bill->generated_at)->addDays(7)->format('d/m/Y') }} @else A DEFINIR @endif</div>
-                                <div>:   @if ($contract->company->payment_method == 0) Prélèvement @elseif ($contract->company->payment_method == 1)
+                                <div>:   @if ($contract->company->bill_payment_method == 0) Prélèvement @elseif ($contract->company->bill_payment_method == 1)
                                     Virement @else @endif</div>
                             </div>
                         </div>
