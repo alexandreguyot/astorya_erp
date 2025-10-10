@@ -111,11 +111,12 @@
                                 </td>
                                 <td>
                                     <span class="badge badge-blue">
-                                        @foreach($contracts as $contract)
-                                            <span class="badge badge-blue">
-                                                {{ $contract->contract_product_detail->first()->last_billed_at->format('d/m/Y') ?? '' }}
-                                            </span>
-                                        @endforeach
+                                        @php $detail = $contracts->first()->contract_product_detail->first(); @endphp
+                                        <span class="badge badge-blue">
+                                            {{ $detail && $detail->last_billed_at
+                                                ? $detail->last_billed_at->format('d/m/Y')
+                                                : 'Jamais facturé' }}
+                                        </span>
                                     </span>
                                 <td>
                                     <span class="badge badge-red">
