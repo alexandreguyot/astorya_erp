@@ -284,6 +284,66 @@ class ContractProductDetail extends Model
         return $start;
     }
 
+    public function nextBillableAfter(): ?\Carbon\Carbon
+    {
+        $raw = $this->getRawOriginal('last_billed_at');
+        return $raw ? \Carbon\Carbon::parse($raw)->addDay()->startOfDay() : null;
+    }
+
+
+    /** True si ce détail doit apparaître pour la période affichée (mois courant) */
+    public function shouldListForPeriod(\Carbon\Carbon $periodStart, \Carbon\Carbon $periodEnd): bool
+    {
+        // Dates brutes utiles
+        $lineEndRaw   = $this->getRawOriginal('billing_terminated_at');
+        $lineEnd      = $lineEndRaw && $lineEndRaw !== '0001-01-01' ? \Carbon\Carbon::parse($lineEndRaw) : null;
+
+        $contractEnd  = $this->contract?->terminated_at
+            ? \Carbon\Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at)
+            : null;
+
+        $lastRaw      = $this->getRawOriginal('last_billed_at');
+        $lastBilled   = $lastRaw ? \Carbon\Carbon::parse($lastRaw)->startOfDay() : null;
+
+        // Fin effective = plus tôt entre fin de ligne et fin de contrat (si présentes)
+        $effectiveEnd = null;
+        if ($lineEnd && $contractEnd) {
+            $effectiveEnd = $lineEnd->lt($contractEnd) ? $lineEnd->copy() : $contractEnd->copy();
+        } elseif ($lineEnd) {
+            $effectiveEnd = $lineEnd->copy();
+        } elseif ($contractEnd) {
+            $effectiveEnd = $contractEnd->copy();
+        }
+
+        // ✅ Nouvelle règle: ne pas afficher si la fin < last_billed_at
+        if ($effectiveEnd && $lastBilled && $effectiveEnd->lt($lastBilled)) {
+            return false;
+        }
+
+        // 1) Si une fin tombe dans la période → on l’affiche (prorata final)
+        if (
+            ($lineEnd && $lineEnd->betweenIncluded($periodStart, $periodEnd)) ||
+            ($contractEnd && $contractEnd->betweenIncluded($periodStart, $periodEnd))
+        ) {
+            return true;
+        }
+
+        // 2) Jamais facturé → n’afficher que si on est sur le bon mois d’échéance (cycle)
+        if (is_null($lastBilled)) {
+            $setup = \Carbon\Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->startOfMonth();
+            $nb    = max(1, (int) ($this->contract->type_period->nb_month ?? 1));
+            $monthsDiff = $setup->diffInMonths($periodStart->copy()->startOfMonth());
+            $isOnCycle  = $periodStart->gte($setup) && ($monthsDiff % $nb === 0);
+            return $isOnCycle;
+        }
+
+        // 3) Déjà facturé au moins une fois → on affiche si l’on peut refacturer pendant cette période
+        // (= lendemain de last_billed_at ≤ fin de période)
+        $nextBillable = $lastBilled->copy()->addDay()->startOfDay();
+        return $nextBillable->lte($periodEnd->copy()->endOfDay());
+    }
+
+
     /** Date de fin “facturable” (bornée par une éventuelle terminaison) */
     protected function lastBillableEnd(Carbon $periodEnd): Carbon
     {

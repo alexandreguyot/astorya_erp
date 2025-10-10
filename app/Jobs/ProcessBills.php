@@ -122,6 +122,13 @@ class ProcessBills implements ShouldQueue
                 if ($bill->save()) {
                     $contract->billed_at = now()->format(config('project.date_format'));
                     $contract->save();
+                    $lastEndRaw = $bill->getRawOriginal('billed_at') ?? $bill->billed_at;
+                    $lastEnd = \Carbon\Carbon::parse($lastEndRaw)->format('Y-m-d');
+
+                    foreach ($contract->contract_product_detail as $detail) {
+                        $detail->last_billed_at = $lastEnd;
+                        $detail->save();
+                    }
                 }
                 Log::info("ProcessBills[{$noBill}] bill created, id={$bill->id}");
             }

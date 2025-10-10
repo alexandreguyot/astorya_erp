@@ -157,78 +157,78 @@ class Index extends Component
 
     private function getGroupedContracts()
     {
-        $dateStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
-        $periodEnd   = $dateStart->copy()->endOfMonth();
+        $periodStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
+        $periodEnd   = $periodStart->copy()->endOfMonth();
 
-        $contracts = Contract::with(['type_period', 'company',
-            'contract_product_detail' => function ($q) use ($dateStart) {
-                $q->whereNull('billing_terminated_at')
-                    ->orWhereDate('billing_terminated_at', '0001-01-01')
-                    ->orWhereDate('billing_terminated_at', '>=', $dateStart);
-        }, 'contract_product_detail.type_product.type_contract'])
+        $contracts = Contract::with([
+                'type_period',
+                'company',
+                'contract_product_detail' => function ($q) use ($periodStart) {
+                    $q->where('monthly_unit_price_without_taxe', '>', 0)
+                    ->where(function ($qq) use ($periodStart) {
+                        $qq->whereNull('billing_terminated_at')
+                            ->orWhereDate('billing_terminated_at', '0001-01-01')
+                            ->orWhereDate('billing_terminated_at', '>=', $periodStart);
+                    })
+                    ->with('type_product.type_contract');
+                },
+            ])
+            // contrat démarré
             ->whereNotNull('setup_at')
-            ->where(function ($query) use ($dateStart) {
-                $query->whereNull('terminated_at')
-                      ->orWhereDate('terminated_at', '>=', $dateStart);
+            // contrat non résilié avant la période
+            ->where(function ($q) use ($periodStart) {
+                $q->whereNull('terminated_at')
+                ->orWhereDate('terminated_at', '>=', $periodStart);
             })
-            ->when($this->search, function ($query) {
-                $query->whereHas('company', function ($q) {
-                    $q->where('companies.name', 'like', '%' . $this->search . '%');
+            // recherche par client
+            ->when($this->search, function ($q) {
+                $q->whereHas('company', function ($qq) {
+                    $qq->where('companies.name', 'like', '%'.$this->search.'%');
                 });
             })
-            ->where(function($q) use ($dateStart) {
-                $q->whereDoesntHave('bills', function($q2) use ($dateStart) {
-                    $q2->whereMonth('generated_at', $dateStart->month)
-                       ->whereYear('generated_at',  $dateStart->year)
-                       ->orWhere(function($q3) use ($dateStart) {
-                            $q3->whereDate('generated_at', '>=', $dateStart);
-                       });
-                })
-                ->orWhere(function($q3) use ($dateStart) {
-                    $q3->whereYear('terminated_at', $dateStart->year)
-                       ->whereMonth('terminated_at', $dateStart->month)
-                       ->whereDate('terminated_at', '>=', $dateStart->copy()->startOfMonth());
-                });
-            })
-            ->whereHas('contract_product_detail', function ($query) use ($dateStart) {
-                $query->where('monthly_unit_price_without_taxe', '>', 0)
-                ->where(function($q2) use ($dateStart) {
-                    $q2->whereNull('billing_terminated_at')
-                        ->orWhereDate('billing_terminated_at', '0001-01-01')
-                        ->orWhereDate('billing_terminated_at', '>=', $dateStart);
+            // ne pas reprendre un contrat déjà facturé ce mois (generated_at)
+            ->where(function ($q) use ($periodStart) {
+                $q->whereDoesntHave('bills', function ($qb) use ($periodStart) {
+                    $qb->whereYear('generated_at',  $periodStart->year)
+                    ->whereMonth('generated_at', $periodStart->month);
                 });
             })
             ->get()
-            ->filter(fn($contract) => $contract->contract_product_detail->isNotEmpty())
-            ->filter(function($contract) use ($dateStart) {
-                $current    = $dateStart->copy()->startOfMonth();
-                $setup      = Carbon::createFromFormat(config('project.date_format'), $contract->setup_at)
-                                    ->startOfMonth();
-                $monthsDiff = $setup->diffInMonths($current);
 
-                $isOnCycle = $current->gte($setup) && $monthsDiff % $contract->type_period->nb_month === 0;
+            // au moins un détail chargé
+            ->filter(fn ($contract) => $contract->contract_product_detail->isNotEmpty())
 
-                $isTerminationMonth = false;
+            // garder si mois d’échéance OU si le contrat se termine dans la période (pour prorata final)
+            ->filter(function ($contract) use ($periodStart, $periodEnd) {
+                $setup      = Carbon::createFromFormat(config('project.date_format'), $contract->setup_at)->startOfMonth();
+                $monthsDiff = $setup->diffInMonths($periodStart);
+                $nbMonth    = max(1, (int) ($contract->type_period->nb_month ?? 1));
+                $isOnCycle  = $periodStart->gte($setup) && ($monthsDiff % $nbMonth === 0);
+
+                $isTerminationInPeriod = false;
                 if ($contract->terminated_at) {
                     $term = Carbon::createFromFormat(config('project.date_format'), $contract->terminated_at);
-                    $isTerminationMonth = $term->year === $current->year && $term->month === $current->month;
+                    $isTerminationInPeriod = $term->betweenIncluded($periodStart, $periodEnd);
                 }
 
-                return $isOnCycle || $isTerminationMonth;
+                return $isOnCycle || $isTerminationInPeriod;
             })
-            // 3) **Anti refacturation dans le passé** :
-        // On garde le contrat uniquement s’il a AU MOINS un détail facturable sur la période UI.
-            ->filter(function ($contract) use ($dateStart, $periodEnd) {
-                return $contract->contract_product_detail->contains(function ($detail) use ($dateStart, $periodEnd) {
-                    // utilise la méthode canGenerateForPeriod() ajoutée sur le modèle Detail
-                    return method_exists($detail, 'canGenerateForPeriod')
-                        ? !$detail->canGenerateForPeriod($dateStart, $periodEnd)
-                        : true; // fallback si jamais
+
+            // ne garde que les contrats ayant AU MOINS un détail listable pour la période
+            ->filter(function ($contract) use ($periodStart, $periodEnd) {
+                return $contract->contract_product_detail->contains(function ($detail) use ($periodStart, $periodEnd) {
+                    return method_exists($detail, 'shouldListForPeriod')
+                        ? $detail->shouldListForPeriod($periodStart, $periodEnd)
+                        : true;
                 });
             })
+
+            // libellé de période
             ->each(function ($contract) {
                 $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
             })
+
+            // groupement & tri
             ->groupBy([
                 fn ($contract) => optional($contract->company)->name ?? 'Sans société',
                 fn ($contract) => $contract->billing_period,
@@ -237,6 +237,8 @@ class Index extends Component
 
         return $contracts;
     }
+
+
 
     function interpolate(string $sql, array $bindings): string
     {

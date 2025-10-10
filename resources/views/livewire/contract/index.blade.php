@@ -61,6 +61,9 @@
                             {{ trans('cruds.contract.fields.company') }}
                             @include('components.table.sort', ['field' => 'company.name'])
                         </th>
+                         <th>
+                            Dernière facturation
+                        </th>
                         <th class="w-1/6">
                             Période de facturation
                         </th>
@@ -106,6 +109,14 @@
                                         <a href="{{ route('admin.companies.edit', $contracts->first()->company_id )}}">{{ $companyName }}</a>
                                     </span>
                                 </td>
+                                <td>
+                                    <span class="badge badge-blue">
+                                        @foreach($contracts as $contract)
+                                            <span class="badge badge-blue">
+                                                {{ $contract->contract_product_detail->first()->last_billed_at->format('d/m/Y') ?? '' }}
+                                            </span>
+                                        @endforeach
+                                    </span>
                                 <td>
                                     <span class="badge badge-red">
                                         {{ $date }}
