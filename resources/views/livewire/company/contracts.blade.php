@@ -7,7 +7,7 @@
             <table class="table w-full table-index">
                 <thead >
                     <tr>
-                        <th></th>
+                        <th>ID</th>
                         <th>Type</th>
                         <th>Périodicité</th>
                         <th>Date de fin</th>
@@ -25,6 +25,7 @@
 
                     <tr wire:click="toggle({{ $contract->id }})" class="hover:bg-gray-50 cursor-pointer {{ $openContractId === $contract->id ? 'bg-gray-100' : '' }}">
                         <td>
+                            {{ $contract->id }}
                             {{-- <input type="checkbox" value="{{ $contract->id }}" /> --}}
                         </td>
                         <td>

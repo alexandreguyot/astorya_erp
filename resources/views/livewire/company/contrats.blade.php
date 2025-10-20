@@ -5,6 +5,9 @@
                 <thead>
                     <tr>
                         <th>
+                            ID
+                        </th>
+                        <th>
                             Type
                         </th>
                         <th>
@@ -21,6 +24,9 @@
                 <tbody>
                     @forelse($contracts as $contract)
                             <tr>
+                                <td>
+                                    {{ $contract->id }}
+                                </td>
                                 <td>
                                     <div>
                                         @foreach($contract->contract_product_detail as $key => $detail)

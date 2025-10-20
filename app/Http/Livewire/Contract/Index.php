@@ -217,9 +217,24 @@ class Index extends Component
             // ne garde que les contrats ayant AU MOINS un détail listable pour la période
             ->filter(function ($contract) use ($periodStart, $periodEnd) {
                 return $contract->contract_product_detail->contains(function ($detail) use ($periodStart, $periodEnd) {
-                    return method_exists($detail, 'shouldListForPeriod')
-                        ? $detail->shouldListForPeriod($periodStart, $periodEnd)
-                        : true;
+                    if (!method_exists($detail, 'shouldListForPeriod')) return true;
+
+                    // on garde seulement si facturable
+                    if (! $detail->shouldListForPeriod($periodStart, $periodEnd)) {
+                        return false;
+                    }
+
+                    // 🧩 EXCLUSION : si le last_billed_at est égal à la fin de la période
+                    $lastRaw = $detail->getRawOriginal('last_billed_at');
+                    if ($lastRaw) {
+                        $last = Carbon::parse($lastRaw)->endOfDay();
+                        if ($last->equalTo($periodEnd->copy()->endOfDay())) {
+                            // déjà facturé jusqu’à la fin de ce mois → inutile de refacturer
+                            return false;
+                        }
+                    }
+
+                    return true;
                 });
             })
 

@@ -128,7 +128,7 @@
                                         @foreach($contract->contract_product_detail as $key => $detail)
                                             @if($detail->type_product && $key == 0)
                                                 <span class="badge badge-blue">
-                                                    {{ $detail->type_product->type_contract->title ?? '' }}
+                                                    <a href="{{ route('admin.contracts.edit', $contract->id )}}">{{ $detail->type_product->type_contract->title ?? '' }}
                                                 </span>
                                             @endif
                                         @endforeach
