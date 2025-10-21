@@ -110,7 +110,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-blue">
+                                    <span class="">
                                         @php $detail = $contracts->first()->contract_product_detail->first(); @endphp
                                         <span class="badge badge-blue">
                                             {{ $detail && $detail->last_billed_at
@@ -128,7 +128,7 @@
                                         @foreach($contract->contract_product_detail as $key => $detail)
                                             @if($detail->type_product && $key == 0)
                                                 <span class="badge badge-blue">
-                                                    <a href="{{ route('admin.contracts.edit', $contract->id )}}">{{ $detail->type_product->type_contract->title ?? '' }}
+                                                    <a href="{{ route('admin.contracts.edit', $contract->id )}}">{{ $detail->type_product->type_contract->title ?? '' }}</a>
                                                 </span>
                                             @endif
                                         @endforeach

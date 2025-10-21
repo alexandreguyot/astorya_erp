@@ -233,6 +233,16 @@ class Index extends Component
                             return false;
                         }
                     }
+                    // exclure si période calculée est inversée (début > fin)
+                    $period = $detail->contract->calculateBillingPeriod($periodStart->format(config('project.date_format')));
+                    if ($period) {
+                        [$startStr, $endStr] = explode(' au ', $period);
+                        $start = Carbon::createFromFormat(config('project.date_format'), $startStr);
+                        $end   = Carbon::createFromFormat(config('project.date_format'), $endStr);
+                        if ($end->lt($start)) {
+                            return false;
+                        }
+                    }
 
                     return true;
                 });
