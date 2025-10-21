@@ -105,13 +105,13 @@
                         <th class="flex flex-col space-y-2 justify-end">
                             @php
                                 $unsentCount = $billGroups->filter(fn($b) => is_null($b['sent_at']))->count();
+                                $canSeeRestricted = auth()->check() && auth()->id() === 1; // ← ID autorisé
                             @endphp
 
                             <button
                                 class="btn btn-sm btn-info mr-2 disabled:opacity-60"
                                 wire:loading.attr="disabled"
                                 wire:click="sendSelectedBills"
-                                {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
                                 Envoyer les mails des factures sélectionnées
@@ -121,12 +121,19 @@
                                 class="btn btn-sm btn-info mr-2 disabled:opacity-60"
                                 wire:loading.attr="disabled"
                                 wire:click="sendAllBills"
-                                {{ $unsentCount === 0 ? 'disabled' : '' }}
                                 @disabled($unsentCount === 0)
                             >
                                 Envoyer tous les mails des factures
                             </button>
-                        </th>
+
+                            @if($canSeeRestricted)
+                                <button
+                                    class="btn btn-sm btn-warning mr-2 disabled:opacity-60"
+                                    wire:click="sendAllErrorMail"
+                                >
+                                    (Admin) Forcer l’envoi de tous les mails
+                                </button>
+                            @endif
                     </tr>
                 </thead>
                 <tbody>

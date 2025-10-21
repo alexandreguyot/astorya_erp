@@ -299,6 +299,18 @@ class Index extends Component
         dispatch(new \App\Jobs\SendBillEmail($bill));
     }
 
+     public function sendErrorInvoice(string $noBill): void
+    {
+        $bill = Bill::with('company', 'company.contact')->where('no_bill', $noBill)->first();
+
+        if (! $bill) {
+            $this->alert('error', "Facture {$noBill} introuvable.");
+            return;
+        }
+
+        dispatch(new \App\Jobs\ErrorSentEmail($bill));
+    }
+
     public function sendMail(string $noBill)
     {
         $this->sendInvoice($noBill);
@@ -365,6 +377,46 @@ class Index extends Component
 
         foreach ($toSend as $noBill) {
             $this->sendInvoice($noBill);
+        }
+
+        $this->alert('success', "Envoi lancé pour " . count($toSend) . " facture(s) sur cette page.");
+    }
+
+    public function sendAllErrorMail()
+    {
+        $query = Bill::with(['company', 'type_period'])
+            ->whereNotNull('no_bill')
+            ->where('no_bill', 'like', 'FACT-%')
+            ->when($this->dateStart && $this->dateEnd, function($q) {
+                $dateStart = $this->convertDateFormat($this->dateStart, 'start');
+                $dateEnd   = $this->convertDateFormat($this->dateEnd,   'end');
+                $q->whereBetween('generated_at', [$dateStart, $dateEnd]);
+            })
+            ->when($this->search, function ($q) {
+                $q->whereHas('company', fn($q2) =>
+                        $q2->where('companies.name', 'like', '%'.$this->search.'%')
+                    )
+                ->orWhere('no_bill', 'like', '%'.$this->search.'%');
+            })
+            ->orderBy($this->sortBy, $this->sortDirection);
+
+        $bills = $query->get();
+        $noBillsOnPage = $bills->pluck('no_bill')->unique()->toArray();
+
+        $toSend = Bill::query()
+            ->select('no_bill')
+            ->whereIn('no_bill', $noBillsOnPage)
+            ->distinct()
+            ->pluck('no_bill')
+            ->toArray();
+
+        if (empty($toSend)) {
+            $this->alert('info', "Toutes les factures ont déjà été envoyées.");
+            return;
+        }
+
+        foreach ($toSend as $noBill) {
+            $this->sendErrorInvoice($noBill);
         }
 
         $this->alert('success', "Envoi lancé pour " . count($toSend) . " facture(s) sur cette page.");
