@@ -219,6 +219,18 @@ class Index extends Component
                 return $contract->contract_product_detail->contains(function ($detail) use ($periodStart, $periodEnd) {
                     if (!method_exists($detail, 'shouldListForPeriod')) return true;
 
+                    // 🚫 Exclure les articles avec une date de fin passée (et différente de 01/01/0001)
+                     if (!empty($detail->billing_terminated_at)) {
+                        try {
+                            $endBilling = Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at);
+                            if ($endBilling->isPast() && !$endBilling->equalTo(Carbon::createFromFormat(config('project.date_format'), '01/01/0001'))) {
+                                return false; // fin de facturation dépassée => on ne garde pas
+                            }
+                        } catch (\Exception $e) {
+                            // si la date est mal formatée, on ne filtre pas (sécurité)
+                        }
+                    }
+
                     // on garde seulement si facturable
                     if (! $detail->shouldListForPeriod($periodStart, $periodEnd)) {
                         return false;

@@ -20,7 +20,6 @@ class BankAccount extends Component
         $this->bankAccount = BankAccountModel::where('id', $this->company->bank_account_id)->first();
         if (!$this->bankAccount) {
             $this->bankAccount = new BankAccountModel();
-            $this->bankAccount->company_id = $company->id;
         }
     }
 
@@ -34,6 +33,8 @@ class BankAccount extends Component
         $this->validate();
 
         $this->bankAccount->save();
+        $this->company->bank_account_id = $this->bankAccount->id;
+        $this->company->save();
 
         $this->alert('success', 'Compte bancaire enregistré avec succès', [
             'position' => 'top-end',
