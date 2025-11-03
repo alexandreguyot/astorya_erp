@@ -173,20 +173,17 @@ class Index extends Component
                     ->with('type_product.type_contract');
                 },
             ])
-            // contrat démarré
             ->whereNotNull('setup_at')
-            // contrat non résilié avant la période
             ->where(function ($q) use ($periodStart) {
                 $q->whereNull('terminated_at')
                 ->orWhereDate('terminated_at', '>=', $periodStart);
             })
-            // recherche par client
             ->when($this->search, function ($q) {
                 $q->whereHas('company', function ($qq) {
-                    $qq->where('companies.name', 'like', '%'.$this->search.'%');
+                    $qq->where('companies.name', 'like', '%' . $this->search . '%');
                 });
             })
-            // ne pas reprendre un contrat déjà facturé ce mois (generated_at)
+            // ne pas reprendre un contrat déjà facturé ce mois
             ->where(function ($q) use ($periodStart) {
                 $q->whereDoesntHave('bills', function ($qb) use ($periodStart) {
                     $qb->whereYear('generated_at',  $periodStart->year)
@@ -214,38 +211,65 @@ class Index extends Component
                 return $isOnCycle || $isTerminationInPeriod;
             })
 
-            // ne garde que les contrats ayant AU MOINS un détail listable pour la période
+            // ne garde que les contrats ayant AU MOINS un détail listable et une période valide
             ->filter(function ($contract) use ($periodStart, $periodEnd) {
+
+                // 🚫 Supprimer les contrats où la date de début = date de fin
+                if ($contract->terminated_at && $contract->setup_at) {
+                    try {
+                        $start = Carbon::createFromFormat(config('project.date_format'), $contract->setup_at);
+                        $end   = Carbon::createFromFormat(config('project.date_format'), $contract->terminated_at);
+                        if ($end->equalTo($start)) {
+                            return false;
+                        }
+                    } catch (\Exception $e) {
+                        // Ignorer les erreurs de format
+                    }
+                }
+
                 return $contract->contract_product_detail->contains(function ($detail) use ($periodStart, $periodEnd) {
                     if (!method_exists($detail, 'shouldListForPeriod')) return true;
 
-                    // 🚫 Exclure les articles avec une date de fin passée (et différente de 01/01/0001)
-                     if (!empty($detail->billing_terminated_at)) {
+                    // 🚫 Exclure les articles avec une date de fin passée
+                    if (!empty($detail->billing_terminated_at)) {
                         try {
                             $endBilling = Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at);
                             if ($endBilling->isPast() && !$endBilling->equalTo(Carbon::createFromFormat(config('project.date_format'), '01/01/0001'))) {
-                                return false; // fin de facturation dépassée => on ne garde pas
+                                return false;
                             }
                         } catch (\Exception $e) {
-                            // si la date est mal formatée, on ne filtre pas (sécurité)
+                            // ignorer erreurs
                         }
                     }
 
-                    // on garde seulement si facturable
+                    // 🚫 Exclure les articles dont la date de début = date de fin
+                    if (!empty($detail->billing_started_at) && !empty($detail->billing_terminated_at)) {
+                        try {
+                            $startBilling = Carbon::createFromFormat(config('project.date_format'), $detail->billing_started_at);
+                            $endBilling   = Carbon::createFromFormat(config('project.date_format'), $detail->billing_terminated_at);
+                            if ($endBilling->equalTo($startBilling)) {
+                                return false;
+                            }
+                        } catch (\Exception $e) {
+                            // sécurité
+                        }
+                    }
+
+                    // garder seulement si facturable
                     if (! $detail->shouldListForPeriod($periodStart, $periodEnd)) {
                         return false;
                     }
 
-                    // 🧩 EXCLUSION : si le last_billed_at est égal à la fin de la période
+                    // 🚫 déjà facturé jusqu’à la fin de période
                     $lastRaw = $detail->getRawOriginal('last_billed_at');
                     if ($lastRaw) {
                         $last = Carbon::parse($lastRaw)->endOfDay();
                         if ($last->equalTo($periodEnd->copy()->endOfDay())) {
-                            // déjà facturé jusqu’à la fin de ce mois → inutile de refacturer
                             return false;
                         }
                     }
-                    // exclure si période calculée est inversée (début > fin)
+
+                    // 🚫 période inversée (début > fin)
                     $period = $detail->contract->calculateBillingPeriod($periodStart->format(config('project.date_format')));
                     if ($period) {
                         [$startStr, $endStr] = explode(' au ', $period);
@@ -274,8 +298,6 @@ class Index extends Component
 
         return $contracts;
     }
-
-
 
     function interpolate(string $sql, array $bindings): string
     {

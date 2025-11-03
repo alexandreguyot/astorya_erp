@@ -13,6 +13,8 @@ class Create extends Component
     public Company $company;
 
     public array $listsForFields = [];
+    public $city = '';
+    public $code_postal = '';
 
     public function mount(Company $company)
     {
@@ -31,6 +33,15 @@ class Create extends Component
     public function submit()
     {
         $this->validate();
+
+        $city = City::firstOrCreate(
+            [
+                'name' => trim($this->city),
+                'zip_code' => trim($this->code_postal),
+            ]
+        );
+
+        $this->company->city_id = $city->id;
 
         $this->company->save();
 
@@ -84,14 +95,16 @@ class Create extends Component
                 'string',
                 'nullable',
             ],
+            'city' => ['required', 'string', 'max:255'],
+            'code_postal' => ['required', 'string', 'max:10'],
         ];
     }
 
     protected function initListsForFields(): void
     {
-        $this->listsForFields['city'] = City::pluck('name', 'id')
-        ->mapWithKeys(fn($name, $id) => [$id => $name])
-        ->unique(fn($name) => strtolower($name))
-        ->toArray();
+        // $this->listsForFields['city'] = City::pluck('name', 'id')
+        // ->mapWithKeys(fn($name, $id) => [$id => $name])
+        // ->unique(fn($name) => strtolower($name))
+        // ->toArray();
     }
 }

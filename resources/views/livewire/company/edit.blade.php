@@ -40,7 +40,17 @@
             {{ trans('cruds.company.fields.address_compl_helper') }}
         </div>
     </div>
-    <div class="form-group {{ $errors->has('company.city_id') ? 'invalid' : '' }}">
+    <div class="grid grid-cols-2 gap-4">
+         <div>
+            <label for="city" class="block text-sm font-medium text-gray-700">Ville</label>
+            <input type="text" id="city" wire:model.defer="city" class="form-control">
+        </div>
+        <div>
+            <label for="code_postal" class="block text-sm font-medium text-gray-700">Code postal</label>
+            <input type="text" id="code_postal" wire:model.defer="code_postal" class="form-control">
+        </div>
+    </div>
+    {{-- <div class="form-group {{ $errors->has('company.city_id') ? 'invalid' : '' }}">
         <label class="form-label required" for="city">{{ trans('cruds.company.fields.city') }}</label>
         <x-select-list class="form-control" required id="city" name="city" :options="$this->listsForFields['city']" wire:model="company.city_id" />
         <div class="validation-message">
@@ -49,7 +59,7 @@
         <div class="help-block">
             {{ trans('cruds.company.fields.city_helper') }}
         </div>
-    </div>
+    </div> --}}
     <div class="form-group {{ $errors->has('company.accounting') ? 'invalid' : '' }}">
         <label class="form-label required" for="accounting">{{ trans('cruds.company.fields.accounting') }}</label>
         <input class="form-control" required type="text" name="accounting" id="accounting" wire:model.defer="company.accounting">

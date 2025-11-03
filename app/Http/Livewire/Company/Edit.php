@@ -12,11 +12,20 @@ class Edit extends Component
 
     public Company $company;
 
+    public $city = '';
+    public $code_postal = '';
+
+
     public array $listsForFields = [];
 
     public function mount(Company $company)
     {
         $this->company = $company;
+        // Préremplir les champs à partir de la ville liée
+        if ($this->company->city) {
+            $this->city = $this->company->city->name ?? '';
+            $this->code_postal = $this->company->city->zip_code ?? '';
+        }
         $this->initListsForFields();
     }
 
@@ -28,6 +37,15 @@ class Edit extends Component
     public function submit()
     {
         $this->validate();
+
+       $city = City::firstOrCreate(
+            [
+                'name' => trim($this->city),
+                'zip_code' => trim($this->code_postal),
+            ]
+        );
+
+        $this->company->city_id = $city->id;
 
         $this->company->save();
 
@@ -79,11 +97,13 @@ class Edit extends Component
                 'string',
                 'nullable',
             ],
+            'city' => ['required', 'string', 'max:255'],
+            'code_postal' => ['required', 'string', 'max:10'],
         ];
     }
 
     protected function initListsForFields(): void
     {
-        $this->listsForFields['city'] = City::pluck('name', 'id')->toArray();
+        // $this->listsForFields['city'] = City::pluck('name', 'id')->toArray();
     }
 }

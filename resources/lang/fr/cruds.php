@@ -284,7 +284,7 @@ return [
             'one_bill_per_period'         => 'Une seule facture par période',
             'one_bill_per_period_helper'  => ' ',
             'bill_payment_method'        => 'Virement ou prélévement',
-            'bill_payment_method_helper' =>  "Si coché, virement, autrement prélévement",
+            'bill_payment_method_helper' =>  "Si coché -> virement, si vide -> prélévement",
             'observations'                => 'Observations',
             'observations_helper'         => ' ',
             'created_at'                  => 'Created at',
