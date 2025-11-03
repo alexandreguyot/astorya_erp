@@ -71,6 +71,7 @@
 <script>
     document.addEventListener("livewire:load", () => {
         function update(value) {
+            console.log('coucou')
             let el = document.getElementById('clear-{{ $attributes['id'] }}');
 
             if (value === '' || (Array.isArray(value) && value.length === 0)) {
@@ -81,6 +82,7 @@
             } else if (el !== null) {
                 el.classList.remove('invisible');
             }
+            console.log("----> ", "{{ $attributes['wire:model'] }}");
             @this.set('{{ $attributes['wire:model'] }}', value);
         }
         @if($attributes['picker'] === 'date')
@@ -88,12 +90,14 @@
                 dateFormat: "dd/mm/yy",
                 changeMonth: true,
                 changeYear: true,
-                onSelect: function(dateText) {
-                    console.log(dateText);
-                    update(dateText);
+               onSelect: function(dateText) {
+                    const input = $('.datepicker-{{ $attributes['id'] }} input');
+                    input.val(dateText);
+                    input[0].dispatchEvent(new Event('input', { bubbles: true }));
                 },
                 onClose: function() {
-                    update($('.datepicker-{{ $attributes['id'] }} input').val());
+                    const input = $('.datepicker-{{ $attributes['id'] }} input');
+                    input[0].dispatchEvent(new Event('input', { bubbles: true }));
                 },
                 onChangeMonthYear: function(year, month) {
                     let formattedDate = '01' + '/' +(month.toString().padStart(2, '0')) + '/' + year;

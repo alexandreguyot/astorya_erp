@@ -81,8 +81,12 @@ class Products extends Component
             'designation'                => $detail->designation,
             'quantity'                   => $detail->quantity,
             'monthly_unit_price_without_taxe' => $detail->monthly_unit_price_without_taxe,
-            'billing_started_at'         => $detail->billing_started_at,
-            'billing_terminated_at'      => $detail->billing_terminated_at,
+            'billing_started_at'         => $detail->getRawOriginal('billing_started_at')
+                                                ? Carbon::parse($detail->getRawOriginal('billing_started_at'))->format('Y-m-d')
+                                                : null,
+            'billing_terminated_at'      => $detail->getRawOriginal('billing_terminated_at')
+                                                ? Carbon::parse($detail->getRawOriginal('billing_terminated_at'))->format('Y-m-d')
+                                                : null,
             'last_billed_at'             => $detail->last_billed_at?->format(config('project.date_format')),
             'pivot_id'                   => $detail->id,
         ];
@@ -90,29 +94,54 @@ class Products extends Component
         $this->showEditModal = true;
     }
 
+    private function normalizeDateToProject(?string $value): ?string
+    {
+        if (!$value) return null;
+
+        // Si c'est déjà au format du projet, on laisse tel quel
+        $fmt = config('project.date_format', 'd/m/Y');
+
+        try {
+            return \Carbon\Carbon::createFromFormat('Y-m-d', $value)->format($fmt);
+        } catch (\Throwable $e) {
+            return $value; // au pire on renvoie brut (et la validation catchera)
+        }
+    }
+
+
     public function updateDetail()
     {
         $dateFormat = config('project.date_format');
-        try {
-            $this->validate([
-                'editDetailData.designation' => 'required|string',
-                'editDetailData.quantity'    => 'required|integer|min:1',
-                'editDetailData.monthly_unit_price_without_taxe' => 'required',
-                'editDetailData.billing_started_at'    => 'nullable|date_format:' . $dateFormat,
-                'editDetailData.billing_terminated_at' => 'nullable|date_format:' . $dateFormat,
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            dd($e->errors());
-        }
 
-        $detail = ContractProductDetail::findOrFail($this->editDetailData['pivot_id']);
+        $this->validate([
+            'editDetailData.designation' => 'required|string',
+            'editDetailData.quantity'    => 'required|integer|min:1',
+            'editDetailData.monthly_unit_price_without_taxe' => 'required',
+            'editDetailData.billing_started_at'    => 'nullable',
+            'editDetailData.billing_terminated_at' => 'nullable',
+        ]);
+
+        // normalise avant sauvegarde
+        $this->editDetailData['billing_started_at'] =
+            $this->normalizeDateToProject($this->editDetailData['billing_started_at']);
+
+        $this->editDetailData['billing_terminated_at'] =
+            $this->normalizeDateToProject($this->editDetailData['billing_terminated_at']);
+
+        // (optionnel) re-valider au bon format projet
+        $this->validate([
+            'editDetailData.billing_started_at'    => 'nullable|date_format:'.$dateFormat,
+            'editDetailData.billing_terminated_at' => 'nullable|date_format:'.$dateFormat,
+        ]);
+
+        $detail = \App\Models\ContractProductDetail::findOrFail($this->editDetailData['pivot_id']);
 
         $detail->update([
-            'designation'                => $this->editDetailData['designation'],
-            'quantity'                   => $this->editDetailData['quantity'],
-            'monthly_unit_price_without_taxe' => str_replace(',','.', $this->editDetailData['monthly_unit_price_without_taxe']),
-            'billing_started_at'         => $this->editDetailData['billing_started_at'],
-            'billing_terminated_at'      => $this->editDetailData['billing_terminated_at'],
+            'designation' => $this->editDetailData['designation'],
+            'quantity'    => $this->editDetailData['quantity'],
+            'monthly_unit_price_without_taxe' => str_replace(',', '.', $this->editDetailData['monthly_unit_price_without_taxe']),
+            'billing_started_at'    => $this->editDetailData['billing_started_at'],
+            'billing_terminated_at' => $this->editDetailData['billing_terminated_at'],
         ]);
 
         $this->showEditModal = false;

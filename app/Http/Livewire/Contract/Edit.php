@@ -89,7 +89,6 @@ class Edit extends Component
         ]);
 
         $detail = ContractProductDetail::findOrFail($this->editDetailData['pivot_id']);
-
         $detail->update([
             'designation'                => $this->editDetailData['designation'],
             'quantity'                   => $this->editDetailData['quantity'],

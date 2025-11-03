@@ -79,14 +79,21 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm">Début facturation</label>
-                        <x-date-picker class="form-control" wire:model.defer="editDetailData.billing_started_at" id="billing_started_at" name="billing_started_at" picker="date"/>
+                        <input
+                        type="date"
+                        class="form-control"
+                        wire:model.defer="editDetailData.billing_started_at"
+                        />
                     </div>
                     <div>
                         <label class="block text-sm">Fin facturation</label>
-                        <x-date-picker class="form-control" wire:model.defer="editDetailData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" picker="date"/>
+                        <input
+                        type="date"
+                        class="form-control"
+                        wire:model.defer="editDetailData.billing_terminated_at"
+                        />
                     </div>
                 </div>
-
                 <div class="flex justify-end space-x-2 pt-2">
                     <button type="button" wire:click="$set('showEditModal', false)" class="px-4 py-2 bg-gray-200 rounded">
                         Annuler
@@ -129,13 +136,19 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-sm">Début facturation</label>
-                        <x-date-picker class="form-control" wire:model.defer="newProductData.billing_started_at" id="billing_started_at" name="billing_started_at" picker="date"/>
-                        @error('newProductData.billing_started_at')<span class="text-red-500">{{ $message }}</span>@enderror
+                        <input
+                        type="date"
+                        class="form-control"
+                        wire:model.defer="newProductData.billing_started_at"
+                        />
                     </div>
                     <div>
                         <label class="block text-sm">Fin facturation</label>
-                        <x-date-picker class="form-control" wire:model.defer="newProductData.billing_terminated_at" id="billing_terminated_at" name="billing_terminated_at" picker="date"/>
-                        @error('newProductData.billing_terminated_at')<span class="text-red-500">{{ $message }}</span>@enderror
+                        <input
+                        type="date"
+                        class="form-control"
+                        wire:model.defer="newProductData.billing_terminated_at"
+                        />
                     </div>
                 </div>
                 <div class="flex justify-end space-x-2 pt-2">
