@@ -23,7 +23,13 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div>
+                        <p class="small-text">
+                            TVA payée sur les débits
+                        </p>
+                    </div>
                 </div>
+
                 <div class="bank-account margin-top-bot-10">
                     <h2>Nos coordonnées bancaires</h2>
                     <div class="row">

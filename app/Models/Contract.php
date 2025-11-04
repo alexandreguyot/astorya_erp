@@ -109,6 +109,30 @@ class Contract extends Model
              . $endBilling->format(config('project.date_format'));
     }
 
+    public function billingBounds($dateStart): array
+    {
+        // $dateStart peut être une string 'd/m/Y' ou un Carbon
+        $base = $dateStart instanceof Carbon
+            ? $dateStart->copy()
+            : Carbon::createFromFormat(config('project.date_format'), $dateStart);
+
+        $nbMonth  = $this->type_period->nb_month ?? 1;
+        $setupDay = Carbon::createFromFormat(config('project.date_format'), $this->setup_at)->day;
+
+        // début = même jour que le setup, borné aux jours du mois courant
+        $day    = min($setupDay, $base->daysInMonth);
+        $start  = $base->copy()->day($day)->startOfDay();
+
+        // fin = date de résiliation si c'est le mois de terminaison, sinon (nbMonth mois) - 1 jour
+        if ($this->isTerminationMonth($base)) {
+            $end = Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)->endOfDay();
+        } else {
+            $end = $start->copy()->addMonths($nbMonth)->subDay()->endOfDay();
+        }
+
+        return [$start, $end];
+    }
+
     public function calculateTotalPrice(Carbon $dateStart)
     {
         return $this->contract_product_detail

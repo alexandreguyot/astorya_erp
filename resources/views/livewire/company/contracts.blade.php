@@ -10,6 +10,7 @@
                         <th>ID</th>
                         <th>Type</th>
                         <th>Périodicité</th>
+                        <th>Date de début</th>
                         <th>Date de fin</th>
                         <th>Dernière période facturée</th>
                         <th>Actions</th>
@@ -33,6 +34,9 @@
                         </td>
                         <td>
                             <span class="badge badge-rose">{{ $contract->type_period->title }}</span>
+                        </td>
+                        <td>
+                            <span class="badge badge-rose">{{ $contract->setup_at }}</span>
                         </td>
                         <td>
                             <span class="badge badge-rose">{{ $contract->terminated_at }}</span>

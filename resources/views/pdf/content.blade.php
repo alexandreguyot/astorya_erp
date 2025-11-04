@@ -83,7 +83,7 @@
                         <td class="width-10 center-align">{{ $product->type_product->code }}</td>
                         <td style="font-size: 14px">
                             {{ $product->designation }}<br />
-                            <b>{{ $contract->calculateBillingPeriod($dateStart) }}</b><br />
+                            <b>{{ $product->calculateBillingPeriod($dateStart) }}</b><br />
                             {{ $contract->company->observations }}
                         </td>
                         <td class="width-10 center-align">{{ $product->quantity }}</td>
