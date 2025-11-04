@@ -25,7 +25,7 @@
                     </table>
                     <div>
                         <p class="small-text">
-                            TVA payée sur les débits
+                            <strong>TVA PAYÉE SUR LES DÉBITS</strong>
                         </p>
                     </div>
                 </div>
