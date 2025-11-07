@@ -53,42 +53,27 @@ class ContractProductDetail extends Model
         $setupDay  = Carbon::createFromFormat(config('project.date_format'), $this->contract->setup_at)->day;
         $baseDate  = Carbon::createFromFormat(config('project.date_format'), $dateStart);
 
-        // Début de période contractuelle
+        // 🕐 Début de période contractuelle
         $day = min($setupDay, $baseDate->daysInMonth);
         $startBilling = $baseDate->copy()->day($day);
 
-        // Fin de période contractuelle
+        // 📆 Fin de période contractuelle
         if ($this->contract->isTerminationMonth($baseDate)) {
             $endBilling = Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at);
         } else {
             $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
         }
 
-        // ✅ Gestion des dates article
-        $articleStart = null;
-        $articleEnd   = null;
-
-        // Parsing sécurisé des dates de l’article
-        if (!empty($this->billing_started_at) && $this->billing_started_at !== '0001-01-01') {
-            try {
-                $articleStart = Carbon::createFromFormat(config('project.date_format'), $this->billing_started_at);
-            } catch (\Throwable $e) {}
-        }
-
-        if (!empty($this->billing_terminated_at) && $this->billing_terminated_at !== '0001-01-01') {
+        // ✅ Si l’article a une date de fin plus courte, on l’utilise
+        if (!empty($this->billing_terminated_at) && $this->billing_terminated_at !== '01/01/0001') {
             try {
                 $articleEnd = Carbon::createFromFormat(config('project.date_format'), $this->billing_terminated_at);
-            } catch (\Throwable $e) {}
-        }
-
-        // 🧩 Début : on prend la plus ancienne entre contrat et article
-        if ($articleStart && $articleStart->lt($startBilling)) {
-            $startBilling = $articleStart;
-        }
-
-        // 🧩 Fin : on prend la plus courte entre contrat et article
-        if ($articleEnd && $articleEnd->lt($endBilling)) {
-            $endBilling = $articleEnd;
+                if ($articleEnd->lt($endBilling)) {
+                    $endBilling = $articleEnd;
+                }
+            } catch (\Throwable $e) {
+                // format invalide => on ignore
+            }
         }
 
         return $startBilling->format(config('project.date_format'))
