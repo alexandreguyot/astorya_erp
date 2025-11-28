@@ -103,6 +103,7 @@ class Contract extends Model
             // sinon 1 mois * nbMonth moins 1 jour
             $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
         }
+        dd($startBilling, $endBilling);
 
         return $startBilling->format(config('project.date_format'))
              . ' au '
@@ -247,7 +248,7 @@ class Contract extends Model
 
     public function getValidatedAtForOneYearAttribute($value)
     {
-        return $value ? Carbon::createFromFormat('Y-m-d', $value)->format(config('project.date_format')) : null;
+        return $value ? Carbon::createFromFormat('Y-m-d H:i:s', $value)->format(config('project.date_format')) : null;
     }
 
     public function setValidatedAtForOneYearAttribute($value)
