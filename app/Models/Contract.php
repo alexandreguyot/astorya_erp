@@ -103,7 +103,6 @@ class Contract extends Model
             // sinon 1 mois * nbMonth moins 1 jour
             $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
         }
-        dd($startBilling, $endBilling);
 
         return $startBilling->format(config('project.date_format'))
              . ' au '
