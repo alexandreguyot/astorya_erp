@@ -92,7 +92,7 @@ class Bill extends Model {
 
     public function company()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public static function getLastBillNumber()

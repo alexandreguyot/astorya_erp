@@ -173,6 +173,9 @@ class Index extends Component
                     ->with('type_product.type_contract');
                 },
             ])
+            ->whereHas('company', function($q) {
+                $q->whereNull('deleted_at');
+            })
             ->whereNotNull('setup_at')
             ->where(function ($q) use ($periodStart) {
                 $q->whereNull('terminated_at')
@@ -370,6 +373,7 @@ class Index extends Component
             'contract_product_detail.type_product.type_vat',
         ])
         ->whereIn('id', $contractIds)
+        ->whereHas('company', fn($q) => $q->whereNull('companies.deleted_at'))
         ->get();
 
         if ($contracts->isEmpty()) {

@@ -52,7 +52,10 @@ class ProcessBills implements ShouldQueue
             },
             'contract_product_detail.type_product.type_contract',
             'contract_product_detail.type_product.type_vat',
-        ])->whereIn('id', $this->contractIds)->get();
+        ])
+        ->whereIn('id', $this->contractIds)
+        ->whereHas('company', fn($q) => $q->whereNull('companies.deleted_at'))
+        ->get();
 
         if ($contracts->isEmpty()) {
             return;

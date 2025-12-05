@@ -30,9 +30,6 @@ class ContractProductDetail extends Model
         'last_billed_at' => 'date',
     ];
 
-    /* =========================
-     |  Relations
-     |=========================*/
     public function contract()
     {
         return $this->belongsTo(Contract::class);
@@ -81,9 +78,6 @@ class ContractProductDetail extends Model
             . $endBilling->format(config('project.date_format'));
     }
 
-    /* =========================
-     |  Scope existant
-     |=========================*/
     public function scopeActiveAt(Builder $query, Carbon $date): Builder
     {
         $cutoff = $date->copy()->startOfMonth()->format('Y-m-d');
@@ -95,9 +89,6 @@ class ContractProductDetail extends Model
         });
     }
 
-    /* =========================
-     |  Helpers dates brutes
-     |=========================*/
     protected function rawBillingEnd(): ?Carbon
     {
         // billing_terminated_at est stocké en Y-m-d (puis formaté par accessor)
@@ -108,7 +99,6 @@ class ContractProductDetail extends Model
 
     protected function rawContractEnd(): ?Carbon
     {
-        // terminated_at du contrat (si présent)
         $raw = optional($this->contract)->getRawOriginal('terminated_at');
         $v = $raw ?? ($this->contract->terminated_at ?? null);
         return $v ? Carbon::parse($v) : null;

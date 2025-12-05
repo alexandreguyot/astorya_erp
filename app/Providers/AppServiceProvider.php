@@ -23,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         RateLimiter::for('send-mails', function () {
-            return Limit::perHour(300)->by('global-mail');
+            return Limit::perHour(150)->by('mail-quota');
         });
     }
 }
