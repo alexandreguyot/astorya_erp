@@ -161,6 +161,30 @@ class Contract extends Model
         return number_format($total, 2, ',', ' ');
     }
 
+    public function crossesPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    {
+        $setup = Carbon::createFromFormat(config('project.date_format'), $this->setup_at);
+        $end   = $this->terminated_at
+            ? Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)
+            : $periodEnd;
+
+        if ($setup->gt($periodEnd)) return false;
+        if ($end->lt($periodStart)) return false;
+
+        return true;
+    }
+
+    public function isCycleBillingMonth(Carbon $periodStart): bool
+    {
+        $setup = Carbon::createFromFormat(config('project.date_format'), $this->setup_at)->startOfMonth();
+        $nb    = max(1, (int) $this->type_period->nb_month);
+
+        $monthsDiff = $setup->diffInMonths($periodStart);
+
+        return $periodStart->gte($setup) && ($monthsDiff % $nb === 0);
+    }
+
+
     public function company()
     {
         return $this->belongsTo(Company::class);

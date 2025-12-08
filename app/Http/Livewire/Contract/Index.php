@@ -155,7 +155,7 @@ class Index extends Component
         return Cache::has("processing.{$groupKey}");
     }
 
-    private function getGroupedContracts()
+    private function getGroupedContractsOfficiel()
     {
         $periodStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
         $periodEnd   = $periodStart->copy()->endOfMonth();
@@ -286,6 +286,68 @@ class Index extends Component
                     return true;
                 });
             })
+
+            // libellé de période
+            ->each(function ($contract) {
+                $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
+            })
+
+            // groupement & tri
+            ->groupBy([
+                fn ($contract) => optional($contract->company)->name ?? 'Sans société',
+                fn ($contract) => $contract->billing_period,
+            ])
+            ->sortKeys();
+
+        return $contracts;
+    }
+
+     private function getGroupedContracts()
+    {
+        $periodStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
+        $periodEnd   = $periodStart->copy()->endOfMonth();
+
+        $contracts = Contract::with([
+                'type_period',
+                'company',
+                'contract_product_detail' => function ($q) use ($periodStart) {
+                    $q->where('monthly_unit_price_without_taxe', '>', 0)
+                    ->where(function ($qq) use ($periodStart) {
+                        $qq->whereNull('billing_terminated_at')
+                            ->orWhereDate('billing_terminated_at', '0001-01-01')
+                            ->orWhereDate('billing_terminated_at', '>=', $periodStart);
+                    })
+                    ->with('type_product.type_contract');
+                },
+            ])
+            ->whereHas('company', function($q) {
+                $q->whereNull('deleted_at');
+            })
+            ->whereNotNull('setup_at')
+            ->where(function ($q) use ($periodStart) {
+                $q->whereNull('terminated_at')
+                ->orWhereDate('terminated_at', '>=', $periodStart);
+            })
+            ->when($this->search, function ($q) {
+                $q->whereHas('company', function ($qq) {
+                    $qq->where('companies.name', 'like', '%' . $this->search . '%');
+                });
+            })
+            // ne pas reprendre un contrat déjà facturé ce mois
+            ->where(function ($q) use ($periodStart) {
+                $q->whereDoesntHave('bills', function ($qb) use ($periodStart) {
+                    $qb->whereYear('generated_at',  $periodStart->year)
+                    ->whereMonth('generated_at', $periodStart->month);
+                });
+            })
+            ->get()
+
+           ->filter(function ($contract) use ($periodStart, $periodEnd) {
+                return $contract->contract_product_detail
+                    ->filter(fn ($d) => $d->shouldListForPeriod($periodStart, $periodEnd))
+                    ->isNotEmpty();
+            })
+
 
             // libellé de période
             ->each(function ($contract) {
