@@ -227,6 +227,11 @@
             <a href="{{ route('admin.bills.export_order_prlv', ['dateStart' => Carbon\Carbon::createFromFormat('d/m/Y', $dateStart)->format('Y-m-d'), 'dateEnd' =>  Carbon\Carbon::createFromFormat('d/m/Y', $dateEnd)->format('Y-m-d')])}}" class="btn btn-sm btn-info" target="_blank">
                 Télécharger ordre prélevement
             </a>
+            <button class="btn btn-sm btn-warning mr-2"
+                wire:click="exportPcaYear"
+                wire:loading.attr="disabled">
+                Export PCA {{ \Carbon\Carbon::createFromFormat('d/m/Y', $dateStart)->year }}
+            </button>
         </div>
     </div>
 </div>

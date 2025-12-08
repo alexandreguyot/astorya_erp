@@ -192,6 +192,21 @@ class Index extends Component
         ]);
     }
 
+    public function exportPcaYear()
+    {
+        // On déduit l'année à partir de la date affichée dans la vue
+        $year = Carbon::createFromFormat('d/m/Y', $this->dateStart)->year;
+
+        $service = app(\App\Services\PcaService::class);
+        $lines = $service->getPcaLinesForYear($year);
+
+        return \Maatwebsite\Excel\Facades\Excel::download(
+            new \App\Exports\PcaExport($lines),
+            "PCA-$year.xlsx"
+        );
+    }
+
+
     private function convertDateFormat($date, $type)
     {
         if (preg_match('/^\d{4}$/', $date)) {

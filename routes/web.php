@@ -96,6 +96,10 @@ Route::group(['prefix' => '', 'as' => 'admin.', 'middleware' => ['auth']], funct
     Route::get('factures/{bill}/pdf', [BillController::class, 'pdf'])->name('bills.pdf');
     Route::get('factures/{bill}/pdf/previsualisation', [BillController::class, 'pdfStream'])->name('bills.pdf.stream');
 
+    Route::get('/exports/pca/{year}', [\App\Http\Controllers\PcaExportController::class, 'export'])
+    ->name('exports.pca');
+
+
     Route::get('contrats', [ContractController::class, 'index'])->name('contracts.index');
     Route::get('contrats/annuels', [ContractController::class, 'annuals'])->name('contracts.annual-index');
     Route::get('contrats/creation/{company}', [ContractController::class, 'create'])->name('contracts.create');
