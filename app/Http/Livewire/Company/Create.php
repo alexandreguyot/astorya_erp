@@ -65,11 +65,6 @@ class Create extends Component
                 'string',
                 'nullable',
             ],
-            'company.city_id' => [
-                'integer',
-                'exists:cities,id',
-                'required',
-            ],
             'company.email' => [
                 'email:rfc',
                 'nullable',
