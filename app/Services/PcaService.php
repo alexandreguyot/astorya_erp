@@ -37,12 +37,11 @@ class PcaService
                 if ($periodEnd->lt($nextYearStart)) {
                     continue;
                 }
+                // Total des jours de la période facturée (inclusif)
+                $totalDays = $periodEnd->diffInDays($periodStart) + 1;
 
-                // Nombre total de jours de la période
-                $totalDays = $periodEnd->diffInDays($periodStart);
-
-                // Jours à proratiser = jours après la nouvelle année
-                $prorataDays = $periodEnd->diffInDays($nextYearStart);
+                // Jours à proratiser = jours après la nouvelle année (inclusif)
+                $prorataDays = $periodEnd->diffInDays($nextYearStart) + 1;
 
                 // Montant de LA LIGNE de facture (ce que tu veux utiliser)
                 $amount = $bill->amount_vat_included;
