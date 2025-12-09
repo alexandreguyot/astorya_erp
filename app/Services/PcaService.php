@@ -10,53 +10,63 @@ class PcaService
 {
     public function getPcaLinesForYear(int $year): Collection
     {
-        $start = Carbon::create($year, 10, 1);
-        $end   = Carbon::create($year, 12, 31);
-        $limit = Carbon::create($year, 12, 31); // Limite année (31/12/YYYY)
+        $start        = Carbon::create($year, 10, 1);
+        $end          = Carbon::create($year, 12, 31);
+        $nextYearStart = Carbon::create($year + 1, 1, 1); // 01/01/YYYY+1
 
-        $bills = Bill::with(['company', 'contract.products'])
+        // On récupère toutes les lignes de facture de la période
+        $billsGrouped = Bill::with([
+                'company',
+                'contract.contract_product_detail.type_product',
+            ])
             ->whereBetween('started_at', [$start, $end])
-            ->get();
+            ->get()
+            ->groupBy('no_bill'); // ← groupement par numéro de facture
 
         $result = collect();
 
-        foreach ($bills as $bill) {
+        foreach ($billsGrouped as $noBill => $billLines) {
 
-            $periodStart = Carbon::createFromFormat(config('project.date_format'), $bill->started_at);
-            $periodEnd   = Carbon::createFromFormat(config('project.date_format'), $bill->billed_at);
+            foreach ($billLines as $bill) {
 
-            // ❌ 1. On NE GARDE que les factures dont la fin dépasse l'année
-            if ($periodEnd->lte($limit)) {
-                continue;
-            }
+                // Dates dans le format du projet
+                $periodStart = Carbon::createFromFormat(config('project.date_format'), $bill->started_at);
+                $periodEnd   = Carbon::createFromFormat(config('project.date_format'), $bill->billed_at);
 
-            // 2. Nombre total de jours facturés
-            $totalDays = $periodEnd->diffInDays($periodStart);
+                // ❌ Exclure si billed_at est AVANT le 01/01/YYYY+1
+                if ($periodEnd->lt($nextYearStart)) {
+                    continue;
+                }
 
-            // 3. Jours proratisés = jours après la nouvelle année
-            $nextYearStart = Carbon::create($year + 1, 1, 1);
-            $prorataDays = $periodEnd->diffInDays($nextYearStart);
+                // Nombre total de jours de la période
+                $totalDays = $periodEnd->diffInDays($periodStart);
 
-            // 4. Montant HT de la ligne de facture
-            $amountHT = $bill->amount_vat_included;
-            // 5. Générer une ligne par produit du contrat
-            foreach ($bill->contract->products as $product) {
+                // Jours à proratiser = jours après la nouvelle année
+                $prorataDays = $periodEnd->diffInDays($nextYearStart);
+
+                // Montant de LA LIGNE de facture (ce que tu veux utiliser)
+                $amount = $bill->amount_vat_included;
+
+                // On va chercher un produit lié au contrat
+                $contract = $bill->contract;
+                $detail   = $contract?->contract_product_detail->first(); // on prend le premier détail
+                $product  = $detail?->type_product;
 
                 $pca = $totalDays > 0
-                    ? ($amountHT * $prorataDays / $totalDays)
+                    ? ($amount * $prorataDays / $totalDays)
                     : 0;
 
                 $result->push([
-                    'Facture'              => $bill->no_bill,
-                    'Client'               => $bill->company?->name,
-                    'Montant HT'           => number_format($amountHT, 2, ',', ''),
-                    'Début'                => $periodStart->format('d/m/Y'),
-                    'Fin'                  => $periodEnd->format('d/m/Y'),
-                    'Nombre de jours'      => $totalDays,
-                    'Jours proratisés'     => $prorataDays,
-                    'Montant PCA'          => number_format(round($pca, 10), 2, ',', ''),
-                    'Service'              => $product->designation_short,
-                    'Compte'               => $product->accounting,
+                    'Facture'          => $noBill,
+                    'Client'           => $bill->company?->name,
+                    'Montant HT'       => number_format($amount, 2, ',', ''), // tu peux renommer si c’est TTC
+                    'Début'            => $periodStart->format('d/m/Y'),
+                    'Fin'              => $periodEnd->format('d/m/Y'),
+                    'Nombre de jours'  => $totalDays,
+                    'Jours proratisés' => $prorataDays,
+                    'Montant PCA'      => number_format($pca, 2, ',', ''),
+                    'Service'          => $product?->designation_short ?? '',
+                    'Compte'           => $product?->accounting ?? '',
                 ]);
             }
         }
