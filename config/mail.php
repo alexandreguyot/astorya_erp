@@ -45,6 +45,17 @@ return [
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
 
+        'mailjet' => [
+            'transport' => 'smtp',
+            'host' => 'in-v3.mailjet.com',
+            'port' => 587,
+            'username' => env('MAILJET_API_KEY'),
+            'password' => env('MAILJET_SECRET_KEY'),
+            'encryption' => 'tls',
+            'timeout' => null,
+            'auth_mode' => null,
+        ],
+
         'ses' => [
             'transport' => 'ses',
         ],
