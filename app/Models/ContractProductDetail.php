@@ -58,7 +58,7 @@ class ContractProductDetail extends Model
         if ($this->contract->isTerminationMonth($baseDate)) {
             $endBilling = Carbon::createFromFormat(config('project.date_format'), $this->contract->terminated_at);
         } else {
-            $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
+            $endBilling = $startBilling->copy()->addMonthsNoOverflow($nbMonth)->subDay();
         }
 
         // ✅ Si l’article a une date de fin plus courte, on l’utilise
@@ -72,7 +72,7 @@ class ContractProductDetail extends Model
                 // format invalide => on ignore
             }
         }
-        
+
         return $startBilling->format(config('project.date_format'))
             . ' au '
             . $endBilling->format(config('project.date_format'));
@@ -170,7 +170,7 @@ class ContractProductDetail extends Model
                 } else {
                     $total += $monthlyBase;
                 }
-                $cursor->addMonth();
+                $cursor->addMonthsNoOverflow();
                 continue;
             }
 
@@ -202,7 +202,7 @@ class ContractProductDetail extends Model
                 // Mois après le mois de fin => rien
             }
 
-            $cursor->addMonth();
+            $cursor->addMonthsNoOverflow();
         }
 
         return round($total, 2);
@@ -349,7 +349,7 @@ class ContractProductDetail extends Model
         return $raw ? \Carbon\Carbon::parse($raw)->addDay()->startOfDay() : null;
     }
 
-    public function shouldListForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    public function shouldListForPeriod3(Carbon $periodStart, Carbon $periodEnd): bool
     {
         // ----- DATES LIGNE -----
         $lineStartRaw = $this->getRawOriginal('billing_started_at');
@@ -374,13 +374,13 @@ class ContractProductDetail extends Model
         $lastRaw = $this->getRawOriginal('last_billed_at');
         $lastBilled = $lastRaw ? Carbon::parse($lastRaw)->startOfDay() : null;
 
-        // ----- EFFECTIVE END = la plus tôt des 3 -----
+        // ----- EFFECTIVE END = la plus tôt entre fin ligne et fin contrat -----
         $effectiveEnd = collect([$lineEnd, $contractEnd])
             ->filter()
             ->sort()
-            ->first(); // la plus tôt
+            ->first();
 
-        // ----- EFFECTIVE START = la plus tôt entre contrat et ligne -----
+        // ----- EFFECTIVE START = la plus tôt -----
         $effectiveStart = collect([$contractStart, $lineStart])
             ->filter()
             ->sort()
@@ -388,33 +388,46 @@ class ContractProductDetail extends Model
 
         // ---------- RÈGLES ----------
 
-        // 1️⃣ Article commence après la période → exclu
+        // 1️⃣ L’article commence après la période → exclu
         if ($effectiveStart && $effectiveStart->gt($periodEnd)) {
             return false;
         }
 
-        // 2️⃣ Article fini avant la période → exclu
+        // 2️⃣ L’article finit avant la période → exclu
         if ($effectiveEnd && $effectiveEnd->lt($periodStart)) {
             return false;
         }
 
-        // 3️⃣ Si déjà facturé, ne refacturer que si last_billed < fin période
-        if ($lastBilled && $effectiveEnd && $effectiveEnd->lt($lastBilled)) {
+        // 3️⃣ Si déjà facturé et la dernière facturation couvre déjà la fin de la ligne → exclu
+        if ($lastBilled && $effectiveEnd && $lastBilled->gte($effectiveEnd)) {
             return false;
         }
+            dd($lineEnd, $periodStart, $periodEnd);
 
-        // 4️⃣ Cas spécial : article ou contrat se termine dans la période
-        if (
-            ($lineEnd && $lineEnd->betweenIncluded($periodStart, $periodEnd)) ||
-            ($contractEnd && $contractEnd->betweenIncluded($periodStart, $periodEnd))
-        ) {
+        // 4️⃣ Cas spécial : la ligne se termine dans la période
+        if ($lineEnd && $lineEnd->betweenIncluded($periodStart, $periodEnd)) {
+            // Si la dernière facturation couvre déjà cette fin → ne pas refacturer
+            if ($lastBilled && $lastBilled->gte($lineEnd)) {
+                return false;
+            }
+
             return true;
         }
 
-        // 5️⃣ Jamais facturé → vérifier le cycle
+        // 5️⃣ Cas spécial : le contrat se termine dans la période
+        if ($contractEnd && $contractEnd->betweenIncluded($periodStart, $periodEnd)) {
+
+            if ($lastBilled && $lastBilled->gte($contractEnd)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        // 6️⃣ Jamais facturé → vérifier si le cycle correspond
         if (!$lastBilled) {
             $setup = $contractStart->copy()->startOfMonth();
-            $nb = max(1, (int)$this->contract->type_period->nb_month);
+            $nb    = max(1, (int)$this->contract->type_period->nb_month);
 
             $monthsDiff = $setup->diffInMonths($periodStart->copy()->startOfMonth());
             $isCycle = $periodStart->gte($setup) && ($monthsDiff % $nb) === 0;
@@ -422,15 +435,120 @@ class ContractProductDetail extends Model
             return $isCycle;
         }
 
-        // 6️⃣ Déjà facturé → refacturable si "lendemain de last_billed <= fin période"
+        // 7️⃣ Déjà facturé → refacturable si "lendemain de last_billed <= fin période"
         $next = $lastBilled->copy()->addDay();
+
         return $next->lte($periodEnd);
     }
+
+    public function shouldListForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+{
+    // ----- DATES LIGNE -----
+    $lineStartRaw = $this->getRawOriginal('billing_started_at');
+    $lineEndRaw   = $this->getRawOriginal('billing_terminated_at');
+
+    $lineStart = $lineStartRaw && $lineStartRaw !== '0001-01-01'
+        ? Carbon::parse($lineStartRaw)->startOfDay()
+        : null;
+
+    $lineEnd = $lineEndRaw && $lineEndRaw !== '0001-01-01'
+        ? Carbon::parse($lineEndRaw)->endOfDay()
+        : null;
+
+    // ----- DATES CONTRAT -----
+    $contractStart = Carbon::createFromFormat(
+        config('project.date_format'),
+        $this->contract->setup_at
+    )->startOfDay();
+
+    $contractEnd = $this->contract->terminated_at
+        ? Carbon::createFromFormat(
+            config('project.date_format'),
+            $this->contract->terminated_at
+        )->endOfDay()
+        : null;
+
+    // ----- DATES DERNIÈRE FACTURATION -----
+    $lastRaw    = $this->getRawOriginal('last_billed_at');
+    $lastBilled = $lastRaw ? Carbon::parse($lastRaw)->startOfDay() : null;
+
+    // ----- INTERVALLE ACTIF DE LA LIGNE -----
+    // début réel : si la ligne a un début spécifique, on le prend, sinon celui du contrat
+    $activeStart = $lineStart ?: $contractStart;
+
+    // fin réelle : la plus tôt entre fin de ligne et fin de contrat (ou null = sans fin)
+    $activeEnd = collect([$lineEnd, $contractEnd])
+        ->filter()
+        ->sort()
+        ->first(); // peut être null
+
+    // 0️⃣ si la ligne commence après la période -> aucun recouvrement
+    if ($activeStart->gt($periodEnd)) {
+        return false;
+    }
+
+    // 0️⃣ bis : si on a une fin et qu'elle est avant le début de période -> aucun recouvrement
+    if ($activeEnd && $activeEnd->lt($periodStart)) {
+        return false;
+    }
+
+    // ----- INTERSECTION entre [activeStart, activeEnd] et [periodStart, periodEnd] -----
+    $intersectionStart = $activeStart->copy()->max($periodStart);
+    $intersectionEnd   = $activeEnd
+        ? $activeEnd->copy()->min($periodEnd)
+        : $periodEnd->copy(); // pas de fin = infini, on coupe à la fin de période
+
+    // si l'intersection est vide -> rien à facturer
+    if ($intersectionStart->gt($intersectionEnd)) {
+        return false;
+    }
+
+    // ----- CAS 1 : déjà facturé au moins une fois -----
+    if ($lastBilled) {
+        // premier jour potentiellement à (re)facturer
+        $nextBillableDay = $lastBilled->copy()->addDay();
+
+        // s'il est après la fin de l'intersection, tout est déjà couvert
+        if ($nextBillableDay->gt($intersectionEnd)) {
+            return false;
+        }
+
+        // il reste au moins un jour non facturé dans la période → on facture
+        return true;
+    }
+
+    // ----- CAS 2 : jamais facturé -> vérifier la périodicité ------
+
+    // on ne facture pas avant le début du contrat
+    if ($periodStart->lt($contractStart)) {
+        return false;
+    }
+
+    $nb = max(1, (int) $this->contract->type_period->nb_month);
+
+    // on se base sur les mois entiers pour le cycle
+    $setupMonth  = $contractStart->copy()->startOfMonth();
+    $periodMonth = $periodStart->copy()->startOfMonth();
+
+    $monthsDiff = $setupMonth->diffInMonths($periodMonth);
+
+    // doit tomber sur un multiple du cycle (mensuel, trimestriel, annuel, ...)
+    if ($monthsDiff % $nb !== 0) {
+        return false;
+    }
+
+    // il y a bien recouvrement + bon mois de cycle -> on facture
+    return true;
+}
+
+
+
+
 
 
 
     /** True si ce détail doit apparaître pour la période affichée (mois courant) */
-    public function shouldListForPeriod2(\Carbon\Carbon $periodStart, \Carbon\Carbon $periodEnd): bool
+    public function shouldListForPeriodOfficiel(\Carbon\Carbon $periodStart, \Carbon\Carbon $periodEnd): bool
     {
         // Dates brutes utiles
         $lineEndRaw   = $this->getRawOriginal('billing_terminated_at');

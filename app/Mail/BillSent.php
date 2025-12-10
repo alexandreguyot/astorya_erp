@@ -56,7 +56,7 @@ class BillSent extends Mailable
         $candidates = [
             $dt->format('Y-m'),
             $dt->copy()->subMonth()->format('Y-m'),
-            $dt->copy()->addMonth()->format('Y-m'), // <- garde-le si tu veux couvrir tous les cas
+            $dt->copy()->addMonthsNoOverflow()->format('Y-m'), // <- garde-le si tu veux couvrir tous les cas
         ];
 
         foreach ($candidates as $ym) {

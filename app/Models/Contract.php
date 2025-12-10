@@ -101,7 +101,7 @@ class Contract extends Model
             $endBilling = Carbon::createFromFormat(config('project.date_format'),$this->terminated_at);
         } else {
             // sinon 1 mois * nbMonth moins 1 jour
-            $endBilling = $startBilling->copy()->addMonths($nbMonth)->subDay();
+            $endBilling = $startBilling->copy()->addMonthsNoOverflow($nbMonth)->subDay();
         }
 
         return $startBilling->format(config('project.date_format'))
@@ -127,7 +127,7 @@ class Contract extends Model
         if ($this->isTerminationMonth($base)) {
             $end = Carbon::createFromFormat(config('project.date_format'), $this->terminated_at)->endOfDay();
         } else {
-            $end = $start->copy()->addMonths($nbMonth)->subDay()->endOfDay();
+            $end = $start->copy()->addMonthsNoOverflow($nbMonth)->subDay()->endOfDay();
         }
 
         return [$start, $end];
