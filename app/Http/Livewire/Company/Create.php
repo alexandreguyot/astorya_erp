@@ -90,8 +90,8 @@ class Create extends Component
                 'string',
                 'nullable',
             ],
-            'city' => ['required', 'string', 'max:255'],
-            'code_postal' => ['required', 'string', 'max:10'],
+            'city' => ['required', 'string', 'regex:/[a-zA-Z]/'],
+            'code_postal' => ['required', 'regex:/^\d{5}$/'],
         ];
     }
 

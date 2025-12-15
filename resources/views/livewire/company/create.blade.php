@@ -43,11 +43,11 @@
     <div class="grid grid-cols-2 gap-4">
          <div>
             <label for="city" class="block text-sm font-medium text-gray-700">Ville</label>
-            <input type="text" id="city" wire:model.defer="city" class="form-control">
+            <input type="text" id="city" wire:model.defer="city" class="form-control" autocomplete="address-level2">
         </div>
         <div>
             <label for="code_postal" class="block text-sm font-medium text-gray-700">Code postal</label>
-            <input type="text" id="code_postal" wire:model.defer="code_postal" class="form-control">
+            <input type="text" id="code_postal" wire:model.defer="code_postal" class="form-control" autocomplete="postal-code">
         </div>
     </div>
     {{-- <div class="form-group {{ $errors->has('company.city_id') ? 'invalid' : '' }}">
