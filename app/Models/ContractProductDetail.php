@@ -441,7 +441,7 @@ class ContractProductDetail extends Model
         return $next->lte($periodEnd);
     }
 
-    public function shouldListForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    public function shouldListForPeriod4(Carbon $periodStart, Carbon $periodEnd): bool
     {
         // ----- DATES LIGNE -----
         $lineStartRaw = $this->getRawOriginal('billing_started_at');
@@ -524,9 +524,9 @@ class ContractProductDetail extends Model
         // ----- CAS 2 : jamais facturé -> vérifier la périodicité ------
 
         // on ne facture pas avant le début du contrat
-        if ($periodStart->lt($contractStart)) {
-            return false;
-        }
+        // if ($periodStart->lt($contractStart)) {
+        //     return false;
+        // }
 
         $nb = max(1, (int) $this->contract->type_period->nb_month);
 
@@ -543,6 +543,70 @@ class ContractProductDetail extends Model
 
         // il y a bien recouvrement + bon mois de cycle -> on facture
         return true;
+    }
+
+    public function shouldListForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    {
+        // ----- DATES LIGNE -----
+        $lineStartRaw = $this->getRawOriginal('billing_started_at');
+        $lineEndRaw   = $this->getRawOriginal('billing_terminated_at');
+
+        $lineStart = $lineStartRaw && $lineStartRaw !== '0001-01-01'
+            ? Carbon::parse($lineStartRaw)->startOfDay()
+            : null;
+
+        $lineEnd = $lineEndRaw && $lineEndRaw !== '0001-01-01'
+            ? Carbon::parse($lineEndRaw)->endOfDay()
+            : null;
+
+        // ----- DATES CONTRAT -----
+        $contractStart = Carbon::createFromFormat(
+            config('project.date_format'),
+            $this->contract->setup_at
+        )->startOfDay();
+
+        $contractEnd = $this->contract->terminated_at
+            ? Carbon::createFromFormat(
+                config('project.date_format'),
+                $this->contract->terminated_at
+            )->endOfDay()
+            : null;
+
+        // ----- DERNIÈRE FACTURATION -----
+        $lastRaw    = $this->getRawOriginal('last_billed_at');
+        $lastBilled = $lastRaw ? Carbon::parse($lastRaw)->startOfDay() : null;
+
+        // ----- INTERVALLE ACTIF -----
+        $activeStart = $lineStart ?: $contractStart;
+
+        $activeEnd = collect([$lineEnd, $contractEnd])
+            ->filter()
+            ->sort()
+            ->first(); // peut être null
+
+        // 1️⃣ Pas actif sur la période → exclu
+        if ($activeStart->gt($periodEnd)) {
+            return false;
+        }
+
+        if ($activeEnd && $activeEnd->lt($periodStart)) {
+            return false;
+        }
+
+        // ----- DÉTERMINATION DE L'ÉCHÉANCE -----
+        if ($lastBilled) {
+            // Déjà facturé → prochaine échéance
+            $nextBillable = $lastBilled->copy()->addDay()->startOfDay();
+        } else {
+            // Jamais facturé → première échéance = début réel
+            $nextBillable = $activeStart->copy()->startOfDay();
+        }
+
+        // ----- AFFICHAGE UNIQUEMENT SI L'ÉCHÉANCE EST DANS LE MOIS -----
+        return $nextBillable->betweenIncluded(
+            $periodStart->copy()->startOfDay(),
+            $periodEnd->copy()->endOfDay()
+        );
     }
 
 
