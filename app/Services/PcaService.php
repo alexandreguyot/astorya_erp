@@ -56,7 +56,7 @@ class PcaService
 
                 // --- 2. Montant de la ligne de facture ---
                 // Tu utilisais amount_vat_included dans ton dernier code
-                $lineAmount = (float) $bill->amount_vat_included;
+                $lineAmount = (float) $bill->amount;
 
                 $contract = $bill->contract;
                 if (! $contract) {
