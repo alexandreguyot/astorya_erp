@@ -593,20 +593,25 @@ class ContractProductDetail extends Model
             return false;
         }
 
-        // ----- DÉTERMINATION DE L'ÉCHÉANCE -----
-        if ($lastBilled) {
-            // Déjà facturé → prochaine échéance
-            $nextBillable = $lastBilled->copy()->addDay()->startOfDay();
-        } else {
-            // Jamais facturé → première échéance = début réel
-            $nextBillable = $activeStart->copy()->startOfDay();
+        // ----- DATE DE RÉFÉRENCE (échéance logique) -----
+        $referenceDate = $lastBilled
+            ? $lastBilled->copy()->addDay()
+            : $activeStart->copy();
+
+        // ❌ pas de rattrapage du passé
+        if ($referenceDate->lt($periodStart)) {
+            return false;
         }
 
-        // ----- AFFICHAGE UNIQUEMENT SI L'ÉCHÉANCE EST DANS LE MOIS -----
-        return $nextBillable->betweenIncluded(
-            $periodStart->copy()->startOfDay(),
-            $periodEnd->copy()->endOfDay()
-        );
+        // ----- MOIS RENOUVELABLE -----
+        $cycle = max(1, (int) $this->contract->type_period->nb_month);
+
+        $refMonth    = $referenceDate->copy()->startOfMonth();
+        $periodMonth = $periodStart->copy()->startOfMonth();
+
+        $monthsDiff = $refMonth->diffInMonths($periodMonth);
+
+        return ($monthsDiff % $cycle) === 0;
     }
 
 
