@@ -184,6 +184,36 @@ class Contract extends Model
         return $periodStart->gte($setup) && ($monthsDiff % $nb === 0);
     }
 
+    public function isActiveForPeriod(Carbon $periodStart, Carbon $periodEnd): bool
+    {
+        $start = Carbon::createFromFormat(
+            config('project.date_format'),
+            $this->setup_at
+        )->startOfDay();
+
+        if ($start->gt($periodEnd)) {
+            return false;
+        }
+
+        if ($this->terminated_at) {
+            $end = Carbon::createFromFormat(
+                config('project.date_format'),
+                $this->terminated_at
+            )->endOfDay();
+
+            if ($end->lt($periodStart)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function isFinished(): bool
+    {
+        return (bool) $this->terminated_at;
+    }
+
 
     public function company()
     {

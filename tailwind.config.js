@@ -1,24 +1,20 @@
 const plugin = require("tailwindcss/plugin")
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors")
 
 module.exports = {
-  mode: 'jit',
-  purge: {
-    enabled: false,
-    content: ['./resources/views/**/*.blade.php', './safelist.txt'],
-    options: {
-      safelist: []
-    }
-  },
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+  ],
   theme: {
     extend: {
       colors: {
         indigo: colors.indigo,
         rose: colors.rose,
-        blueGray: colors.blueGray,
-        lightBlue: colors.sky,
+        slate: colors.slate,
+        sky: colors.sky,
         orange: colors.orange,
-        red: colors.red
+        red: colors.red,
       },
       minHeight: {
         'screen-75': '75vh'
@@ -26,15 +22,9 @@ module.exports = {
       fontSize: {
         '55': '55rem'
       },
-      opacity: {
-        '80': '.8'
-      },
       zIndex: {
         '2': 2,
         '3': 3
-      },
-      overflow: {
-        'y-visible': 'visible',
       },
       inset: {
         '-100': '-100%',
@@ -75,70 +65,20 @@ module.exports = {
       minWidth: {
         '140-px': '140px',
         '48': '12rem'
-      },
-      backgroundSize: {
-        full: '100$'
       }
     }
   },
-  variants: [
-    'responsive',
-    'group-hover',
-    'focus-within',
-    'first',
-    'last',
-    'odd',
-    'even',
-    'hover',
-    'focus',
-    'active',
-    'visited',
-    'disabled'
-  ],
   plugins: [
     require('@tailwindcss/forms'),
     plugin(function ({ addComponents, theme }) {
-      const screens = theme("screens", {});
-      addComponents([
-        {
-          ".container": { width: "100%" },
-        },
-        {
-          [`@media (min-width: ${screens.sm})`]: {
-            ".container": {
-              "max-width": "640px",
-            },
-          },
-        },
-        {
-          [`@media (min-width: ${screens.md})`]: {
-            ".container": {
-              "max-width": "768px",
-            },
-          },
-        },
-        {
-          [`@media (min-width: ${screens.lg})`]: {
-            ".container": {
-              "max-width": "1024px",
-            },
-          },
-        },
-        {
-          [`@media (min-width: ${screens.xl})`]: {
-            ".container": {
-              "max-width": "1280px",
-            },
-          },
-        },
-        {
-          [`@media (min-width: ${screens["2xl"]})`]: {
-            ".container": {
-              "max-width": "1280px",
-            },
-          },
-        },
-      ]);
+      const screens = theme("screens")
+      addComponents({
+        ".container": { width: "100%" },
+        [`@media (min-width: ${screens.sm})`]: { ".container": { maxWidth: "640px" }},
+        [`@media (min-width: ${screens.md})`]: { ".container": { maxWidth: "768px" }},
+        [`@media (min-width: ${screens.lg})`]: { ".container": { maxWidth: "1024px" }},
+        [`@media (min-width: ${screens.xl})`]: { ".container": { maxWidth: "1280px" }},
+      })
     })
   ]
 }

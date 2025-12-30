@@ -302,7 +302,7 @@ class Index extends Component
         return $contracts;
     }
 
-     private function getGroupedContracts()
+    private function getGroupedContracts()
     {
         $periodStart = Carbon::createFromFormat(config('project.date_format'), $this->dateStart)->startOfMonth();
         $periodEnd   = $periodStart->copy()->endOfMonth();
@@ -320,9 +320,7 @@ class Index extends Component
                     ->with('type_product.type_contract');
                 },
             ])
-            ->whereHas('company', function($q) {
-                $q->whereNull('deleted_at');
-            })
+            ->whereHas('company', fn ($q) => $q->whereNull('deleted_at'))
             ->whereNotNull('setup_at')
             ->where(function ($q) use ($periodStart) {
                 $q->whereNull('terminated_at')
@@ -334,27 +332,31 @@ class Index extends Component
                 });
             })
             // ne pas reprendre un contrat déjà facturé ce mois
-            ->where(function ($q) use ($periodStart) {
-                $q->whereDoesntHave('bills', function ($qb) use ($periodStart) {
-                    $qb->whereYear('generated_at',  $periodStart->year)
-                    ->whereMonth('generated_at', $periodStart->month);
-                });
+            ->whereDoesntHave('bills', function ($qb) use ($periodStart) {
+                $qb->whereYear('generated_at', $periodStart->year)
+                ->whereMonth('generated_at', $periodStart->month);
             })
             ->get()
 
-           ->filter(function ($contract) use ($periodStart, $periodEnd) {
-                return $contract->contract_product_detail
-                    ->filter(fn ($d) => $d->shouldListForPeriod($periodStart, $periodEnd))
-                    ->isNotEmpty();
-            })
-
-
-            // libellé de période
+            // ✅ 1️⃣ Calcul du billing_period AVANT tout filtre métier
             ->each(function ($contract) {
                 $contract->billing_period = $contract->calculateBillingPeriod($this->dateStart);
             })
 
-            // groupement & tri
+            // ✅ 2️⃣ Filtrage métier utilisant billing_period + détails
+            ->filter(function ($contract) use ($periodStart, $periodEnd) {
+                return $contract->contract_product_detail
+                    ->filter(fn ($detail) =>
+                        $detail->shouldListForPeriod(
+                            $periodStart,
+                            $periodEnd,
+                            $contract->billing_period // ← maintenant possible
+                        )
+                    )
+                    ->isNotEmpty();
+            })
+
+            // ✅ 3️⃣ Groupement & tri
             ->groupBy([
                 fn ($contract) => optional($contract->company)->name ?? 'Sans société',
                 fn ($contract) => $contract->billing_period,
