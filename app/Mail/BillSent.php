@@ -45,38 +45,68 @@ class BillSent extends Mailable
      */
     protected function resolvePdfPath(): string
     {
-        // $generatedAt peut être une string "d/m/Y" ou déjà un Carbon/DateTime
+        $fileName = "{$this->bill->no_bill}.pdf";
+        $baseDir  = storage_path('app');
+
+        /**
+         * 1️⃣ PRIORITÉ ABSOLUE : file_path en base
+         */
+        if (!empty($this->bill->file_path)) {
+            $directPath = $baseDir . '/' . ltrim($this->bill->file_path, '/');
+
+            if (is_file($directPath)) {
+                Log::info('BillSent: PDF trouvé via file_path', [
+                    'path' => $directPath,
+                ]);
+
+                return $directPath;
+            }
+
+            Log::warning('BillSent: file_path présent mais fichier introuvable', [
+                'file_path' => $this->bill->file_path,
+                'resolved'  => $directPath,
+            ]);
+        }
+
+        /**
+         * 2️⃣ FALLBACK : recherche par generated_at (ancien comportement)
+         */
         $dt = $this->bill->generated_at instanceof Carbon
             ? $this->bill->generated_at->copy()
-            : Carbon::createFromFormat('d/m/Y', (string)$this->bill->generated_at);
+            : Carbon::createFromFormat('d/m/Y', (string) $this->bill->generated_at);
 
-        $baseDir = storage_path('app/private/factures');
-        $fileName = "{$this->bill->no_bill}.pdf";
+        $facturesDir = $baseDir . '/private/factures';
 
         $candidates = [
             $dt->format('Y-m'),
             $dt->copy()->subMonth()->format('Y-m'),
-            $dt->copy()->addMonthsNoOverflow()->format('Y-m'), // <- garde-le si tu veux couvrir tous les cas
+            $dt->copy()->addMonthsNoOverflow()->format('Y-m'),
         ];
 
         foreach ($candidates as $ym) {
-            $path = "{$baseDir}/{$ym}/{$fileName}";
+            $path = "{$facturesDir}/{$ym}/{$fileName}";
             if (is_file($path)) {
-                // Log facultatif pour savoir lequel a servi
-                Log::info("BillSent: PDF trouvé", ['path' => $path]);
+                Log::info('BillSent: PDF trouvé via fallback', [
+                    'path' => $path,
+                    'fallback_month' => $ym,
+                ]);
+
                 return $path;
             }
         }
 
-        // Rien trouvé : on log + on remonte une erreur explicite
-        Log::warning("BillSent: PDF introuvable", [
-            'bill' => $this->bill->no_bill,
-            'generated_at' => (string)$this->bill->generated_at,
-            'searched_in' => $candidates,
+        /**
+         * 3️⃣ ÉCHEC TOTAL
+         */
+        Log::error('BillSent: PDF introuvable (file_path + fallback)', [
+            'bill'        => $this->bill->no_bill,
+            'file_path'  => $this->bill->file_path,
+            'generated'  => (string) $this->bill->generated_at,
+            'searched'   => $candidates,
         ]);
 
         throw new \RuntimeException(
-            "PDF de la facture {$this->bill->no_bill} introuvable dans: " . implode(', ', $candidates)
+            "PDF de la facture {$this->bill->no_bill} introuvable (file_path et fallback échoués)."
         );
     }
 }
