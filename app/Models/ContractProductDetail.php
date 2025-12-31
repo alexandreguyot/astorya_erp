@@ -413,7 +413,7 @@ class ContractProductDetail extends Model
             explode(' au ', $billingPeriod)[0]
         )->startOfDay();
 
-        $billiedPeriodEnd = Carbon::createFromFormat(
+        $billingPeriodEnd = Carbon::createFromFormat(
             config('project.date_format'),
             explode(' au ', $billingPeriod)[1]
         )->endOfDay();
@@ -421,10 +421,14 @@ class ContractProductDetail extends Model
         if (
             $lastBilled &&
             $billingPeriodStart &&
-            $billiedPeriodEnd &&
-            $lastBilled->betweenIncluded(
+            $billingPeriodEnd &&
+            (
+                $lastBilled->betweenIncluded(
                 $billingPeriodStart->copy()->startOfDay(),
-                $billiedPeriodEnd->copy()->endOfDay()
+                $billingPeriodEnd->copy()->endOfDay()
+            )
+            ||
+                $lastBilled->gt($billingPeriodEnd)
             )
         ) {
             return false;

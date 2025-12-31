@@ -15,6 +15,9 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComptableExport;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Admin\BillController;
+use App\Jobs\GenerateBillPdf;
+use Illuminate\Support\Facades\DB;
+
 
 class Index extends Component
 {
@@ -228,6 +231,67 @@ class Index extends Component
 
         return null;
     }
+
+    public function regenerateBill(string $noBill): void
+    {
+        if (Cache::has("regenerating.bill.{$noBill}")) {
+            $this->alert('info', "Régénération déjà en cours.");
+            return;
+        }
+
+        Cache::add("regenerating.bill.{$noBill}", true, now()->addMinutes(10));
+
+        $bill = Bill::where('no_bill', $noBill)->first();
+
+        if (! $bill) {
+            $this->alert('error', "Facture {$noBill} introuvable.");
+            return;
+        }
+
+        // 🔒 Sécurité admin
+        if (! auth()->check() || auth()->id() !== 1) {
+            $this->alert('error', "Action non autorisée.");
+            return;
+        }
+
+        // 🔒 BLOQUAGE : déjà envoyée
+        if ($bill->sent_at) {
+            $this->alert(
+                'warning',
+                "Cette facture a déjà été envoyée le {$bill->sent_at}. Régénération bloquée."
+            );
+            return;
+        }
+
+        $dateStarted = $bill->started_at instanceof Carbon
+            ? $bill->started_at
+            : Carbon::createFromFormat('d/m/Y', $bill->started_at)->startOfDay();
+
+        dispatch(new \App\Jobs\GenerateBillPdf(
+            $noBill,
+            $dateStarted
+        ));
+
+        $this->alert('success', "Regénération lancée pour la facture {$noBill}.");
+    }
+
+
+    public function getLastJobError(string $noBill): ?string
+    {
+        $job = DB::table('failed_jobs')
+            ->where('payload', 'like', '%"no_bill":"' . $noBill . '"%')
+            ->orderByDesc('failed_at')
+            ->first();
+
+        if (! $job) {
+            return null;
+        }
+
+        return str($job->exception)
+            ->limit(300)
+            ->toString();
+    }
+
 
     public function downloadZipFile()
     {

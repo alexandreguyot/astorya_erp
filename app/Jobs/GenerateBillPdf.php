@@ -13,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Cache;
 class GenerateBillPdf implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
@@ -27,6 +28,15 @@ class GenerateBillPdf implements ShouldQueue
         $this->no_bill = $no_bill;
         $this->dateStarted = $dateStarted;
     }
+
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('GenerateBillPdf failed', [
+            'no_bill' => $this->no_bill,
+            'error' => $exception->getMessage(),
+        ]);
+    }
+
 
     public function handle(): void
     {
@@ -100,6 +110,7 @@ class GenerateBillPdf implements ShouldQueue
         Storage::put($path, $pdf->output());
 
         Log::info('PDF Generated and saved for bill: ' . $this->no_bill);
+        Cache::forget("regenerating.bill.{$this->no_bill}");
     }
 
     protected function getVatResumesFromContracts($contracts, $date = null)

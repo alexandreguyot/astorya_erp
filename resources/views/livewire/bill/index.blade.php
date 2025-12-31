@@ -183,6 +183,16 @@
                                     <a class="btn btn-sm btn-indigo mr-2" href="{{ route('admin.bills.pdf', $bill['no_bill']) }}" target="_blank">
                                         Télécharger la facture
                                     </a>
+                                    @if($canSeeRestricted)
+                                        <button
+                                            class="btn btn-sm btn-warning mr-2"
+                                            wire:click="regenerateBill('{{ $bill['no_bill'] }}')"
+                                            wire:loading.attr="disabled"
+                                            title="Regénérer le PDF"
+                                        >
+                                            (Admin) Regénérer la facture
+                                        </button>
+                                    @endif
                                     @if($this->isSending($bill['no_bill']))
                                         <svg class="animate-spin h-5 w-5 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -192,6 +202,16 @@
                                         <button class="btn btn-sm btn-indigo" wire:click="sendMail('{{ $bill['no_bill'] }}')" wire:loading.attr="disabled">
                                             Envoyer la facture
                                         </button>
+                                    @endif
+                                    @php
+                                        $jobError = $this->getLastJobError($bill['no_bill']);
+                                    @endphp
+
+                                    @if($jobError)
+                                        <div class="text-xs text-red-600 mt-1 max-w-md">
+                                            ❌ Erreur génération :
+                                            <pre class="whitespace-pre-wrap">{{ $jobError }}</pre>
+                                        </div>
                                     @endif
                                 </div>
                             </td>
